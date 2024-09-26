@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Tài Khoản</title>
+    <link rel="stylesheet" href="/css/register.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    
+    <div class="container">
+        <div class="account-box">
+            <div class="right">
+                <div class="account-container">
+                    <h1>TẠO TÀI KHOẢN</h1>
+                    <input type="text" id="username" class="input-field" placeholder="Tên người dùng" required><br>
+                    <input type="password" id="password" class="input-field" placeholder="Mật khẩu" required><br>
+                    <input type="text" id="name" class="input-field" placeholder="Họ và tên" required><br>
+                    <select id="gender" class="input-field" required>
+                        <option value="">Chọn giới tính</option>
+                        <option value="Nam">Nam</option>
+                        <option value="Nữ">Nữ</option>
+                        <option value="Khác">Khác</option>
+                    </select><br>
+                    <input type="tel" id="sdt" class="input-field" placeholder="Số điện thoại" required pattern="[0-9]{10,11}"><br>
+                    <input type="text" id="address" class="input-field" placeholder="Địa chỉ" required><br>
+                    <input type="file" id="image" class="input-field" accept="image/*" onchange="updateImageName()"><br>
+                    <span id="image-name"></span>
+                    <button type="button" class="btn-create" onclick="createAccount()">Tạo Tài Khoản</button> 
+                </div>
+                <div class="account-options">
+                    <a href="/api/account/login">Đã có tài khoản? Đăng nhập</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="/js/register.js"></script>
+</body>
+</html>
