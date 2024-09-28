@@ -33,7 +33,10 @@ app.use(express.static(path.join(__dirname, 'app/public/css')));
 app.use('/api/account/', accountRouter);
 app.use('/api/licenseHolder/', licenseHolderRoutes);
 app.use('/api/register/', accountRouter);
-app.use('/addlicenseHolder/', licenseHolderRoutes);
+app.use('/api/addAccount/', accountRouter);
+app.use('/api/updatedAccount/', accountRouter);
+
+app.use('/api/addlicenseHolder/', licenseHolderRoutes);
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 
@@ -50,10 +53,6 @@ app.get('/account', (req, res) => {
 });
 app.get('/licenseHolder', (req, res) => {
     res.render('licenseHolder'); // Render the register page
-});
-
-app.get('/truyxuatbanglaixeoto', (req, res) => {
-    res.render('truyxuatbanglaixeoto'); // Render the license retrieval page
 });
 
 app.get('/', (req, res) => {
@@ -73,6 +72,10 @@ app.get('/api/account/', async (req, res) => {
     }
   });
   
+  app.get('/truyxuatbanglaixeoto', (req, res) => {
+    res.render('truyxuatbanglaixeoto'); // Render the license retrieval page
+});
+
 app.listen(3000, () => {
     console.log(`Server started on port 3000`);
 });

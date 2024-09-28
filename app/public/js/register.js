@@ -14,25 +14,31 @@ async function createAccount() {
         return;
     }
 
-    // Tạo đối tượng FormData để gửi dữ liệu
-    const formData = new FormData();
-    formData.append('username', username);
-    formData.append('password', password);
-    formData.append('name', name);
-    formData.append('gender', gender);
-    formData.append('sdt', sdt);
-    formData.append('address', address);
-    
+    // Tạo đối tượng để gửi dữ liệu
+    const accountData = {
+        username: username,
+        password: password, // Bạn có thể mã hóa mật khẩu ở server
+        SDT: Number(sdt), // Chuyển đổi số điện thoại sang số
+        Name: name,
+        Address: address,
+        Gender: gender
+    };
+
     // Kiểm tra xem có hình ảnh được chọn hay không
     if (image) {
-        formData.append('image', image);
+        // Thêm thuộc tính Image với link đến hình ảnh
+        // Bạn cần xử lý upload hình ảnh ở server và trả về đường dẫn hình ảnh
+        accountData.Image = await uploadImage(image); // Hàm uploadImage cần được định nghĩa
     }
 
     try {
         // Gửi yêu cầu POST đến server
-        const response = await fetch('/register', {
+        const response = await fetch('/api/register', {
             method: 'POST',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json' // Đặt kiểu nội dung là JSON
+            },
+            body: JSON.stringify(accountData) // Chuyển đổi đối tượng thành chuỗi JSON
         });
 
         // Kiểm tra xem phản hồi có thành công không
@@ -64,6 +70,24 @@ async function createAccount() {
         console.error('Error creating account:', error);
         alert('Lỗi kết nối khi tạo tài khoản: ' + error.message);
     }
+}
+
+// Hàm uploadImage để xử lý upload hình ảnh và trả về đường dẫn
+async function uploadImage(file) {
+    const formData = new FormData();
+    formData.append('image', file);
+
+    const response = await fetch('/api/upload', { // Giả sử bạn có API upload hình
+        method: 'POST',
+        body: formData
+    });
+
+    if (!response.ok) {
+        throw new Error('Lỗi khi tải lên hình ảnh');
+    }
+
+    const data = await response.json();
+    return data.imageUrl; // Giả sử server trả về đường dẫn hình ảnh
 }
 
 function updateImageName() {

@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quản lý chủ sở hữu GPLX</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
   <link rel="stylesheet" href="css/index.css">
   <link rel="stylesheet" href="/css/truyxuatGPLX.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
 </head>
 <body>
     <div class="header">
@@ -28,11 +28,9 @@
     
       <div class="main-content-wrapper">
         <nav class="sidebar">
-             
           <ul class="nav flex-column">
             <li class="nav-item">
-              <a class="nav-link text-white" href="/truyxuatbanglaixeoto" >
-                
+              <a class="nav-link text-white" href="/truyxuatbanglaixeoto">
                 <i class="icon fas fa-search"></i>
                 <span>Truy xuất sản phẩm</span>
               </a>
@@ -76,17 +74,12 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a style="color: black; text-decoration: none;" href="http://localhost:3000/trangchu">
-                        <img    
-                        src="/uploads/home.png" style="width: 15px; margin-top: -4px;">
-                        Trang chủ
+                        <img src="/uploads/home.png" style="width: 15px; margin-top: -4px;"> Trang chủ
                     </a>
                 </li>
                 <li class="breadcrumb-item active" aria-current="page">Truy xuất sản phẩm</li>
             </ol>
         </nav>
-    
-        <!-- Title Above Search Bar -->
-        
     
         <!-- Search Bar -->
         <div class="search-container">
@@ -94,80 +87,63 @@
             <button class="btn" type="button" onclick="fetchLicenseHolder()">
                 Tìm kiếm <i class="bi bi-search"></i>
             </button>
-    
         </div>
-        <div  id="details"></div>
-
+        <div id="details"></div>
     </div>
-
-      <!-- Div where details will be displayed -->
   
-      <script>
-          // Function to fetch license holder data
-         i
-  
-          // Function to display license holder data
-          function displayLicenseHolder(holder) {
-              const detailDiv = document.getElementById('details');
-              detailDiv.innerHTML = `
-                  <h3>Chi tiết chủ sở hữu GPLX</h3>
-                  <p><strong>Tên:</strong> ${holder.Name}</p>
-                  <p><strong>Ngày sinh:</strong> ${new Date(holder.DateOfBirth).toLocaleDateString()}</p>
-                  <p><strong>CCCD:</strong> ${holder.CCCD}</p>
-                  <p><strong>Địa chỉ:</strong> ${holder.Address}</p>
-                  <p><strong>Số điện thoại:</strong> ${holder.PhoneNumber}</p>
-                  <p><strong>Email:</strong> ${holder.Email}</p>
-                  <p><strong>Ngày cấp:</strong> ${new Date(holder.Ngaycap).toLocaleDateString()}</p>
-                  <p><strong>Ngày hết hạn:</strong> ${new Date(holder.Ngayhethan).toLocaleDateString()}</p>
-                  <p><strong>Trạng thái:</strong> ${holder.Status}</p>
-                  <p><strong>Giám đốc:</strong> ${holder.Giamdoc}</p>
-                  <p><strong>Lỗi vi phạm:</strong> ${holder.Loivipham}</p>
-                  <p><strong>Mã GPLX:</strong> ${holder.MaGPLX}</p>
-              `;
-          }
-async function fetchLicenseHolders() {
-    try {
-        const response = await fetch('/api/license-holders');
-        const holders = await response.json();
-        console.log(holders); // Hiển thị kết quả trong console
-        displayLicenseHolders(holders);
-    } catch (error) {
-        console.error('Error fetching license holders:', error);
-    }
-}
+    <script>
+      async function fetchLicenseHolder() {
+        const input = document.getElementById('idOrGPLX').value.trim();
+        const detailDiv = document.getElementById('details');
 
-// Hàm để lấy license holder theo ID
-async function findLicenseHolder(licenseId) {
-    try {
-        const holder = await LicenseHolder.findOne({ licenseId: licenseId });
-        
-        if (holder) {
-            console.log('License holder found:', holder);
-            // Xử lý thông tin chủ sở hữu ở đây (ví dụ: hiển thị cho người dùng)
-        } else {
-            console.log('No license holder found with that ID.');
+        if (!input) {
+          detailDiv.innerHTML = '<p class="text-danger">Vui lòng nhập ID hoặc Mã GPLX để tìm kiếm.</p>';
+          return;
         }
-    } catch (error) {
-        console.error('Error finding license holder:', error);
-    }
-}
 
+        try {
+          const response = await fetch(`/api/licenseHolder/${input}`);
+          if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+          }
+          
+          const holder = await response.json();
+          if (holder) {
+            displayLicenseHolder(holder);
+          } else {
+            detailDiv.innerHTML = '<p class="text-warning">Không tìm thấy chủ sở hữu GPLX với thông tin đã nhập.</p>';
+          }
+        } catch (error) {
+          detailDiv.innerHTML = '<p class="text-danger">Lỗi khi truy xuất dữ liệu. Vui lòng thử lại sau.</p>';
+        }
+      }
 
-const currentPath = window.location.pathname;
-const currentPage = currentPath.substring(currentPath.lastIndexOf('/') + 1) || 'index.html';
+      function displayLicenseHolder(holder) {
+        const detailDiv = document.getElementById('details');
+        detailDiv.innerHTML = `
+          <h3>Chi tiết chủ sở hữu GPLX</h3>
+          <p><strong>Tên:</strong> ${holder.Name}</p>
+          <p><strong>Ngày sinh:</strong> ${new Date(holder.DateOfBirth).toLocaleDateString()}</p>
+          <p><strong>CCCD:</strong> ${holder.CCCD}</p>
+          <p><strong>Địa chỉ:</strong> ${holder.Address}</p>
+          <p><strong>Số điện thoại:</strong> ${holder.PhoneNumber}</p>
+          <p><strong>Email:</strong> ${holder.Email}</p>
+          <p><strong>Ngày cấp:</strong> ${new Date(holder.Ngaycap).toLocaleDateString()}</p>
+          <p><strong>Ngày hết hạn:</strong> ${new Date(holder.Ngayhethan).toLocaleDateString()}</p>
+          <p><strong>Trạng thái:</strong> ${holder.Status}</p>
+          <p><strong>Giám đốc:</strong> ${holder.Giamdoc}</p>
+          <p><strong>Lỗi vi phạm:</strong> ${holder.Loivipham}</p>
+          <p><strong>Mã GPLX:</strong> ${holder.MaGPLX}</p>
+        `;
+      }
+    </script>
 
-// Remove file extension from the page name for display purposes
-const pageName = currentPage.split('.')[0].replace(/-/g, ' ').toUpperCase();
-
-// Set the page name dynamically
-document.getElementById('currentPage').textContent = pageName;
-      </script>
   </div>
 
   <!-- Bootstrap JS (bundle includes Popper.js) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="/js/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -43,7 +43,6 @@ const register = async (req, res, next) => {
     }
     
 };
-
 // Đăng nhập
 const postlogin = async (req, res, next) => {
     const { username, password } = req.body;
@@ -178,6 +177,47 @@ const changePassword = async (req, res, next) => {
     }
 };
 
+const updatedAccount = async (req, res) => {
+    const { id } = req.params;
+    const { username, password, role, phone, name, address, gender } = req.body;
+
+    // Kiểm tra xem ID có hợp lệ hay không
+    if (!id) {
+        return res.status(400).json({ success: false, message: 'ID không hợp lệ.' });
+    }
+
+    // Kiểm tra các trường bắt buộc có được cung cấp hay không
+    if (!username || !password || !role || !phone || !name || !address || !gender) {
+        return res.status(400).json({ success: false, message: 'Vui lòng cung cấp tất cả các trường bắt buộc.' });
+    }
+
+    try {
+        const result = await AccountModel.updateOne(
+            { _id: id }, // Tìm tài khoản theo id
+            {
+                username,
+                password, // Lưu ý: hãy xem xét mã hóa mật khẩu trước khi lưu trữ
+                role,
+                SDT: phone,
+                Name: name,
+                Address: address,
+                Gender: gender
+            }
+        );
+
+        // Kiểm tra xem tài khoản có được sửa đổi hay không
+        if (result.nModified > 0) {
+            return res.json({ success: true, message: 'Tài khoản đã được cập nhật thành công!' });
+        } else {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy tài khoản để sửa.' });
+        }
+    } catch (error) {
+        console.error('Error updating account:', error); // Log lỗi để tiện theo dõi
+        return res.status(500).json({ success: false, message: 'Lỗi máy chủ. Vui lòng thử lại sau.' });
+    }
+};
+
+
 // Xóa tài khoản
 const deleteAccount = async (req, res, next) => {
     try {
@@ -211,6 +251,7 @@ module.exports = {
     postlogin,
     getAll,
     getId,
+    updatedAccount,
     addAccount,
     changePassword,
     deleteAccount,

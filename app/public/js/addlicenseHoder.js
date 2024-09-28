@@ -19,7 +19,7 @@ async function handleSubmit(event) {
 
     // Send data to API to store in MongoDB
     try {
-        const response = await fetch('/addlicenseHolder', {
+        const response = await fetch('/api/addlicenseHolder/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -29,35 +29,30 @@ async function handleSubmit(event) {
 
         // Check if the response is successful (200–299)
         if (response.ok) {
-            try {
-                const result = await response.json();
-
-                // Check if the result contains success
-                if (result.success) {
-                    alert('Thêm chủ sở hữu thành công!');
-                    location.reload(); // Reload to display new data
-                } else {
-                    alert('Đã có lỗi xảy ra, vui lòng thử lại.');
-                }
-            } catch (error) {
-                // Handle JSON parsing errors
-                console.error('Error parsing JSON:', error);
-                alert('Lỗi khi xử lý dữ liệu trả về.');
+            const result = await response.json();
+            // Check if the result contains success
+            if (result.success) {
+                alert('Thêm chủ sở hữu thành công!');
+                location.reload(); // Reload to display new data
+            } else {
+                alert('Đã có lỗi xảy ra, vui lòng thử lại.');
             }
         } else {
             // Handle non-200 responses
-            alert(`Lỗi từ máy chủ: ${response.status}`);
+            const errorMessage = await response.text(); // Fetch error message from server
+            alert(`Lỗi từ máy chủ: ${response.status} - ${errorMessage}`);
         }
     } catch (error) {
         // Handle network errors
         console.error('Error:', error);
-        alert('Lỗi khi gửi dữ liệu.');
+        alert('Lỗi khi gửi dữ liệu. Vui lòng kiểm tra kết nối mạng.');
     }
 }
 
-
 // Add event listener for the form
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('addAccountForm').addEventListener('submit', handleSubmit);
-  });
-  
+    const form = document.getElementById('addAccountForm');
+    if (form) {
+        form.addEventListener('submit', handleSubmit);
+    }
+});

@@ -10,7 +10,8 @@ const AccountSchema = new Schema({
     Name: String,
     Address: String,
     Image: String,
-    Gender: String
+    Gender: String,
+    Email: String
 },{
     collection:'account'
 });

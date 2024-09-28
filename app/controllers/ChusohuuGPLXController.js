@@ -26,7 +26,7 @@ exports.getId =  (req, res, next) => {
 }
 
 exports.taodanhmuc= (req, res, next) => {
-    res.render('createDanhMuc')
+    res.render('addLicenseHolder')
 }
 
 

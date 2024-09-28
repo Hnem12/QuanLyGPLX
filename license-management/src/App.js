@@ -1,49 +1,101 @@
-// App.js
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-import Home from './components/Home';
-import LicenseManagement from './components/LicenseManagement';
-import AccountManagement from './components/AccountManagement';
+import React, { useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './App.css'; // Make sure to link your CSS files
+import LicenseHolderSearch from './LicenseHolderSearch';
 
 function App() {
   return (
-    <Router>
-      <div className="container">
-        {/* Sidebar */}
-        <div className="sidebar">
-          <h2>Trang Chủ</h2>
-          <ul>
-            <li><Link to="/">Trang chủ</Link></li>
-            <li><Link to="/truyxuatbanglaixeoto">Truy xuất sản phẩm</Link></li>
-            <li>
-              <Link to="#">Quản lý</Link>
-              <ul>
-                <li><Link to="/account">Tài khoản tổ chức</Link></li>
-                <li><Link to="/organizations">Danh sách tổ chức</Link></li>
-                <li><Link to="/statistics">Thống kê doanh nghiệp</Link></li>
-                <li><Link to="/roles">Phân quyền vai trò</Link></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-
-        {/* Main Content */}
-        <div className="main-content">
-          <div className="user-actions">
-            <a href="#" className="document-btn">My Documents</a>
-            <a href="http://localhost:3000/api/account/login" className="logout-btn">Logout</a>
-          </div>
-
-          <Switch>
-            {/* Định nghĩa các route */}
-            <Route exact path="/" component={Home} />
-            <Route path="/truyxuatbanglaixeoto" component={LicenseManagement} />
-            <Route path="/account" component={AccountManagement} />
-            {/* Bạn có thể thêm các route khác */}
-          </Switch>
+    <div className="App">
+      <Header />
+      <div className="main-content-wrapper">
+        <Sidebar />
+        <div className="container mt-4">
+          <Breadcrumb />
+          <LicenseHolderSearch />
         </div>
       </div>
-    </Router>
+    </div>
+  );
+}
+
+function Header() {
+  return (
+    <div className="header">
+      <div className="logo">
+        <img src="/uploads/h7.png" alt="Logo" />
+        <div className="title">Trang Chủ</div>
+        <button id="toggleButton" className="btn btn-outline-light">
+          <i className="fas fa-chevron-left"></i>
+        </button>
+      </div>
+      <div className="user-info">
+        <div className="notification">🔔</div>
+        <div className="system-name"></div>
+        <img src="/uploads/h6.jpg" alt="Avatar" />
+      </div>
+    </div>
+  );
+}
+
+function Sidebar() {
+  return (
+    <nav className="sidebar">
+      <ul className="nav flex-column">
+        <li className="nav-item">
+          <a className="nav-link text-white" href="/truyxuatbanglaixeoto">
+            <i className="icon fas fa-search"></i>
+            <span>Truy xuất sản phẩm</span>
+          </a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link text-white" href="#">
+            <i className="icon fas fa-cog"></i>
+            <span>Quản lý</span>
+          </a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link text-white" href="/account">
+            <i className="icon fas fa-users"></i>
+            <span>Tài khoản tổ chức</span>
+          </a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link text-white" href="/licenseHolder">
+            <i className="icon fas fa-building"></i>
+            <span>Danh sách tổ chức</span>
+          </a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link text-white" href="#">
+            <i className="icon fas fa-chart-bar"></i>
+            <span>Thống kê doanh nghiệp</span>
+          </a>
+        </li>
+        <li className="nav-item">
+          <a className="nav-link text-white" href="#">
+            <i className="icon fas fa-user-shield"></i>
+            <span>Phân quyền vai trò</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  );
+}
+
+function Breadcrumb() {
+  return (
+    <nav aria-label="breadcrumb">
+      <ol className="breadcrumb">
+        <li className="breadcrumb-item">
+          <a href="http://localhost:3000/trangchu" style={{ color: 'black', textDecoration: 'none' }}>
+            <img src="/uploads/home.png" style={{ width: '15px', marginTop: '-4px' }} alt="Home" /> Trang chủ
+          </a>
+        </li>
+        <li className="breadcrumb-item active" aria-current="page">
+          Truy xuất sản phẩm
+        </li>
+      </ol>
+    </nav>
   );
 }
 

@@ -15,26 +15,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Tạo một chủ sở hữu GPLX mới
-router.post('/addlicenseHolder', async (req, res) => {
-  try {
-    // Validate and create a new LicenseHolder from request body
-    const licenseHolder = new LicenseHolder(req.body);
-
-    // Save the new license holder to the database
-    const savedHolder = await licenseHolder.save();
-
-    // Return status 201 for successful creation
-    res.status(201).json(savedHolder);
-  } catch (err) {
-    // Return 500 status for server errors and the error message
-    res.status(499).json({
-      message: 'Lỗi khi tạo chủ sở hữu GPLX',
-      error: err.message
-    });
-  }
-});
-
 
 // Lấy một chủ sở hữu GPLX cụ thể theo ID
 router.get('/:id', async (req, res) => {
@@ -103,26 +83,48 @@ router.get('/search/:idOrGPLX', async (req, res) => {
   }
 });
 
-// Router
 router.post('/addlicenseHolder', async (req, res) => {
   try {
-    const licenseHolder = new LicenseHolder(req.body);
-    const savedHolder = await licenseHolder.save();
+      // Validate input data
+      const { maGPLX, name } = req.body;
+      if (!maGPLX || !name) {
+          return res.status(400).json({ 
+              success: false, 
+              message: 'Mã GPLX và tên là bắt buộc.' 
+          });
+      }
 
-    // Gửi mã GPLX đã lưu qua response
-    res.status(201).json({
-      message: 'Chủ sở hữu GPLX đã được tạo thành công',
-      MaGPLX: savedHolder.MaGPLX, // Gửi mã GPLX đã lưu
-      holder: savedHolder // Gửi toàn bộ thông tin chủ sở hữu GPLX
-    });
+      // Check for existing license holder
+      const existingHolder = await LicenseHolder.findOne({ maGPLX });
+      if (existingHolder) {
+          return res.status(400).json({ 
+              success: false, 
+              message: 'Mã GPLX đã tồn tại.' 
+          });
+      }
+
+      // Create a new LicenseHolder from request body
+      const licenseHolder = new LicenseHolder(req.body);
+
+      // Save the new license holder to the database
+      const savedHolder = await licenseHolder.save();
+
+      // Return status 201 for successful creation with the saved holder data
+      res.status(201).json({ 
+          success: true, 
+          message: 'Thêm chủ sở hữu GPLX thành công!', 
+          data: savedHolder 
+      });
   } catch (err) {
-    res.status(500).json({
-      message: 'Lỗi khi tạo chủ sở hữu GPLX',
-      error: err.message
-    });
+      console.error('Error creating license holder:', err); // Log the error
+
+      // Return 500 status for server errors
+      res.status(500).json({
+          success: false,
+          message: 'Lỗi khi tạo chủ sở hữu GPLX',
+          error: err.message // Provide the error message
+      });
   }
 });
-
-
 
 module.exports = router;

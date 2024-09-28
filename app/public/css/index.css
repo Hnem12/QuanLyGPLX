@@ -16,19 +16,16 @@
 .logo {
   display: flex;
   align-items: center;
- 
 }
 
 .logo img {
   height: 35px;
-  margin-right: 7px;
-  margin-left: 7px;
+  margin: 0 7px;
 }
 
 .title {
   font-size: 1.5em;
   margin-left: 10px;
-  font-family: 'Times New Roman', Times, serif, sans-serif;
 }
 
 .user-info {
@@ -43,39 +40,34 @@
   margin-left: 10px;
 }
 
-.notification, .system-name {
+.notification,
+.system-name {
   margin-right: 10px;
-  size: 40dp;
 }
 
-/* CSS phần body và sidebar */
+/* CSS cho phần body và sidebar */
 body {
   height: 100vh;
   margin: 0;
   display: flex;
-  flex-direction: column; /* Sửa lại để đảm bảo layout theo cột */
-  overflow: hidden; /* Ẩn cuộn ngang */
+  flex-direction: column;
+  overflow-y: hidden; /* Ẩn cuộn dọc cho body */
   font-family: 'Times New Roman', Times, serif, sans-serif;
 }
 
-.main-content-wrapper {
-  display: flex;
-  height: calc(100vh - 60px); /* Chiều cao trừ phần header, đảm bảo đủ không gian cho nội dung */
-  overflow: hidden;
-}
-
+/* CSS cho phần sidebar */
 .sidebar {
-  width: 200px;
+  width: 200px; /* Chiều rộng mặc định của sidebar */
   background-color: #ebebeb;
   height: 100%;
   padding: 1rem;
-  color:  rgb(104, 39, 39);
+  color: rgb(104, 39, 39);
   transition: width 0.3s ease;
-  overflow-y: auto; /* Đảm bảo sidebar cuộn được nếu nội dung quá dài */
+  overflow-y: auto; 
 }
 
 .sidebar.collapsed {
-  width: 80px;
+  width: 80px; /* Chiều rộng khi sidebar bị thu gọn */
 }
 
 .sidebar.collapsed .nav-link {
@@ -88,7 +80,7 @@ body {
 }
 
 .sidebar.collapsed h4 {
-  display: none;
+  display: none; /* Ẩn tiêu đề khi thu gọn */
 }
 
 .sidebar .nav-link {
@@ -101,7 +93,14 @@ body {
 }
 
 .sidebar.collapsed .nav-link span {
-  display: none;
+  display: none; /* Ẩn văn bản khi thu gọn */
+}
+
+/* CSS cho phần nội dung chính */
+.main-content-wrapper {
+  display: flex;
+  flex-grow: 1; 
+  overflow-y: auto; /* Cho phép cuộn dọc cho nội dung chính */
 }
 
 .main-content {
@@ -133,26 +132,24 @@ th {
   }
 
   .sidebar {
-    width: 100px;
+    width: 100px; /* Chiều rộng sidebar trên thiết bị nhỏ */
   }
 
   .main-content {
-    padding: 1rem;
+    padding: 1rem; /* Padding cho nội dung chính trên thiết bị nhỏ */
   }
 }
-span{
-  color:  rgb(0, 0, 0);
+
+span {
+  color: rgb(0, 0, 0);
 }
-.main-content-wrapper {
-  display: flex;
-  flex-grow: 1; /* Đảm bảo phần còn lại sau header chiếm đầy không gian */
-  overflow: hidden;
-}
+
 #toggleButton {
-  margin-left: 20px; /* Di chuyển nút sang bên phải 20dp (khoảng cách) */
-  font-size: 13px; /* Điều chỉnh kích thước icon */
-  cursor: pointer; /* Con trỏ chuột sẽ thành dạng pointer khi di qua nút */
+  margin-left: 20px; 
+  font-size: 13px; 
+  cursor: pointer; 
 }
+
 i {
   color: black;
 }
