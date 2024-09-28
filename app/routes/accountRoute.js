@@ -7,8 +7,6 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 var cookieParser = require('cookie-parser');
-
-
 router.use(cookieParser())
 // Tao tài khoản
 router.post('/register',

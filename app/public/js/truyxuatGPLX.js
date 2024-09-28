@@ -29,15 +29,21 @@ function displayLicenseHolders(holders) {
 }
 
 // Hàm để lấy license holder theo ID
-async function fetchLicenseHolder(id) {
+async function findLicenseHolder(licenseId) {
     try {
-        const response = await fetch(`/api/license-holders/${id}`);
-        const holder = await response.json();
-        displayLicenseHolder(holder);
+        const holder = await LicenseHolder.findOne({ licenseId: licenseId });
+        
+        if (holder) {
+            console.log('License holder found:', holder);
+            // Xử lý thông tin chủ sở hữu ở đây (ví dụ: hiển thị cho người dùng)
+        } else {
+            console.log('No license holder found with that ID.');
+        }
     } catch (error) {
-        console.error('Error fetching license holder:', error);
+        console.error('Error finding license holder:', error);
     }
 }
+
 
 // Hàm để hiển thị chi tiết license holder
 function displayLicenseHolder(holder) {
@@ -58,3 +64,12 @@ function displayLicenseHolder(holder) {
         <p>Mã GPLX: ${holder.MaGPLX}</p> <!-- Thêm trường MaGPLX -->
     `;
 }
+
+const currentPath = window.location.pathname;
+const currentPage = currentPath.substring(currentPath.lastIndexOf('/') + 1) || 'index.html';
+
+// Remove file extension from the page name for display purposes
+const pageName = currentPage.split('.')[0].replace(/-/g, ' ').toUpperCase();
+
+// Set the page name dynamically
+document.getElementById('currentPage').textContent = pageName;

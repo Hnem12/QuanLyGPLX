@@ -1,167 +1,158 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+/* CSS cho phần header */
+.header {
+  background-color: #e2366f;
+  color: rgb(0, 0, 0);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  font-family: 'Times New Roman', Times, serif, sans-serif;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.logo {
+  display: flex;
+  align-items: center;
+ 
+}
+
+.logo img {
+  height: 35px;
+  margin-right: 7px;
+  margin-left: 7px;
+}
+
+.title {
+  font-size: 1.5em;
+  margin-left: 10px;
+  font-family: 'Times New Roman', Times, serif, sans-serif;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-info img {
+  border-radius: 50%;
+  height: 40px;
+  width: 40px;
+  margin-left: 10px;
+}
+
+.notification, .system-name {
+  margin-right: 10px;
+  size: 40dp;
+}
+
+/* CSS phần body và sidebar */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f9;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column; /* Sửa lại để đảm bảo layout theo cột */
+  overflow: hidden; /* Ẩn cuộn ngang */
+  font-family: 'Times New Roman', Times, serif, sans-serif;
 }
 
-.container {
-    display: flex;
-    height: 100vh;
+.main-content-wrapper {
+  display: flex;
+  height: calc(100vh - 60px); /* Chiều cao trừ phần header, đảm bảo đủ không gian cho nội dung */
+  overflow: hidden;
 }
 
-/* Sidebar */
 .sidebar {
-    width: 250px;
-    background-color: #2e7d4f;
-    color: white;
-    padding-top: 20px;
+  width: 200px;
+  background-color: #ebebeb;
+  height: 100%;
+  padding: 1rem;
+  color:  rgb(104, 39, 39);
+  transition: width 0.3s ease;
+  overflow-y: auto; /* Đảm bảo sidebar cuộn được nếu nội dung quá dài */
 }
 
-.sidebar h2 {
-    text-align: center;
-    margin-bottom: 20px;
+.sidebar.collapsed {
+  width: 80px;
 }
 
-.sidebar ul {
-    list-style: none;
-    padding-left: 20px;
+.sidebar.collapsed .nav-link {
+  text-align: center;
+  justify-content: center;
 }
 
-.sidebar ul li {
-    margin: 15px 0;
+.sidebar h4 {
+  display: block;
 }
 
-.sidebar ul li a {
-    color: white;
-    text-decoration: none;
-    font-size: 16px;
-    display: block;
+.sidebar.collapsed h4 {
+  display: none;
 }
 
-.sidebar ul li a:hover {
-    background-color: #1b5e36;
-    padding-left: 10px;
-    transition: all 0.3s;
+.sidebar .nav-link {
+  display: flex;
+  align-items: center;
 }
 
-/* Main Content */
+.sidebar .icon {
+  margin-right: 10px;
+}
+
+.sidebar.collapsed .nav-link span {
+  display: none;
+}
+
 .main-content {
-    flex: 1;
-    padding: 20px;
+  flex-grow: 1;
+  padding: 2rem;
+  overflow-y: auto; /* Đảm bảo nội dung chính cuộn được nếu vượt quá chiều cao màn hình */
 }
 
-.breadcrumb {
-    margin-bottom: 20px;
+th {
+  text-align: center;
 }
 
-.breadcrumb a {
-    text-decoration: none;
-    color: #2e7d4f;
-    margin-right: 5px;
+.thugon {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  text-align: center;
 }
 
-h1 {
-    font-size: 24px;
-    margin-bottom: 20px;
+.thugon h4 {
+  margin: 0;
 }
 
-/* Table Styles */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: white;
-}
+/* Responsive thiết kế */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-table thead {
-    background-color: #2e7d4f;
-    color: white;
-}
+  .sidebar {
+    width: 100px;
+  }
 
-table th, table td {
-    padding: 10px;
-    border: 1px solid #ccc;
-    text-align: left;
+  .main-content {
+    padding: 1rem;
+  }
 }
-
-table th {
-    font-size: 14px;
+span{
+  color:  rgb(0, 0, 0);
 }
-
-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+.main-content-wrapper {
+  display: flex;
+  flex-grow: 1; /* Đảm bảo phần còn lại sau header chiếm đầy không gian */
+  overflow: hidden;
 }
-
-/* Action Buttons */
-.btn {
-    padding: 5px 10px;
-    border: none;
-    cursor: pointer;
-    border-radius: 3px;
+#toggleButton {
+  margin-left: 20px; /* Di chuyển nút sang bên phải 20dp (khoảng cách) */
+  font-size: 13px; /* Điều chỉnh kích thước icon */
+  cursor: pointer; /* Con trỏ chuột sẽ thành dạng pointer khi di qua nút */
 }
-
-.btn-edit {
-    background-color: #ffa000;
-    color: white;
+i {
+  color: black;
 }
-
-.btn-delete {
-    background-color: #f44336;
-    color: white;
-}
-
-.btn-edit:hover, .btn-delete:hover {
-    opacity: 0.8;
-}
-
-/* Add Account Button */
-.add-account-btn {
-    background-color: #2e7d4f;
-    color: white;
-    padding: 10px 20px;
-    text-decoration: none;
-    border-radius: 5px;
-    display: inline-block;
-    margin-bottom: 20px;
-}
-
-.add-account-btn:hover {
-    background-color: #24653a;
-}
-
-/* Top-right user actions */
-.user-actions {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    margin-bottom: 20px;
-}
-/* Hiệu ứng hover cho hàng trong bảng */
-tbody tr:hover {
-background-color: #e0f7fa; /* Màu nền khi di chuột */
-}
-
-/* Hiệu ứng cho nút */
-.btn {
-transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu nền */
-}
-
-.user-actions .document-btn,
-.user-actions .logout-btn {
-    background-color: #2e7d4f;
-    color: white;
-    padding: 10px 15px;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-left: 10px;
-}
-
-.user-actions .logout-btn:hover,
-.user-actions .document-btn:hover {
-    background-color: #24653a;
-}
-

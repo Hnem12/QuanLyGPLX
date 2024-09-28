@@ -5,6 +5,9 @@ const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 const path = require('path');
 const ejs = require('ejs');
+const mongoose = require('mongoose');
+const express = require('express');
+const cookieParser = require('cookie-parser');
 
 // Tạo tài khoản
 const register = async (req, res, next) => {
@@ -13,31 +16,36 @@ const register = async (req, res, next) => {
         return res.status(400).json({ errors: errors.array() });
     }
     try {
-        const { username, password, role } = req.body;
+        const { username, password, role, SDT, Name, Address, Image, Gender } = req.body;
         
         const existingUser = await AccountModel.findOne({ username });
         if (existingUser) {
             return res.status(400).json('User này đã tồn tại');
         }
-
+    
         const encryptedPassword = await bcrypt.hash(password, saltRounds);
         
         const newUser = await AccountModel.create({
             username,
             password: encryptedPassword,
             role,
+            SDT,
+            Name,
+            Address,
+            Image,
+            Gender
         });
-
+    
         return res.json('Tạo tài khoản thành công');
     } catch (error) {
+        console.error('Lỗi khi tạo tài khoản:', error);
         return res.status(500).json('Tạo tài khoản thất bại');
     }
+    
 };
 
 // Đăng nhập
 const postlogin = async (req, res, next) => {
-    // var Username = req.body.username;
-    // var Password = req.body.password;
     const { username, password } = req.body;
     try {
         const account = await AccountModel.findOne({ username });
@@ -48,11 +56,21 @@ const postlogin = async (req, res, next) => {
         const checkPassword = bcrypt.compareSync(password, account.password);
         if (!checkPassword) {
             return res.status(401).json('Mật khẩu không chính xác');
-        }
-        else {
-            var token = jwt.sign({ _id: account._id }, 'Hnem'); // Generate JWT token
-            res.cookie('token', token, { httpOnly: true }); // Set token in cookies
-            return res.json({ message: 'Đăng nhập thành công' });
+        } else {
+            const token = jwt.sign({ _id: account._id }, 'Hnem');
+            res.cookie('token', token, { httpOnly: true });
+            return res.json({
+                message: 'Đăng nhập thành công',
+                userData: {
+                    username: account.username,
+                    role: account.role,
+                    SDT: account.SDT,
+                    Name: account.Name,
+                    Address: account.Address,
+                    Image: account.Image,
+                    Gender: account.Gender
+                }
+            });
         }
     } catch (error) {
         res.status(500).json({ error: error.message });
@@ -105,7 +123,15 @@ const getAll = async (req, res, next) => {
 const getId = async (req, res, next) => {
     try {
         const account = await AccountModel.findById(req.params.id);
-        res.json(account);
+        res.json({
+            username: account.username,
+            role: account.role,
+            SDT: account.SDT,
+            Name: account.Name,
+            Address: account.Address,
+            Image: account.Image,
+            Gender: account.Gender
+        });
     } catch (error) {
         res.status(500).json('Lỗi server');
     }
@@ -113,12 +139,17 @@ const getId = async (req, res, next) => {
 
 // Thêm tài khoản
 const addAccount = async (req, res, next) => {
-    const { username, password } = req.body;
+    const { username, password, SDT, Name, Address, Image, Gender } = req.body;
     try {
         const encryptedPassword = await bcrypt.hash(password, saltRounds);
         const newAccount = await AccountModel.create({
             username,
             password: encryptedPassword,
+            SDT,
+            Name,
+            Address,
+            Image,
+            Gender
         });
         res.json('Thêm account thành công');
     } catch (error) {

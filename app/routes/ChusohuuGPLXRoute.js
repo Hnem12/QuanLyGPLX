@@ -3,6 +3,7 @@ const router = express.Router();
 const LicenseHolder = require('../models/ChusohuuGPLXModel');
 const { register } = require('../controllers/accountController');
 const { upload } = require('../controllers/accountController'); // Multer middleware
+const mongoose = require('mongoose');
 
 // Lấy tất cả chủ sở hữu GPLX
 router.get('/', async (req, res) => {
@@ -15,15 +16,25 @@ router.get('/', async (req, res) => {
 });
 
 // Tạo một chủ sở hữu GPLX mới
-router.post('/', async (req, res) => {
-  const licenseHolder = new LicenseHolder(req.body);
+router.post('/addlicenseHolder', async (req, res) => {
   try {
+    // Validate and create a new LicenseHolder from request body
+    const licenseHolder = new LicenseHolder(req.body);
+
+    // Save the new license holder to the database
     const savedHolder = await licenseHolder.save();
-    res.status(201).json(savedHolder); // Trả về mã trạng thái 201 khi tạo thành công
+
+    // Return status 201 for successful creation
+    res.status(201).json(savedHolder);
   } catch (err) {
-    res.status(400).json({ message: 'Lỗi khi tạo chủ sở hữu GPLX', error: err.message });
+    // Return 500 status for server errors and the error message
+    res.status(499).json({
+      message: 'Lỗi khi tạo chủ sở hữu GPLX',
+      error: err.message
+    });
   }
 });
+
 
 // Lấy một chủ sở hữu GPLX cụ thể theo ID
 router.get('/:id', async (req, res) => {
@@ -64,28 +75,24 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// Lấy một chủ sở hữu GPLX theo ID hoặc Mã GPLX
-const mongoose = require('mongoose');
-
 router.get('/search/:idOrGPLX', async (req, res) => {
   try {
-    const { idOrGPLX } = req.params;
+    const { idOrGPLX } = req.params; // idOrGPLX có thể là ID hoặc Mã GPLX
+    let holder;
 
-    // Tìm kiếm theo ID trước
-    let holder = await LicenseHolder.findById(idOrGPLX);
-
-    // Nếu không tìm thấy theo ID, kiểm tra xem idOrGPLX có phải là ObjectId hợp lệ không
-    if (!holder) {
-      if (mongoose.isValidObjectId(idOrGPLX)) {
-        const convertedId = mongoose.Types.ObjectId(idOrGPLX);
-        holder = await LicenseHolder.findById(convertedId);
-      } else {
-        // Nếu không phải ObjectId, tìm kiếm theo MaGPLX
-        holder = await LicenseHolder.findById({ MaGPLX: idOrGPLX });
-      }
+    // Kiểm tra xem idOrGPLX có phải ObjectId hợp lệ không
+    if (mongoose.isValidObjectId(idOrGPLX)) {
+      // Nếu hợp lệ, tìm theo ID trước
+      holder = await LicenseHolder.findById(idOrGPLX);
     }
 
-    // Nếu vẫn không tìm thấy
+    // Nếu không tìm thấy theo ID hoặc idOrGPLX không phải là ObjectId,
+    // tìm kiếm theo MaGPLX (nhớ rằng MaGPLX là chuỗi)
+    if (!holder) {
+      holder = await LicenseHolder.findOne({ MaGPLX: idOrGPLX }); // Tìm theo Mã GPLX
+    }
+
+    // Nếu không tìm thấy cả theo ID và MaGPLX
     if (!holder) {
       return res.status(404).json({ message: 'Không tìm thấy chủ sở hữu GPLX với ID hoặc Mã GPLX đã cho' });
     }
@@ -95,6 +102,27 @@ router.get('/search/:idOrGPLX', async (req, res) => {
     res.status(500).json({ message: 'Lỗi khi tìm kiếm chủ sở hữu GPLX', error: err.message });
   }
 });
+
+// Router
+router.post('/addlicenseHolder', async (req, res) => {
+  try {
+    const licenseHolder = new LicenseHolder(req.body);
+    const savedHolder = await licenseHolder.save();
+
+    // Gửi mã GPLX đã lưu qua response
+    res.status(201).json({
+      message: 'Chủ sở hữu GPLX đã được tạo thành công',
+      MaGPLX: savedHolder.MaGPLX, // Gửi mã GPLX đã lưu
+      holder: savedHolder // Gửi toàn bộ thông tin chủ sở hữu GPLX
+    });
+  } catch (err) {
+    res.status(500).json({
+      message: 'Lỗi khi tạo chủ sở hữu GPLX',
+      error: err.message
+    });
+  }
+});
+
 
 
 module.exports = router;

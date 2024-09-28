@@ -30,52 +30,65 @@ exports.taodanhmuc= (req, res, next) => {
 }
 
 
-exports.createCategory = (req, res, next) => {
-    const errors = validationResult(req)
+exports.addLicenseHolder = (req, res, next) => {
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(500).json({ errors: errors.array() });
     }
-    var name = req.body.name
-    var dateOfBirth = req.body.DateOfBirth
-    var cCCD = req.body.CCCD
-    var address = req.body.Address
-    var phoneNumber = req.body.PhoneNumber
-    var email = req.body.Email
-    var ngaycap = req.body.Ngaycap
-    var ngayhethan = req.body.Ngayhethan
-    var status = req.body.Status
-    var giamdoc = req.body.Giamdoc
-    var loivipham = req.body.Loivipham
-    var maGPLX = req.body.maGPLX
+
+    // Extract fields from the request body
+    const {
+        name, maGPLX, DateOfBirth, CCCD, Address, PhoneNumber,
+        Email, Ngaycap, Ngayhethan, Status, Giamdoc, Loivipham
+    } = req.body;
+
+    // Check if the license holder already exists
     ChusohuuGPLXModel.findOne({
-        Name: name, DateOfBirth: dateOfBirth, CCCD: cCCD, Address: address,
-        PhoneNumber:  phoneNumber, Email: email, Ngaycap: ngaycap, Ngayhethan: ngayhethan,
-         Status: status, Giamdoc: giamdoc, Loivipham: loivipham, MaGPLX: maGPLX
+        Name: name,
+        DateOfBirth,
+        CCCD,
+        Address,
+        PhoneNumber,
+        Email,
+        Ngaycap,
+        Ngayhethan,
+        Status,
+        MaGPLX: maGPLX
     })
     .then(data => {
         if (data) {
-        res.json('Danh mục này đã tồn tại')
-        }
-        else {
+            return res.json('Người dùng này đã tồn tại');
+        } else {
+            // Create a new license holder, MongoDB will automatically generate _id
             return ChusohuuGPLXModel.create({
-                Name: name, DateOfBirth: dateOfBirth, CCCD: cCCD, Address: address,
-                PhoneNumber:  phoneNumber, Email: email, Ngaycap: ngaycap, Ngayhethan: ngayhethan, Status: status, MaGPLX: maGPLX
-            })
+                Name: name,
+                DateOfBirth,
+                CCCD,
+                Address,
+                PhoneNumber,
+                Email,
+                Ngaycap,
+                Ngayhethan,
+                Status,
+                MaGPLX: maGPLX
+            });
         }
     })
-        .then(data => {
-            if(data){
-                res.json('Tao danh muc thanh cong')
-                }
-        })
-        .catch(err => {
-        res.status(500).json('Tao danh muc that bai')
+    .then(data => {
+        if (data) {
+            res.json('Tạo danh mục thành công');
+        }
     })
-}
+    .catch(err => {
+        res.status(500).json('Tạo danh mục thất bại');
+    });
+};
+
 
 // sửa danh mục 
 exports.updateCategory = (req, res, next) => {
     var _id = req.params.id
+    var NewmaGPLX = req.body.maGPLX
     var Newname = req.body.newname
     var NewDateOfBirth =req.body.newDateOfBirth
     var NewAddress =req.body.newaddress
@@ -87,7 +100,6 @@ exports.updateCategory = (req, res, next) => {
     var NewStatus =req.body.newstatus
     var Newgiamdoc = req.body.giamdoc
     var Newloivipham = req.body.loivipham
-    var NewmaGPLX = req.body.maGPLX
     ChusohuuGPLXModel.findByIdAndUpdate(_id, {
         Name: Newname,
         DateOfBirth: NewDateOfBirth,

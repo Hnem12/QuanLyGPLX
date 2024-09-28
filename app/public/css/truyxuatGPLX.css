@@ -1,0 +1,88 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    padding: 20px;
+    
+}
+h1 {
+    color: #4CAF50;
+}
+#idOrGPLX {
+    padding: 10px;
+    width: 300px;
+    font-size: 16px;
+}
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 10px;
+}
+button:hover {
+    background-color: #45a049;
+}
+#details {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: fit-content;
+    max-width: 90%; /* Đảm bảo hiển thị tốt trên màn hình nhỏ */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng đổ bóng */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+#details h3 {
+    margin-top: 0;
+    color: #4CAF50;
+}
+#details p {
+    margin: 5px 0;
+}
+.breadcrumb a {
+    text-decoration: none;
+    color: rgb(0, 0, 0);
+}
+.breadcrumb-item+.breadcrumb-item::before {
+    content: " / ";
+}/* Tạo style nhỏ gọn cho container tìm kiếm */
+.search-container {
+    display: flex;
+    justify-content: space-between; /* Giữ khoảng cách hợp lý giữa input và button */
+    align-items: center;
+    width: 100%; /* Container chiếm 100% chiều rộng của vùng cha */
+    padding: 0 20px; /* Tạo khoảng cách bên trái và phải */
+}
+
+/* Kéo dài thanh input */
+.search-container .form-control {
+    flex-grow: 1; /* Cho phép input chiếm không gian còn lại */
+    height: 35px;
+    font-size: 16px;
+    padding: 5px 15px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-right: 10px; /* Khoảng cách giữa input và button */
+}
+
+/* Điều chỉnh kích thước button */
+.search-container .btn {
+    height: 35px;
+    padding: 5px 15px;
+    font-size: 16px;
+    background-color: #2baf2b;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-container .btn:hover {
+    background-color: #249324;
+}
