@@ -38,3 +38,28 @@ async function fetchLicenseHolders() {
   window.onload = async () => {
     await fetchLicenseHolders(); // Lấy danh sách license holders
   };
+
+  async function deleteHolder(id) {
+    const confirmation = confirm('Bạn có chắc chắn muốn xóa tài khoản này?');
+    if (!confirmation) return;
+
+    try {
+        const response = await fetch(`/api/delete/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        if (response.ok) {
+            alert('Tài khoản đã được xóa thành công!');
+            location.reload(); // Tải lại trang sau khi xóa
+        } else {
+            const errorMessage = await response.text();
+            alert(`Lỗi khi xóa tài khoản: ${errorMessage}`);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Lỗi khi gửi yêu cầu. Vui lòng thử lại.');
+    }
+}

@@ -35,8 +35,7 @@ app.use('/api/licenseHolder/', licenseHolderRoutes);
 app.use('/api/register/', accountRouter);
 app.use('/api/addAccount/', accountRouter);
 app.use('/api/updatedAccount/', accountRouter);
-
-app.use('/api/addlicenseHolder/', licenseHolderRoutes);
+app.use('/api/addLicenseHolder/', licenseHolderRoutes);
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 
@@ -58,6 +57,7 @@ app.get('/licenseHolder', (req, res) => {
 app.get('/', (req, res) => {
     res.render('login'); // Render the login page
 });
+
 app.use(checkAuthentication); 
 app.get('/trangchu',checkAuthentication, (req, res) => {
     res.render('index'); // Render the index page

@@ -66,12 +66,6 @@ const ChusohuuGPLXSchema = new Schema({
     collection: 'chusohuuGPLX',
     timestamps: true // Tự động tạo trường createdAt và updatedAt
 });
-ChusohuuGPLXSchema.statics.findByMaGPLX = async function(MaGPLX) {
-    if (!MaGPLX) {
-        throw new Error('Mã GPLX không được để trống'); // Kiểm tra dữ liệu đầu vào
-    }
-    return await this.findOne({ MaGPLX });
-};
 
 // Cập nhật thông tin chủ sở hữu GPLX
 ChusohuuGPLXSchema.methods.updateInfo = async function(data) {
