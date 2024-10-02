@@ -38,6 +38,7 @@ app.use('/api/updatedAccount/', accountRouter);
 app.use('/api/truyxuatbanglaixeoto/', licenseHolderRoutes);
 app.use('/api', licenseHolderRoutes);
 app.use('/api/deleteLicenseHolder', licenseHolderRoutes);
+app.use('/api/search/', licenseHolderRoutes);
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 

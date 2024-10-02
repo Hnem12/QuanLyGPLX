@@ -76,45 +76,6 @@ router.delete('/:id', async (req, res) => {
 
 
 
-router.get('/search/:idOrGPLX', async (req, res) => {
-  const { idOrGPLX } = req.params; // The parameter can be either ID or MaGPLX
-
-  try {
-      let holder;
-
-      // Check if the parameter is a valid ObjectId for ID search
-      if (mongoose.isValidObjectId(idOrGPLX)) {
-          holder = await LicenseHolder.findById(idOrGPLX);
-          if (holder) {
-              console.log('Found holder by ID:', holder);
-              return res.json({
-                  message: 'Found holder by ID',
-                  MaGPLX: holder.MaGPLX, // Return the MaGPLX as well
-                  holder // You can return the full holder object if needed
-              });
-          }
-      }
-
-      // Normalize the input for MaGPLX search
-      const normalizedMaGPLX = idOrGPLX.trim().toLowerCase();
-      holder = await LicenseHolder.findOne({ MaGPLX : normalizedMaGPLX });
-
-      // Return the result
-      if (holder) {
-          console.log('Found holder by MaGPLX:', holder);
-          return res.json({
-              message: 'Found holder by MaGPLX',
-              MaGPLX: holder.MaGPLX, // Return the MaGPLX
-              holder // You can return the full holder object if needed
-          });
-      } else {
-          return res.status(404).json({ message: 'Không tìm thấy chủ sở hữu GPLX với ID hoặc Mã GPLX đã cho' });
-      }
-  } catch (err) {
-      console.error('Search error:', err);
-      return res.status(500).json({ message: 'Lỗi khi tìm kiếm chủ sở hữu GPLX', error: err.message });
-  }
-});
 
 router.post('/addlicenseHolder', async (req, res) => {
   try {
@@ -198,6 +159,47 @@ router.post('/addlicenseHolder', async (req, res) => {
           error: err.message // Provide the error message
       });
   }
+});
+
+
+router.get('/search/:idOrGPLX', async (req, res) => {
+    const { idOrGPLX } = req.params; // The parameter can be either ID or MaGPLX
+  
+    try {
+        let holder = null;
+  
+        // First, check if the parameter is a valid ObjectId for ID search
+        if (mongoose.isValidObjectId(idOrGPLX)) {
+            holder = await LicenseHolder.findById(idOrGPLX);
+            if (holder) {
+                console.log('Found holder by ID:', holder);
+                return res.json({
+                    message: 'Found holder by ID',
+                    MaGPLX: holder.MaGPLX, // Returning MaGPLX
+                    holder // Returning the full holder object
+                });
+            }
+        }
+
+        holder = await LicenseHolder.findOne({ MaGPLX: idOrGPLX });
+
+        // Check if the holder was found by MaGPLX
+        if (holder) {
+            console.log('Found holder by MaGPLX:', holder);
+            return res.json({
+                message: 'Found holder by MaGPLX',
+                MaGPLX: holder.MaGPLX, // Returning MaGPLX
+                holder // Returning the full holder object
+            });
+        }
+
+        // If not found by either ID or MaGPLX, return 404
+        return res.status(404).json({ message: 'Không tìm thấy chủ sở hữu GPLX với ID hoặc Mã GPLX đã cho' });
+  
+    } catch (err) {
+        console.error('Search error:', err);
+        return res.status(500).json({ message: 'Lỗi khi tìm kiếm chủ sở hữu GPLX', error: err.message });
+    }
 });
 
 
