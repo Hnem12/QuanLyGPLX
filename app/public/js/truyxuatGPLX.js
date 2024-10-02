@@ -1,75 +1,92 @@
-// Hàm để lấy tất cả license holders
-async function fetchLicenseHolders() {
-    try {
-        const response = await fetch('/api/license-holders');
-        const holders = await response.json();
-        console.log(holders); // Hiển thị kết quả trong console
-        displayLicenseHolders(holders);
-    } catch (error) {
-        console.error('Error fetching license holders:', error);
+function updatePlaceholder() {
+    const searchField = document.getElementById('searchField').value;
+    const inputField = document.getElementById('idOrGPLX');
+
+    // Update placeholder based on search field selection
+    if (searchField === 'ID') {
+        inputField.placeholder = 'Nhập ID';
+    } else if (searchField === 'MaGPLX') {
+        inputField.placeholder = 'Nhập Mã GPLX';
     }
 }
 
-// Hàm để hiển thị danh sách license holders
-function displayLicenseHolders(holders) {
-    const resultDiv = document.getElementById('result');
-    resultDiv.innerHTML = '';
-    holders.forEach(holder => {
-        resultDiv.innerHTML += `
-            <div>
-                <h4>${holder.Name}</h4>
-                <p>CCCD: ${holder.CCCD}</p>
-                <p>Địa chỉ: ${holder.Address}</p>
-                <p>Ngày cấp: ${new Date(holder.Ngaycap).toLocaleDateString()}</p>
-                <p>Ngày hết hạn: ${new Date(holder.Ngayhethan).toLocaleDateString()}</p>
-                <button onclick="fetchLicenseHolder('${holder._id}')">Xem chi tiết</button>
-            </div>
-        `;
-    });
-}
+async function fetchLicenseHolder() {
+    const input = document.getElementById('idOrGPLX').value.trim();
+    const searchField = document.getElementById('searchField').value; 
+    const detailDiv = document.getElementById('details');
 
-// Hàm để lấy license holder theo ID
-async function findLicenseHolder(licenseId) {
+    // Check if input is empty
+    if (!input) {
+        detailDiv.innerHTML = '<p class="text-danger">Vui lòng nhập thông tin để tìm kiếm.</p>';
+        return;
+    }
+
+    // Show loading message
+    detailDiv.innerHTML = '<p>Đang tải...</p>';
+
     try {
-        const holder = await LicenseHolder.findOne({ licenseId: licenseId });
-        
+        let url = '';
+
+        if (searchField === 'ID') {
+            url = `/api/licenseHolder/${encodeURIComponent(input)}`; // ID lookup
+        } else if (searchField === 'MaGPLX') {
+            url = `/api/licenseHolder/search/${encodeURIComponent(input)}`; // MaGPLX lookup
+        }
+
+        // Fetch the data
+        const response = await fetch(url);
+
+        // Check for non-200 response
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+
+        const holder = await response.json();
+
+        // Check if holder data is returned
         if (holder) {
-            console.log('License holder found:', holder);
-            // Xử lý thông tin chủ sở hữu ở đây (ví dụ: hiển thị cho người dùng)
+            displayLicenseHolder(holder);
         } else {
-            console.log('No license holder found with that ID.');
+            detailDiv.innerHTML = '<p class="text-warning">Không tìm thấy chủ sở hữu với thông tin đã nhập.</p>';
         }
     } catch (error) {
-        console.error('Error finding license holder:', error);
+        detailDiv.innerHTML = '<p class="text-danger">Lỗi khi truy xuất dữ liệu. Vui lòng thử lại sau.</p>';
+        console.error('Fetch error:', error);
     }
 }
 
-
-// Hàm để hiển thị chi tiết license holder
 function displayLicenseHolder(holder) {
     const detailDiv = document.getElementById('details');
     detailDiv.innerHTML = `
-        <h3>Chi tiết chủ sở hữu GPLX</h3>
-        <p>Tên: ${holder.Name}</p>
-        <p>Ngày sinh: ${new Date(holder.DateOfBirth).toLocaleDateString()}</p>
-        <p>CCCD: ${holder.CCCD}</p>
-        <p>Địa chỉ: ${holder.Address}</p>
-        <p>Số điện thoại: ${holder.PhoneNumber}</p>
-        <p>Email: ${holder.Email}</p>
-        <p>Ngày cấp: ${new Date(holder.Ngaycap).toLocaleDateString()}</p>
-        <p>Ngày hết hạn: ${new Date(holder.Ngayhethan).toLocaleDateString()}</p>
-        <p>Trạng thái: ${holder.Status}</p>
-        <p>Giám đốc: ${holder.Giamdoc}</p>
-        <p>Lỗi vi phạm: ${holder.Loivipham}</p>
-        <p>Mã GPLX: ${holder.MaGPLX}</p> <!-- Thêm trường MaGPLX -->
+      <div class="holder-details">
+        <h4 class="holder-title">Chi tiết chủ sở hữu GPLX</h4>
+        <div class="holder-info-container">
+          <div class="holder-info-left">
+          
+            <p><strong>Tên:</strong> ${holder.Name}</p>
+            <p><strong>Ngày sinh:</strong> ${holder.DateOfBirth ? new Date(holder.DateOfBirth).toLocaleDateString() : 'N/A'}</p>
+            <p><strong>CCCD:</strong> ${holder.CCCD}</p>
+            <p><strong>Số điện thoại:</strong> ${holder.PhoneNumber}</p>
+            <p><strong>Email:</strong> ${holder.Email}</p>
+          </div>
+          <div class="holder-info-right">
+            <p><strong>Ngày cấp:</strong> ${holder.Ngaycap ? new Date(holder.Ngaycap).toLocaleDateString() : 'N/A'}</p>
+            <p><strong>Ngày hết hạn:</strong> ${holder.Ngayhethan ? new Date(holder.Ngayhethan).toLocaleDateString() : 'N/A'}</p>
+            <p><strong>Trạng thái:</strong> <span class="status ${holder.Status === 'Active' ? 'active' : 'inactive'}">${holder.Status}</span></p>
+            <p><strong>Mã GPLX:</strong> ${holder.MaGPLX}</p>
+              <p><strong>ID:</strong> ${holder.Giamdoc}</p> 
+          </div>
+        </div>
+      </div>
     `;
 }
 
-const currentPath = window.location.pathname;
-const currentPage = currentPath.substring(currentPath.lastIndexOf('/') + 1) || 'index.html';
+updatePlaceholder();
 
-// Remove file extension from the page name for display purposes
-const pageName = currentPage.split('.')[0].replace(/-/g, ' ').toUpperCase();
-
-// Set the page name dynamically
-document.getElementById('currentPage').textContent = pageName;
+// Event listener for search button
+document.getElementById('idOrGPLX').addEventListener('click', function() {
+    // Clear the input field
+    document.getElementById('idOrGPLX').value = '';
+    // Call the fetchByMaGPLX function
+    fetchByMaGPLX();
+});  

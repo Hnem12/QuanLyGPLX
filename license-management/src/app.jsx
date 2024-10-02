@@ -1,50 +1,72 @@
-// App.js
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch, Link } from 'react-router-dom';
-import Home from './components/Home';
-import LicenseManagement from './components/LicenseManagement';
-import AccountManagement from './components/AccountManagement';
+import React, { useState } from 'react';
 
-function App() {
+const LicenseLookup = () => {
+  const [licenseType, setLicenseType] = useState('GPLX PET (Có thời hạn)');
+  const [licenseNumber, setLicenseNumber] = useState('');
+  const [birthDate, setBirthDate] = useState('');
+  const [captcha, setCaptcha] = useState('');
+  const [captchaInput, setCaptchaInput] = useState('');
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Add validation or API call here
+    if (captcha === captchaInput) {
+      alert("Form submitted successfully!");
+    } else {
+      alert("CAPTCHA is incorrect.");
+    }
+  };
+
   return (
-    <Router>
-      <div className="container">
-        {/* Sidebar */}
-        <div className="sidebar">
-          <h2>Trang Chủ</h2>
-          <ul>
-            <li><Link to="/">Trang chủ</Link></li>
-            <li><Link to="/truyxuatbanglaixeoto">Truy xuất sản phẩm</Link></li>
-            <li>
-              <Link to="#">Quản lý</Link>
-              <ul>
-                <li><Link to="/account">Tài khoản tổ chức</Link></li>
-                <li><Link to="/organizations">Danh sách tổ chức</Link></li>
-                <li><Link to="/statistics">Thống kê doanh nghiệp</Link></li>
-                <li><Link to="/roles">Phân quyền vai trò</Link></li>
-              </ul>
-            </li>
-          </ul>
+    <div className="container">
+      <h2>Tra cứu thông tin giấy phép lái xe</h2>
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label>Loại GPLX:</label>
+          <select value={licenseType} onChange={(e) => setLicenseType(e.target.value)}>
+            <option value="GPLX PET (Có thời hạn)">GPLX PET (Có thời hạn)</option>
+            <option value="GPLX Cũ">GPLX Cũ</option>
+          </select>
         </div>
 
-        {/* Main Content */}
-        <div className="main-content">
-          <div className="user-actions">
-            <a href="#" className="document-btn">HNem</a>
-            <a href="http://localhost:3000/api/account/login" className="logout-btn">Logout</a>
+        <div className="form-group">
+          <label>Số GPLX:</label>
+          <input
+            type="text"
+            value={licenseNumber}
+            onChange={(e) => setLicenseNumber(e.target.value)}
+            placeholder="Nhập số GPLX đã cấp"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Ngày/Tháng/Năm sinh:</label>
+          <input
+            type="text"
+            value={birthDate}
+            onChange={(e) => setBirthDate(e.target.value)}
+            placeholder="dd/MM/yyyy hoặc Năm sinh"
+          />
+        </div>
+
+        <div className="form-group">
+          <label>Mã bảo vệ:</label>
+          <div className="captcha-box">
+            <span className="captcha">{captcha}</span> 
+            <button type="button" onClick={() => setCaptcha('pXxYN8')}>Refresh</button>
           </div>
-
-          <Switch>
-            {/* Định nghĩa các route */}
-            <Route exact path="/" component={Home} />
-            <Route path="/truyxuatbanglaixeoto" component={LicenseManagement} />
-            <Route path="/account" component={AccountManagement} />
-            {/* Bạn có thể thêm các route khác */}
-          </Switch>
+          <input
+            type="text"
+            value={captchaInput}
+            onChange={(e) => setCaptchaInput(e.target.value)}
+            placeholder="Nhập mã bảo vệ"
+          />
         </div>
-      </div>
-    </Router>
-  );
-}
 
-export default App;
+        <button type="submit">Tra cứu giấy phép lái xe</button>
+      </form>
+    </div>
+  );
+};
+
+export default LicenseLookup;

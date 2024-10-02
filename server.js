@@ -35,10 +35,15 @@ app.use('/api/licenseHolder/', licenseHolderRoutes);
 app.use('/api/register/', accountRouter);
 app.use('/api/addAccount/', accountRouter);
 app.use('/api/updatedAccount/', accountRouter);
-app.use('/api/addLicenseHolder/', licenseHolderRoutes);
+app.use('/api/truyxuatbanglaixeoto/', licenseHolderRoutes);
+app.use('/api', licenseHolderRoutes);
+app.use('/api/deleteLicenseHolder', licenseHolderRoutes);
 
 app.use(express.static(path.join(__dirname, 'client/build')));
 
+app.get('/', (req, res) => {
+    res.render('login'); // Render the login page
+});
 
 app.get('/login', (req, res) => {
     res.render('login'); // Render the login page
@@ -47,21 +52,20 @@ app.get('/login', (req, res) => {
 app.get('/register', (req, res) => {
     res.render('register'); // Render the register page
 });
-app.get('/account', (req, res) => {
+app.use(checkAuthentication); 
+
+app.get('/account',checkAuthentication, (req, res) => {
     res.render('Account'); // Render the register page
 });
-app.get('/licenseHolder', (req, res) => {
+app.get('/licenseHolder',checkAuthentication, (req, res) => {
     res.render('licenseHolder'); // Render the register page
 });
 
-app.get('/', (req, res) => {
-    res.render('login'); // Render the login page
-});
 
-app.use(checkAuthentication); 
 app.get('/trangchu',checkAuthentication, (req, res) => {
     res.render('index'); // Render the index page
 });
+
 app.get('/api/account/', async (req, res) => {
     try {
       const accounts = await AccountModel.find(); // Lấy tất cả dữ liệu từ collection 'account'
@@ -75,6 +79,27 @@ app.get('/api/account/', async (req, res) => {
   app.get('/truyxuatbanglaixeoto', (req, res) => {
     res.render('truyxuatbanglaixeoto'); // Render the license retrieval page
 });
+app.get('/api/licenseHolder/search/:MaGPLX', async (req, res) => {
+    try {
+        const { MaGPLX } = req.params;
+        const holder = await LicenseHolder.findOne({ MaGPLX });
+
+        if (!holder) {
+            return res.status(404).json({ message: "Holder not found" });
+        }
+
+        // Check and log the holder data
+        console.log('Found holder:', holder);
+
+        return res.json(holder); // Trả về holder cho frontend
+    } catch (error) {
+        console.error('Error fetching license holder:', error);
+        return res.status(500).json({ message: 'Server error' });
+    }
+});
+
+
+
 
 app.listen(3000, () => {
     console.log(`Server started on port 3000`);

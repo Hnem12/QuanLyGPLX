@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="css/index.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+  <link rel="icon" href="/uploads/h8.png" type="image/x-icon">
 </head>
 <body>
   <div class="header">
@@ -22,6 +23,7 @@
       <div class="notification">🔔</div>
       <div class="system-name"></div>
        <img src="/uploads/h6.jpg" alt="Avatar">
+       <a style="color: black; text-decoration: none; margin-left: 20px;" href="http://localhost:3000/"> Đăng xuất </a>
     </div>
   </div>
 
@@ -164,10 +166,14 @@
             <div class="mb-3">
               <label for="status" class="form-label">Trạng thái</label>
               <select class="form-control" id="status" required>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
+                <option value="Đã kích hoạt">Đã kích hoạt</option>
+                <option value="Chưa kích hoạt">Chưa kích hoạt</option>
               </select>
             </div>
+            <div class="mb-3">
+              <label for="giamdoc" class="form-label">Giám đốc</label>
+              <input type="text" class="form-control" id="giamdoc">
+          </div>
             <button type="submit" class="btn btn-primary">Lưu</button>
           </form>
         </div>
@@ -223,6 +229,7 @@
                           <option value="other">Khác</option>
                       </select>
                   </div>
+              
                   <button type="submit" class="btn btn-primary">Lưu Thay Đổi</button>
               </form>
           </div>

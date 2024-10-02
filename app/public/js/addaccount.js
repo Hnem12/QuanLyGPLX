@@ -12,7 +12,9 @@ async function fetchAccounts() {
             <td>${account.username}</td>
             <td>${account.Name}</td>
             <td>Điện thoại: ${account.SDT} <br>Email: ${account.email}</td>
-            <td>${account.role}</td>
+            <td>${account.Address}</td>
+              <td>${account.Gender}</td>
+                  <td>${account.role}</td>
             <td>Đã kích hoạt</td>
             <td>
                 <button class="btn btn-warning btn-sm" onclick='openEditModal(${JSON.stringify(account._id)})'>Sửa</button>
@@ -21,6 +23,7 @@ async function fetchAccounts() {
           </tr>
         `;
         tableBody.insertAdjacentHTML('beforeend', row);
+        document.querySelector('.system-name').textContent = `Hệ thống quản lý GPLX - Xin chào, ${account.username}`;
       });
     } catch (error) {
       console.error('Failed to fetch accounts:', error);

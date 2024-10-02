@@ -1,0 +1,161 @@
+
+td {
+    text-align: center;
+    vertical-align: middle;
+  }
+  /* CSS cho phần header */
+.header {
+    background-color: #e2366f;
+    color: rgb(0, 0, 0);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    font-family: 'Times New Roman', Times, serif, sans-serif;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .logo {
+    display: flex;
+    align-items: center;
+  }
+  
+  .logo img {
+    height: 35px;
+    margin: 0 7px;
+  }
+  
+  .title {
+    font-size: 1.5em;
+    margin-left: 10px;
+  }
+  
+  .user-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .user-info img {
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    margin-left: 10px;
+  }
+  
+  .notification,
+  .system-name {
+    margin-right: 10px;
+  }
+  
+  /* CSS cho phần body và sidebar */
+  body {
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden; /* Ẩn cuộn dọc cho body */
+    font-family: 'Times New Roman', Times, serif, sans-serif;
+  }
+  
+  /* CSS cho phần sidebar */
+  .sidebar {
+    width: 200px; /* Chiều rộng mặc định của sidebar */
+    background-color: #ebebeb;
+    height: 100%;
+    padding: 1rem;
+    color: rgb(104, 39, 39);
+    transition: width 0.3s ease;
+    overflow-y: auto; 
+  }
+  
+  .sidebar.collapsed {
+    width: 80px; /* Chiều rộng khi sidebar bị thu gọn */
+  }
+  
+  .sidebar.collapsed .nav-link {
+    text-align: center;
+    justify-content: center;
+  }
+  
+  .sidebar h4 {
+    display: block;
+  }
+  
+  .sidebar.collapsed h4 {
+    display: none; /* Ẩn tiêu đề khi thu gọn */
+  }
+  
+  .sidebar .nav-link {
+    display: flex;
+    align-items: center;
+  }
+  
+  .sidebar .icon {
+    margin-right: 10px;
+  }
+  
+  .sidebar.collapsed .nav-link span {
+    display: none; /* Ẩn văn bản khi thu gọn */
+  }
+  
+  /* CSS cho phần nội dung chính */
+  .main-content-wrapper {
+    display: flex;
+    flex-grow: 1; 
+    overflow-y: auto; /* Cho phép cuộn dọc cho nội dung chính */
+  }
+  
+  .main-content {
+    flex-grow: 1;
+    padding: 2rem;
+    overflow-y: auto; /* Đảm bảo nội dung chính cuộn được nếu vượt quá chiều cao màn hình */
+  }
+  
+  th {
+    text-align: center;
+  }
+  
+  .thugon {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  .thugon h4 {
+    margin: 0;
+  }
+  
+  /* Responsive thiết kế */
+  @media (max-width: 768px) {
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .sidebar {
+      width: 100px; /* Chiều rộng sidebar trên thiết bị nhỏ */
+    }
+  
+    .main-content {
+      padding: 1rem; /* Padding cho nội dung chính trên thiết bị nhỏ */
+    }
+  }
+  
+  span {
+    color: rgb(0, 0, 0);
+  }
+  
+  #toggleButton {
+    margin-left: 20px; 
+    font-size: 13px; 
+    cursor: pointer; 
+  }
+  
+  i {
+    color: black;
+  }
+  

@@ -46,7 +46,7 @@ const ChusohuuGPLXSchema = new Schema({
     Status: {
         type: String,
         required: true,
-        enum: ['Đã kích hoạt', 'Chưa kích hoạt', 'Tạm dừng'],
+        enum: ['Đã kích hoạt', 'Chưa kích hoạt'],
         default: 'Đã kích hoạt'
     },
     Giamdoc: {

@@ -42,78 +42,151 @@ router.put('/:id', async (req, res) => {
   }
 });
 
-// Xóa một chủ sở hữu GPLX
+
 router.delete('/:id', async (req, res) => {
   try {
-    const removedHolder = await LicenseHolder.findByIdAndDelete(req.params.id);
-    if (!removedHolder) {
-      return res.status(404).json({ message: 'Không tìm thấy chủ sở hữu GPLX để xóa' });
-    }
-    res.json({ message: 'Đã xóa chủ sở hữu GPLX', holder: removedHolder });
+      const { id } = req.params; // Extract ID from request parameters
+      
+      // Directly attempt to delete the license holder
+      const deletedHolder = await LicenseHolder.findByIdAndDelete(id);
+      
+      // Check if the license holder was found and deleted
+      if (!deletedHolder) {
+          return res.status(404).json({
+              success: false,
+              message: 'Chủ sở hữu GPLX không tìm thấy.' // License holder not found
+          });
+      }
+
+      // Return success message
+      res.status(200).json({
+          success: true,
+          message: 'Xóa chủ sở hữu GPLX thành công!' // Successfully deleted message
+      });
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi khi xóa chủ sở hữu GPLX', error: err.message });
+      console.error('Error deleting license holder:', err);
+      res.status(500).json({
+          success: false,
+          message: 'Lỗi khi xóa chủ sở hữu GPLX',
+          error: err.message
+      });
   }
 });
 
+
+
+
 router.get('/search/:idOrGPLX', async (req, res) => {
+  const { idOrGPLX } = req.params; // The parameter can be either ID or MaGPLX
+
   try {
-    const { idOrGPLX } = req.params; // idOrGPLX có thể là ID hoặc Mã GPLX
-    let holder;
+      let holder;
 
-    // Kiểm tra xem idOrGPLX có phải ObjectId hợp lệ không
-    if (mongoose.isValidObjectId(idOrGPLX)) {
-      // Nếu hợp lệ, tìm theo ID trước
-      holder = await LicenseHolder.findById(idOrGPLX);
-    }
+      // Check if the parameter is a valid ObjectId for ID search
+      if (mongoose.isValidObjectId(idOrGPLX)) {
+          holder = await LicenseHolder.findById(idOrGPLX);
+          if (holder) {
+              console.log('Found holder by ID:', holder);
+              return res.json({
+                  message: 'Found holder by ID',
+                  MaGPLX: holder.MaGPLX, // Return the MaGPLX as well
+                  holder // You can return the full holder object if needed
+              });
+          }
+      }
 
-    // Nếu không tìm thấy theo ID hoặc idOrGPLX không phải là ObjectId,
-    // tìm kiếm theo MaGPLX (nhớ rằng MaGPLX là chuỗi)
-    if (!holder) {
-      holder = await LicenseHolder.findOne({ MaGPLX: idOrGPLX }); // Tìm theo Mã GPLX
-    }
+      // Normalize the input for MaGPLX search
+      const normalizedMaGPLX = idOrGPLX.trim().toLowerCase();
+      holder = await LicenseHolder.findOne({ MaGPLX : normalizedMaGPLX });
 
-    // Nếu không tìm thấy cả theo ID và MaGPLX
-    if (!holder) {
-      return res.status(404).json({ message: 'Không tìm thấy chủ sở hữu GPLX với ID hoặc Mã GPLX đã cho' });
-    }
-
-    res.json(holder);
+      // Return the result
+      if (holder) {
+          console.log('Found holder by MaGPLX:', holder);
+          return res.json({
+              message: 'Found holder by MaGPLX',
+              MaGPLX: holder.MaGPLX, // Return the MaGPLX
+              holder // You can return the full holder object if needed
+          });
+      } else {
+          return res.status(404).json({ message: 'Không tìm thấy chủ sở hữu GPLX với ID hoặc Mã GPLX đã cho' });
+      }
   } catch (err) {
-    res.status(500).json({ message: 'Lỗi khi tìm kiếm chủ sở hữu GPLX', error: err.message });
+      console.error('Search error:', err);
+      return res.status(500).json({ message: 'Lỗi khi tìm kiếm chủ sở hữu GPLX', error: err.message });
   }
 });
 
 router.post('/addlicenseHolder', async (req, res) => {
   try {
       // Validate input data
-      const { maGPLX, name } = req.body;
-      if (!maGPLX || !name) {
-          return res.status(400).json({ 
-              success: false, 
-              message: 'Mã GPLX và tên là bắt buộc.' 
+      const { MaGPLX, Name, DateOfBirth, CCCD, Address, PhoneNumber, Email, Ngaycap, Ngayhethan, Status, Giamdoc } = req.body;
+
+      // Required fields validation
+      if (!MaGPLX || !Name || !DateOfBirth || !CCCD || !Address || !PhoneNumber || !Email || !Ngaycap || !Ngayhethan || !Giamdoc ) {
+          return res.status(400).json({
+              success: false,
+              message: 'Mã GPLX, tên, ngày sinh, CCCD, địa chỉ, số điện thoại, email, ngày cấp, ngày hết hạn, giám đốc, và trạng thái là bắt buộc.'
+          });
+      }
+
+      // Check if Status is a valid enum value
+      const validStatuses = ['Đã kích hoạt', 'Chưa kích hoạt'];
+      if (!validStatuses.includes(Status)) {
+          return res.status(400).json({
+              success: false,
+              message: 'Trạng thái không hợp lệ. Các giá trị hợp lệ là: Đã kích hoạt, Chưa kích hoạt'
           });
       }
 
       // Check for existing license holder
-      const existingHolder = await LicenseHolder.findOne({ maGPLX });
+      const existingHolder = await LicenseHolder.findOne({ MaGPLX });
       if (existingHolder) {
-          return res.status(400).json({ 
-              success: false, 
-              message: 'Mã GPLX đã tồn tại.' 
+          return res.status(400).json({
+              success: false,
+              message: 'Mã GPLX đã tồn tại.'
+          });
+      }
+
+      // Optional: Additional validation for email format
+      const emailPattern = /.+\@.+\..+/;
+      if (!emailPattern.test(Email)) {
+          return res.status(400).json({
+              success: false,
+              message: 'Email không hợp lệ.'
+          });
+      }
+
+      // Optional: Validate date formats
+      if (isNaN(Date.parse(DateOfBirth)) || isNaN(Date.parse(Ngaycap)) || isNaN(Date.parse(Ngayhethan))) {
+          return res.status(400).json({
+              success: false,
+              message: 'Ngày sinh, ngày cấp và ngày hết hạn phải là định dạng ngày hợp lệ.'
           });
       }
 
       // Create a new LicenseHolder from request body
-      const licenseHolder = new LicenseHolder(req.body);
+      const licenseHolder = new LicenseHolder({
+          MaGPLX,
+          Name,
+          DateOfBirth,
+          CCCD,
+          Address,
+          PhoneNumber,
+          Email,
+          Ngaycap,
+          Ngayhethan,
+          Status,
+          Giamdoc
+      });
 
       // Save the new license holder to the database
       const savedHolder = await licenseHolder.save();
 
       // Return status 201 for successful creation with the saved holder data
-      res.status(201).json({ 
-          success: true, 
-          message: 'Thêm chủ sở hữu GPLX thành công!', 
-          data: savedHolder 
+      res.status(201).json({
+          success: true,
+          message: 'Thêm chủ sở hữu GPLX thành công!',
+          data: savedHolder
       });
   } catch (err) {
       console.error('Error creating license holder:', err); // Log the error
@@ -126,5 +199,6 @@ router.post('/addlicenseHolder', async (req, res) => {
       });
   }
 });
+
 
 module.exports = router;

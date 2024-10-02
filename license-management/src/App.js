@@ -1,102 +1,80 @@
 import React, { useState } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './App.css'; // Make sure to link your CSS files
-import LicenseHolderSearch from './LicenseHolderSearch';
 
-function App() {
+const App = () => {
+  const [licenseType, setLicenseType] = useState('GPLX PET (Có thời hạn)');
+  const [licenseNumber, setLicenseNumber] = useState('');
+  const [birthDate, setBirthDate] = useState('');
+  const [captchaInput, setCaptchaInput] = useState('');
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const data = { licenseType, licenseNumber, birthDate, captchaInput };
+
+    try {
+      const response = await fetch('http://localhost:5000/api/license-lookup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+      if (response.ok) {
+        alert(result.message);
+      } else {
+        alert(result.error);
+      }
+    } catch (error) {
+      alert('Có lỗi xảy ra khi tra cứu thông tin.');
+    }
+  };
+
   return (
-    <div className="App">
-      <Header />
-      <div className="main-content-wrapper">
-        <Sidebar />
-        <div className="container mt-4">
-          <Breadcrumb />
-          <LicenseHolderSearch />
+    <div className="container">
+      <h2>Tra cứu thông tin giấy phép lái xe</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Loại GPLX:</label>
+          <select value={licenseType} onChange={(e) => setLicenseType(e.target.value)}>
+            <option value="GPLX PET (Có thời hạn)">GPLX PET (Có thời hạn)</option>
+            <option value="GPLX Cũ">GPLX Cũ</option>
+          </select>
         </div>
-      </div>
+
+        <div>
+          <label>Số GPLX:</label>
+          <input
+            type="text"
+            value={licenseNumber}
+            onChange={(e) => setLicenseNumber(e.target.value)}
+            placeholder="Nhập số GPLX đã cấp"
+          />
+        </div>
+
+        <div>
+          <label>Ngày/Tháng/Năm sinh:</label>
+          <input
+            type="text"
+            value={birthDate}
+            onChange={(e) => setBirthDate(e.target.value)}
+            placeholder="dd/MM/yyyy"
+          />
+        </div>
+
+        <div>
+          <label>Mã bảo vệ:</label>
+          <input
+            type="text"
+            value={captchaInput}
+            onChange={(e) => setCaptchaInput(e.target.value)}
+            placeholder="Nhập mã bảo vệ"
+          />
+        </div>
+
+        <button type="submit">Tra cứu giấy phép lái xe</button>
+      </form>
     </div>
   );
-}
-
-function Header() {
-  return (
-    <div className="header">
-      <div className="logo">
-        <img src="/uploads/h7.png" alt="Logo" />
-        <div className="title">Trang Chủ</div>
-        <button id="toggleButton" className="btn btn-outline-light">
-          <i className="fas fa-chevron-left"></i>
-        </button>
-      </div>
-      <div className="user-info">
-        <div className="notification">🔔</div>
-        <div className="system-name"></div>
-        <img src="/uploads/h6.jpg" alt="Avatar" />
-      </div>
-    </div>
-  );
-}
-
-function Sidebar() {
-  return (
-    <nav className="sidebar">
-      <ul className="nav flex-column">
-        <li className="nav-item">
-          <a className="nav-link text-white" href="/truyxuatbanglaixeoto">
-            <i className="icon fas fa-search"></i>
-            <span>Truy xuất sản phẩm</span>
-          </a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link text-white" href="#">
-            <i className="icon fas fa-cog"></i>
-            <span>Quản lý</span>
-          </a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link text-white" href="/account">
-            <i className="icon fas fa-users"></i>
-            <span>Tài khoản tổ chức</span>
-          </a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link text-white" href="/licenseHolder">
-            <i className="icon fas fa-building"></i>
-            <span>Danh sách tổ chức</span>
-          </a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link text-white" href="#">
-            <i className="icon fas fa-chart-bar"></i>
-            <span>Thống kê doanh nghiệp</span>
-          </a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link text-white" href="#">
-            <i className="icon fas fa-user-shield"></i>
-            <span>Phân quyền vai trò</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
-  );
-}
-
-function Breadcrumb() {
-  return (
-    <nav aria-label="breadcrumb">
-      <ol className="breadcrumb">
-        <li className="breadcrumb-item">
-          <a href="http://localhost:3000/trangchu" style={{ color: 'black', textDecoration: 'none' }}>
-            <img src="/uploads/home.png" style={{ width: '15px', marginTop: '-4px' }} alt="Home" /> Trang chủ
-          </a>
-        </li>
-        <li className="breadcrumb-item active" aria-current="page">
-          Truy xuất sản phẩm
-        </li>
-      </ol>
-    </nav>
-  );
-}
+};
 
 export default App;
