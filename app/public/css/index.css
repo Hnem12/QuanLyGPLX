@@ -153,3 +153,19 @@ span {
 i {
   color: black;
 }
+
+td {
+  text-align: center;
+}
+
+.status {
+  background-color: #e6faf1; /* Màu nền nhạt */
+  color: #1a7431; /* Màu chữ xanh */
+  padding: 1px; /* Khoảng cách bên trong */
+  border-radius: 5px; /* Bo góc nhẹ */
+  text-align: center; /* Căn giữa */
+  border: 1px #1a7431; /* Đường viền xanh quanh chữ */
+  display: inline-block; /* Hiển thị dưới dạng khối nội tuyến để chỉ bao quanh chữ */
+  font-size: 14px; /* Kích thước chữ */
+  font-weight: bold; /* Chữ đậm */
+}

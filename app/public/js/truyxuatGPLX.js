@@ -1,45 +1,37 @@
-function updatePlaceholder() {
-    const searchField = document.getElementById('searchField').value;
-    const inputField = document.getElementById('idOrGPLX');
-
-    // Update placeholder based on search field selection
-    if (searchField === 'ID') {
-        inputField.placeholder = 'Nhập ID';
-    } else if (searchField === 'MaGPLX') {
-        inputField.placeholder = 'Nhập Mã GPLX';
-    }
-}
-
 async function fetchLicenseHolder() {
     const input = document.getElementById('idOrGPLX').value.trim();
     const searchField = document.getElementById('searchField').value; 
     const detailDiv = document.getElementById('details');
 
+    // Check if input is empty
     if (!input) {
         detailDiv.innerHTML = '<p class="text-danger">Vui lòng nhập thông tin để tìm kiếm.</p>';
         return;
     }
 
-    detailDiv.innerHTML = '<p>Đang tải...</p>';
+    detailDiv.innerHTML = '<p>Đang tải...</p>'; // Show loading message
 
     try {
         let url = '';
+        
+        // Construct URL based on selected search field
         if (searchField === 'ID') {
-            url = `/api/licenseHolder/${encodeURIComponent(input)}`;
+            url = `/api/licenseHolder/${encodeURIComponent(input)}`; // ID lookup
         } else if (searchField === 'MaGPLX') {
-            url = `/api/licenseHolder/search/${encodeURIComponent(input)}`;
+            url = `/api/licenseHolder/search/${encodeURIComponent(input)}`; // MaGPLX lookup
+        } else if (searchField === 'CCCD') {
+            url = `/api/licenseHolder/search/${encodeURIComponent(input)}`; // CCCD lookup
         }
 
+        // Fetch the data
         const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error(`Error: ${response.status}`);
-        }
 
         const data = await response.json();
         const holder = data.holder || data; // Handle holder object
 
+        // Check if holder data is returned
         if (holder) {
-            console.log('Holder Data:', holder); // Debugging line
+            
             displayLicenseHolder(holder);
         } else {
             detailDiv.innerHTML = '<p class="text-warning">Không tìm thấy chủ sở hữu với thông tin đã nhập.</p>';
@@ -57,7 +49,7 @@ function displayLicenseHolder(holder) {
     // Setting up the details inside the 'details' div
     detailDiv.innerHTML = `
       <div class="holder-details">
-        <h4 class="holder-title">Chi tiết chủ sở hữu GPLX</h4>
+        <h4 class="holder-title">Thông tin GPLX</h4>
         <div class="holder-info-container">
           <div class="holder-info-left">
             <p><strong>Tên:</strong> ${holder.Name || 'N/A'}</p>
@@ -79,11 +71,3 @@ function displayLicenseHolder(holder) {
 }
 
 updatePlaceholder();
-
-// Event listener for search button
-// document.getElementById('idOrGPLX').addEventListener('click', function() {
-//     // Clear the input field
-//     document.getElementById('idOrGPLX').value = '';
-//     // Call the fetchByMaGPLX function
-//     fetchByMaGPLX();
-// });  

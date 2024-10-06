@@ -15,7 +15,7 @@ async function fetchAccounts() {
             <td>${account.Address}</td>
               <td>${account.Gender}</td>
                   <td>${account.role}</td>
-            <td>Đã kích hoạt</td>
+            <td span class="status">Đã kích hoạt</td>
             <td>
                 <button class="btn btn-warning btn-sm" onclick='openEditModal(${JSON.stringify(account._id)})'>Sửa</button>
               <button class="btn btn-danger btn-sm" onclick="deleteAccount('${account._id}')">Xóa</button>

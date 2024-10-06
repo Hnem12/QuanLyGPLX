@@ -24,6 +24,12 @@ const ChusohuuGPLXSchema = new Schema({
         required: true,
         trim: true
     },
+    HangGPLX: {
+        type: String,
+        required: true,
+        enum: ['B1', 'B2', 'C', 'D', 'E'], // Danh sách các hạng GPLX có sẵn
+        trim: true
+    },
     PhoneNumber: {
         type: String,
         required: true,
@@ -40,6 +46,10 @@ const ChusohuuGPLXSchema = new Schema({
         required: true
     },
     Ngayhethan: {
+        type: Date,
+        required: true
+    },
+    Ngaytrungtuyen: {
         type: Date,
         required: true
     },

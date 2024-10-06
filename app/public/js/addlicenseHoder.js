@@ -1,30 +1,36 @@
+// Hàm xử lý việc gửi dữ liệu từ form
 async function handleSubmit(event) {
-    event.preventDefault(); // Prevent page reload
+    event.preventDefault(); // Ngăn chặn tải lại trang
 
-    // Gather input data from form fields
+    // Tập hợp dữ liệu từ các trường trong form
     const data = {
-        MaGPLX: document.getElementById('gplx').value, // Ensure correct casing
-        Name: document.getElementById('name').value,   // Ensure correct casing
+        MaGPLX: document.getElementById('gplx').value.trim(),
+        Name: document.getElementById('name').value.trim(),
         DateOfBirth: document.getElementById('dob').value,
-        CCCD: document.getElementById('cccd').value,
-        Address: document.getElementById('address').value,
-        PhoneNumber: document.getElementById('phone').value,
-        Email: document.getElementById('email').value,
+        CCCD: document.getElementById('cccd').value.trim(),
+        Address: document.getElementById('address').value.trim(),
+        PhoneNumber: document.getElementById('phone').value.trim(),
+        Email: document.getElementById('email').value.trim(),
+        HangGPLX: document.getElementById('hangGPLX').value,
         Ngaycap: document.getElementById('issueDate').value,
         Ngayhethan: document.getElementById('expiryDate').value,
-        Status: document.getElementById('status').value, // Ensure you have this field in your form
-        Giamdoc: document.getElementById('giamdoc').value // Ensure you have this field in your form
+        Ngaytrungtuyen: document.getElementById('ngaytrungtuyen').value,
+        Status: document.getElementById('status').value,
+        Giamdoc: document.getElementById('giamdoc').value.trim()
     };
-
-    // Validate required fields
-    if (!data.MaGPLX || !data.Name || !data.DateOfBirth || !data.CCCD || !data.Address || !data.PhoneNumber || !data.Email || !data.Ngaycap || !data.Ngayhethan || !data.Giamdoc) {
-        alert('Mã GPLX, tên, ngày sinh, CCCD, địa chỉ, số điện thoại, email, ngày cấp, ngày hết hạn, giám đốc, và trạng thái là bắt buộc.');
-        return; // Exit if validation fails
+    
+    // Kiểm tra các trường bắt buộc
+    const requiredFields = ['MaGPLX', 'Name', 'DateOfBirth', 'CCCD', 'Address', 'PhoneNumber', 'Email', 'HangGPLX', 'Ngaycap', 'Ngaytrungtuyen', 'Ngayhethan', 'Giamdoc'];
+    for (const field of requiredFields) {
+        if (!data[field]) {
+            alert(`${field.replace(/([A-Z])/g, ' $1')}: không được để trống.`);
+            return; // Thoát nếu xác thực không thành công
+        }
     }
 
-    // Send data to API to store in MongoDB
+    // Gửi dữ liệu đến API để lưu vào MongoDB
     try {
-        console.log('Data being sent:', data); // Debug log
+        console.log('Dữ liệu đang được gửi:', data); // Ghi log để debug
         const response = await fetch('/api/addlicenseHolder', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -34,25 +40,24 @@ async function handleSubmit(event) {
         const result = await response.json();
         if (response.ok) {
             alert(result.message || 'Thêm tài khoản thành công!');
-            // Reload the page after successful addition
+            // Tải lại trang sau khi thêm thành công
             location.reload();
         } else {
             alert(result.message || 'Đã có lỗi xảy ra, vui lòng thử lại.');
         }
     } catch (error) {
         alert('Lỗi khi gửi dữ liệu. Vui lòng kiểm tra kết nối mạng.');
-        console.error('Error:', error);
+        console.error('Lỗi:', error);
     }
 }
 
-// Add event listener for the form
+// Thêm listener sự kiện cho form
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('addAccountForm');
     if (form) {
         form.addEventListener('submit', handleSubmit);
     }
 });
-
 
 // Hàm để xóa tài khoản dựa trên ID
 async function deleteLicenseHolder(id) {
@@ -65,16 +70,15 @@ async function deleteLicenseHolder(id) {
         const result = await response.json();
         if (response.ok) {
             alert(result.message || 'Xóa tài khoản thành công!');
-            // Optionally reload or update the UI
+            // Có thể tải lại hoặc cập nhật UI
             location.reload();
         } else {
             alert(result.message || 'Đã có lỗi xảy ra, vui lòng thử lại.');
         }
     } catch (error) {
         alert('Lỗi khi gửi dữ liệu. Vui lòng kiểm tra kết nối mạng.');
-        console.error('Error:', error);
+        console.error('Lỗi:', error);
     }
 }
 
-// Example of how to call the delete function
-
+// Ví dụ cách gọi hàm xóa

@@ -9,16 +9,21 @@ const accountRouter = require('./app/routes/accountRoute');
 const licenseHolderRoutes = require('./app/routes/ChusohuuGPLXRoute');
 const LicenseHolderModels = require('./app/models/ChusohuuGPLXModel');
 const CaplaiGPLXModel = require('./app/models/CaplaiGPLXModels');
+var cors = require("cors");
 // const AccountManagement = require('./license-management/src/components/AccountManagement');
 const React = require('react');
 const mongoose = require('mongoose');
 const ReactDOMServer = require('react-dom/server');
+const LicenseHolder = require('./app/models/ChusohuuGPLXModel');
 const app = express();
 dbconnect();
 module.exports = { dbconnect };
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'app/views'));
+app.use(express.json()); // để xử lý dạng dữ liệu json
+app.use(express.urlencoded({ extended: true })); // để xử lý dữ liệu url encoded
+app.use(cors({ credentials: true, origin: "*" })); // chấp thuận cors từ mọi u
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -36,8 +41,8 @@ app.use('/api/register/', accountRouter);
 app.use('/api/addAccount/', accountRouter);
 app.use('/api/updatedAccount/', accountRouter);
 app.use('/api/truyxuatbanglaixeoto/', licenseHolderRoutes);
-app.use('/api', licenseHolderRoutes);
 app.use('/api/deleteLicenseHolder', licenseHolderRoutes);
+app.use('/api/', licenseHolderRoutes);
 app.use('/api/search/', licenseHolderRoutes);
 
 app.use(express.static(path.join(__dirname, 'client/build')));
@@ -53,15 +58,25 @@ app.get('/login', (req, res) => {
 app.get('/register', (req, res) => {
     res.render('register'); // Render the register page
 });
+app.post('/api/reissue-license', (req, res) => {
+    const { licenseID, name, reason } = req.body;
+    
+    // Xử lý dữ liệu (lưu vào cơ sở dữ liệu, kiểm tra, v.v.)
+    console.log('Received data:', { licenseID, name, reason });
+
+    // Gửi phản hồi về frontend
+    res.json({ message: 'Dữ liệu đã được nhận thành công!', data: req.body });
+});
 app.use(checkAuthentication); 
 
 app.get('/account',checkAuthentication, (req, res) => {
     res.render('Account'); // Render the register page
 });
+
 app.get('/licenseHolder',checkAuthentication, (req, res) => {
     res.render('licenseHolder'); // Render the register page
-});
 
+});
 
 app.get('/trangchu',checkAuthentication, (req, res) => {
     res.render('index'); // Render the index page
