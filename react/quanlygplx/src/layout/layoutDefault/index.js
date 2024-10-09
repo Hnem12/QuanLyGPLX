@@ -29,8 +29,8 @@ function LayoutDefault() {
                         </NavLink>
                     </Menu.Item>
                     <Menu.Item key="manage">
-                        <NavLink to="/quan-ly-vi-pham" className={({ isActive }) => (isActive ? 'active' : '')}>
-                            Quản lý vi phạm
+                        <NavLink to="/GiahanGPLX" className={({ isActive }) => (isActive ? 'active' : '')}>
+                            Gia hạn GPLX
                         </NavLink>
                     </Menu.Item>
                     <Menu.Item key="exchange">
@@ -54,7 +54,7 @@ function LayoutDefault() {
                 <div className="footer-content">
                     <ul className="footer-menu">
                         <li><a href="#">Trang chủ</a></li>
-                        <li><a href="#">Giới thiệu</a></li>
+                        <li><a href="/Test">Giới thiệu</a></li>
                         <li><a href="#">Quản lý vi phạm</a></li>
                         <li><a href="#">Đổi GPLX trực tuyến</a></li>
                     </ul>

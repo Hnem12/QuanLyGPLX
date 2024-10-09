@@ -1,0 +1,83 @@
+.gplx-form-container {
+  width: 80%;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  background-color: #f9f9f9;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Times New Roman', Times, serif;
+}
+
+h1, h2 {
+  text-align: center;
+  color: #333;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+.form-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px; /* space between columns */
+  justify-content: space-between;
+  align-items: start;
+}
+
+.form-search {
+  grid-column: span 2; /* take full width */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.form-item {
+  display: flex;
+  flex-direction: column; /* Stack label and input vertically */
+  width: 100%; /* Ensure it takes full width */
+}
+
+.form-item .ant-form-item-label {
+  margin-bottom: 0; /* Remove bottom margin from label */
+}
+
+.Xepngang {
+  display: flex; /* Use flex to align items side by side */
+  gap: 30px; /* Space between items */
+  margin-bottom: 20px; /* Add some space below this section */
+}
+
+.Xepngang .form-item {
+  flex: 1; /* Allow items to grow equally */
+}
+
+
+.submit-button {
+  padding: 12px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 200px;
+  text-align: center;
+}
+
+.submit-button:hover {
+  background-color: #218838;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center; /* Center horizontally */
+  margin-top: 20px;
+}
+.Cachngang{
+  margin-left: 20px;
+}
+.form-info{
+  margin-top: -25px;
+  font-family: 'Times New Roman', Times, serif;
+}

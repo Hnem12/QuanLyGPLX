@@ -1,0 +1,172 @@
+.gplx-form-container {
+    width: 80%;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1, h2 {
+    text-align: center;
+    color: #333;
+  }
+  
+  .form-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px; /* space between columns */
+    justify-content: space-between;
+    align-items: start;
+  }
+  
+  /* Search GPLX Section */
+  .form-search {
+    grid-column: span 2; /* take full width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .input-group-inline {
+    display: flex;
+    flex-wrap: wrap; /* allows wrapping */
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+  }
+  
+  .input-group label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    font-size: 14px;
+  }
+  
+  .input-group input,
+  .input-group select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%; /* Make inputs responsive */
+    max-width: 350px; /* Optional max-width */
+  }
+  
+  /* Specific styles for full names */
+  .full-name {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .first-name, .last-name {
+    width: calc(50% - 10px); /* Equal space minus gap */
+  }
+  
+  .first-name input, .last-name input {
+    width: 100%;
+  }
+  
+  /* Button styles */
+  .search-button {
+    margin-top: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .search-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Info Section */
+  .form-info {
+    grid-column: span 2;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* two columns */
+    gap: 20px;
+    display: flex;
+  }
+  
+  .form-left {
+    padding: 10px;
+    border: 0px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    flex-direction: column;
+    flex: 9;
+  }
+  
+  .form-right {
+    padding: 10px;
+    border: 0px solid #ccc;
+    border-radius: 5px;
+    background-color: #fff;
+    flex: 1; /* Takes 1/3 of the space */
+  }
+  
+  .input-group input,
+  .input-group select {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+  }
+  
+  .input-group input[type="file"] {
+    padding: 0;
+  }
+  
+  /* Button */
+  .submit-button {
+    padding: 12px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    width: 100%;
+    max-width: 200px;
+    text-align: center;
+  }
+  
+  .submit-button:hover {
+    background-color: #218838;
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    margin-top: 20px;
+  }
+  
+  .test {
+    display: flex; /* Sử dụng Flexbox để căn chỉnh các phần tử con */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    width: 100%;
+  }
+  
+  span {
+    margin-right: 10px;
+  }
+  
+  .Xepngang {
+    display: flex;
+    gap: 50px;
+  }
+  

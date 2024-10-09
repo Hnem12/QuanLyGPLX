@@ -1,46 +1,37 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 function GplxReissueForm() {
   // Define state to hold form data
   const [licenseID, setLicenseID] = useState("");
-  const [name, setName] = useState(""); // This can be fetched automatically if needed
+  const [name, setName] = useState("");
   const [reason, setReason] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  // Handle form submission
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    const formData = {
-      licenseID,
-      name,
-      reason,
+  
+  useEffect(() => {
+    const fetchApi = async () => {
+        try {
+            const response = await fetch("http://localhost:3000/api/licenseHolder");
+            if (!response.ok) {
+                throw new Error("Network response was not ok");
+            }
+            const result = await response.json();
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            setError('Error fetching data. Please try again later.');
+        } 
     };
 
-    console.log("Form Data Submitted: ", formData);
-
-    try {
-      const response = await fetch("http://your-backend-url/api/reissue-license", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData), // Chuyển đổi dữ liệu thành JSON
-      });
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
-      const data = await response.json(); // Chuyển đổi phản hồi thành JSON
-      console.log("Response from server: ", data); // Xử lý phản hồi từ backend
-    } catch (error) {
-      console.error("Error sending form data: ", error); // Xử lý lỗi
-    }
-  };
+    fetchApi();
+}, []);
 
   return (
     <div style={styles.container}>
       <h2>Cấp lại Giấy phép lái xe (GPLX)</h2>
-      <form onSubmit={handleSubmit} style={styles.form}>
+      {loading && <p>Đang tải...</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <form style={styles.form}>
         {/* License ID Field */}
         <label htmlFor="licenseID" style={styles.label}>
           Mã GPLX cần cấp lại:
@@ -49,10 +40,10 @@ function GplxReissueForm() {
           type="text"
           id="licenseID"
           value={licenseID}
-          onChange={(e) => setLicenseID(e.target.value)}
+          onChange={(e) => setLicenseID(e.target.value)} // Update state on input change
           required
           style={styles.input}
-          placeholder="Nhập mã GPLX"
+          placeholder="Nhập mã GPLX (VD: GPLX12349)"
         />
 
         {/* License Holder's Name Field */}
@@ -62,11 +53,12 @@ function GplxReissueForm() {
         <input
           type="text"
           id="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          value={name}           // Automatically display the fetched name
+          onChange={(e) => setName(e.target.value)} // Allow manual edit if needed
           required
           style={styles.input}
-          placeholder="Nhập tên người dùng"
+          placeholder="Tên người dùng sẽ hiển thị tự động"
+          readOnly
         />
 
         {/* Reason for Reissuing Field */}
@@ -84,17 +76,17 @@ function GplxReissueForm() {
 
         {/* Submit Button */}
         <button type="submit" style={styles.button}>
-          Thêm yêu cầu
+          Gửi yêu cầu cấp lại
         </button>
       </form>
     </div>
   );
 }
 
-// Basic inline styling (you can use external CSS as well)
+// Basic inline styling
 const styles = {
   container: {
-    width: "50%",
+    width: "65%",
     margin: "auto",
     padding: "20px",
     border: "1px solid #ccc",

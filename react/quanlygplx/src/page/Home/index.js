@@ -13,7 +13,7 @@ const LicenseSearch = () => {
     const [showModal, setShowModal] = useState(false);
 
     const generateCaptcha = () => {
-        const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabccdefghijklmnopqrstuvwxyz';
+        const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         let captchaCode = '';
         for (let i = 0; i < 6; i++) {
             captchaCode += chars[Math.floor(Math.random() * chars.length)];
@@ -83,7 +83,7 @@ const LicenseSearch = () => {
             <div className="form-container mx-auto p-8 max-w-lg">
                 <h2 className="text-2xl font-bold mb-4">TRA CỨU THÔNG TIN GIẤY PHÉP LÁI XE</h2>
                 <form onSubmit={handleSubmit}>
-                    <div className="mb-4">
+                    <div className="mb-3">
                         <label className="block font-bold mb-2" htmlFor="so-gplx">Số GPLX:</label>
                         <input
                             id="so-gplx"
@@ -94,7 +94,7 @@ const LicenseSearch = () => {
                             className="border border-gray-300 p-2 w-full"
                         />
                     </div>
-                    <div className="mb-4">
+                    <div className="mb-3">
                         <label className="block font-bold mb-2" htmlFor="birth-date">Ngày sinh:</label>
                         <input
                             id="birth-date"
@@ -104,7 +104,7 @@ const LicenseSearch = () => {
                             className="border border-gray-300 p-2 w-full"
                         />
                     </div>
-                    <div className="mb-4">
+                    <div className="mb-3">
                         <label className="block font-bold mb-2">CAPTCHA:</label>
                         <div className="captcha-container flex items-center">
                             <span 

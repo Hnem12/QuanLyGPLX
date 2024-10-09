@@ -1,31 +1,3 @@
-body {
-  font-family: 'Times New Roman', Times, serif;
-}
-
-/* Header */
-.header {
-  background-color: #1a237e; /* Màu nền cho header */
-  color: white;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.header img {
-  height: 50px; /* Đặt chiều cao cho logo */
-}
-
-.header .nav-link {
-  color: white;
-  padding: 10px 20px;
-  text-decoration: none;
-}
-
-.header .nav-link:hover {
-  background-color: #3949ab; /* Hiệu ứng hover khi rê chuột vào link */
-}
-
 /* Form Container */
 .form-container {
   background: linear-gradient(to bottom, #e0f7fa, #ffffff); /* Nền chuyển màu */
@@ -34,13 +6,26 @@ body {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.form-container input, 
+.form-container input,
 .form-container select {
   width: 100%;
   padding: 10px;
   margin: 10px 0;
   border: 1px solid #ccc;
   border-radius: 4px;
+  transition: border-color 0.3s ease; /* Thêm hiệu ứng chuyển đổi */
+}
+
+/* Khi trường nhập liệu còn trống */
+.form-container input:placeholder-shown {
+  border-color: #ff9800; /* Đổi màu viền khi không có thông tin */
+  background-color: #fff8e1; /* Màu nền nhạt khi không có thông tin */
+}
+
+.form-container input:focus,
+.form-container select:focus {
+  border-color: #1fcf45; /* Màu viền khi trường được chọn */
+  outline: none; /* Ẩn đường viền mặc định của trình duyệt */
 }
 
 .form-container button {
