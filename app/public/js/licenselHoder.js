@@ -21,9 +21,7 @@ async function fetchLicenseHolders() {
           <td>${new Date(holder.Ngayhethan).toLocaleDateString()}</td>
           <td>${holder.Giamdoc}</td>
           <td>
-        
               <span class="status">${holder.Status}</span>
-         
           </td>
           <td>${holder.Loivipham}</td>        
           </tr>

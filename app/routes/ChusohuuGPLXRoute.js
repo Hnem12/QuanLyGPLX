@@ -6,7 +6,7 @@ const { upload } = require('../controllers/accountController'); // Multer middle
 const mongoose = require('mongoose');
 
 // Lấy tất cả chủ sở hữu GPLX
-router.get('/', async (req, res) => {
+router.get('/licenseHolder', async (req, res) => {
   try {
     const holders = await LicenseHolder.find();
     res.json(holders);

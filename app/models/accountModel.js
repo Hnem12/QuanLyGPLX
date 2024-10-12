@@ -1,20 +1,23 @@
 const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema;
-
-const AccountSchema = new Schema({
-    username: String,
-    password: String,
-    role: Number,
-    SDT: Number,
-    Name: String,
-    Address: String,
-    Image: String,
-    Gender: String,
-    Email: String
-},{
-    collection:'account'
+const AccountSchema = new mongoose.Schema({
+    username: { type: String, required: true },
+    password: { type: String, required: true },
+    role: { type: String, enum: ['Admin', 'User'], default: 'User' },
+    SDT: { type: String, required: true },
+    Name: { type: String, required: true },
+    Address: { type: String, required: true },
+    Gender: { type: String, enum: ['Male', 'Female'], required: true },
+    email: { type: String, required: true }, // Make sure this is present and required
+    status: { type: String, default: 'Chưa kích hoạt' }, // New field for status with default value
+    image: { type: String, required: false }, // New field for storing image URL or path
+}, 
+{
+    collection: 'account' // Specify the collection name here
 });
 
-const AccountModel = mongoose.model('account', AccountSchema)
-module.exports= AccountModel
+// Create the model
+const AccountModel = mongoose.model('Account', AccountSchema);
+
+// Export the model
+module.exports = AccountModel;
