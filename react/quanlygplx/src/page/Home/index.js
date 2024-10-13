@@ -108,8 +108,8 @@ const LicenseSearch = () => {
                         <label className="block font-bold mb-2">CAPTCHA:</label>
                         <div className="captcha-container flex items-center">
                             <span 
-                                className="captcha-box bg-blue-200 p-4 rounded-md text-2xl font-bold text-center tracking-widest shadow-lg" 
-                                style={{ letterSpacing: '6px', userSelect: 'none', width: '100px' }}
+                                className="captcha-box bg-blue-200 p-4 rounded-md text-2xl font-bold text-center tracking-widest shadow-lg capcha" 
+                                style={{ letterSpacing: '6px', userSelect: 'none', padding:10 }}
                             >
                                 {captcha}
                             </span>
@@ -174,5 +174,6 @@ const LicenseSearch = () => {
         </div>
     );
 };
+
 
 export default LicenseSearch;
