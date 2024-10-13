@@ -168,17 +168,42 @@ const getId = async (req, res, next) => {
     }
 };
 
-
 const addAccount = async (req, res, next) => {
-    const { username, password, SDT, Name, Address, Image, Gender, email } = req.body;
-    try {
-        // Ensure that the password is provided before hashing
-        if (!password) {
-            return res.status(400).json('Mật khẩu không được để trống');
-        }
+    // Destructure the fields from the request body
+    const { username, password, SDT, Name, Address, Image, Gender, email, role, status } = req.body;
 
+    try {
+        // Validate required fields
+        if (!username) {
+            return res.status(400).json({ success: false, message: 'Tên người dùng không được để trống' });
+        }
+        if (!password) {
+            return res.status(400).json({ success: false, message: 'Mật khẩu không được để trống' });
+        }
+        if (!SDT || !/^\d{10,11}$/.test(SDT)) { // Validate phone number format
+            return res.status(400).json({ success: false, message: 'Số điện thoại không hợp lệ' });
+        }
+        if (!email || !/\S+@\S+\.\S+/.test(email)) { // Validate email format
+            return res.status(400).json({ success: false, message: 'Email không hợp lệ' });
+        }
+        if (!Name) {
+            return res.status(400).json({ success: false, message: 'Tên không được để trống' });
+        }
+        if (!Address) {
+            return res.status(400).json({ success: false, message: 'Địa chỉ không được để trống' });
+        }
+ 
+        const existingAccount = await AccountModel.findOne({ 
+            $or: [{ username }, { email }] 
+        });
+        if (existingAccount) {
+            return res.status(400).json({ success: false, message: 'Tên người dùng hoặc email đã tồn tại' });
+        }
+        if (!role) {
+            return res.status(400).json({ success: false, message: 'Vai trò không được để trống' });
+        }
         // Hash the password with bcrypt
-        const encryptedPassword = await bcrypt.hash(password, saltRounds);
+        const encryptedPassword = await bcrypt.hash(password, 10); // Use a salt rounds constant here
         
         // Create the new account
         const newAccount = await AccountModel.create({
@@ -189,15 +214,18 @@ const addAccount = async (req, res, next) => {
             Address,
             Image,
             email,
-            Gender
+            Gender,
+            role,
+            status
         });
 
-        return res.status(201).json('Thêm account thành công');
+        return res.status(201).json({ success: true, message: 'Thêm tài khoản thành công', account: newAccount });
     } catch (error) {
-        console.error('Lỗi khi thêm account:', error);
-        return res.status(500).json('Lỗi server');
+        console.error('Lỗi khi thêm tài khoản:', error);
+        return res.status(500).json({ success: false, message: 'Lỗi server' });
     }
 };
+
 
 // Đổi mật khẩu
 const changePassword = async (req, res, next) => {
@@ -220,61 +248,75 @@ const changePassword = async (req, res, next) => {
     }
 };
 
+
 const updatedAccount = async (req, res) => {
     const { id } = req.params;
     const { username, password, role, phone, name, address, gender, email, status } = req.body;
 
-    // Kiểm tra ID có hợp lệ không
+    // Check if ID is valid
     if (!id) {
         return res.status(400).json({ success: false, message: 'ID không hợp lệ.' });
     }
 
-    // Kiểm tra các trường bắt buộc có được cung cấp đầy đủ không
-    // if (!username || !role || !phone || !name || !address || !gender || !email) {
-    //     return res.status(400).json({ success: false, message: 'Vui lòng cung cấp tất cả các trường bắt buộc.' });
-    // }
-
     try {
-        // Mã hóa mật khẩu mới nếu có sự thay đổi
-        let hashedPassword;
+        // Fetch the current account data
+        const currentAccount = await AccountModel.findById(id);
+        if (!currentAccount) {
+            return res.status(404).json({ success: false, message: 'Không tìm thấy tài khoản.' });
+        }
+
+        // Prepare data for update
+        const updateData = {};
+
+        // Only update fields if they have changed
+        if (username !== undefined && username !== currentAccount.username) {
+            updateData.username = username;
+        }
+        if (role !== undefined && role !== currentAccount.role) {
+            updateData.role = role;
+        }
+        if (phone !== undefined && phone !== currentAccount.SDT) {
+            updateData.SDT = phone;
+        }
+        if (name !== undefined && name !== currentAccount.Name) {
+            updateData.Name = name;
+        }
+        if (address !== undefined && address !== currentAccount.Address) {
+            updateData.Address = address;
+        }
+        if (gender !== undefined && gender !== currentAccount.Gender) {
+            updateData.Gender = gender;
+        }
+        if (email !== undefined && email !== currentAccount.email) {
+            updateData.email = email;
+        }
+        if (status !== undefined) {
+            updateData.status = status; // If status is provided, update it
+        }
+
+        // Hash new password only if provided
         if (password) {
-            hashedPassword = await bcrypt.hash(password, 10);
+            updateData.password = await bcrypt.hash(password, 10);
         }
 
-        // Cập nhật tài khoản với các trường thông tin
-        const updateData = {
-            username,
-            role,
-            SDT: phone,
-            Name: name,
-            Address: address,
-            Gender: gender,
-            email,
-            status: status || 'Đã kích hoạt' // Default to 'Đã kích hoạt' if not provided
-        };
+        // Log the update data for debugging
+        console.log('Update Data:', updateData);
 
-        // Nếu mật khẩu không thay đổi, loại bỏ trường password khỏi updateData
-        if (!hashedPassword) {
-            delete updateData.password;
-        } else {
-            updateData.password = hashedPassword; // Thêm mật khẩu đã mã hóa vào updateData
+        // If there is nothing to update, return a message
+        if (Object.keys(updateData).length === 0) {
+            return res.json({ success: true, message: 'Không có thay đổi nào được thực hiện.' });
         }
 
-        // Loại bỏ các trường không thay đổi
-        Object.keys(updateData).forEach(key => {
-            if (updateData[key] === undefined || updateData[key] === '') {
-                delete updateData[key];
-            }
-        });
+        // Update the account
+        const result = await AccountModel.updateOne({ _id: id }, { $set: updateData });
 
-        const result = await AccountModel.updateOne({ _id: id }, updateData);
-
-        // Kiểm tra kết quả cập nhật
+        // Check the result of the update
         if (result.nModified > 0) {
             return res.json({ success: true, message: 'Tài khoản đã được cập nhật thành công!' });
-        } else  {
-            return res.status(404).json({ success: false, message: 'Không tìm thấy tài khoản để sửa.' });
+        } else {
+            return res.json({ success: true, message: 'Không có thay đổi nào được thực hiện hoặc các giá trị đã tồn tại.' });
         }
+
     } catch (error) {
         console.error('Error updating account:', error);
         return res.status(500).json({ success: false, message: 'Lỗi máy chủ. Vui lòng thử lại sau.' });
