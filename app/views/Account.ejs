@@ -12,79 +12,26 @@
 </head>
 <body>
   <!-- Header -->
-  <div class="header">
-    <div class="logo">
-      <img src="/uploads/h7.png">
-      <div class="title">Trang Chủ</div>
-      <button id="toggleButton" class="btn btn-outline-light">
-        <i class="fas fa-chevron-left"></i>
-      </button>
-    </div>
-    <div class="user-info">
-      <div class="notification">🔔</div>
-      <div class="system-name"></div>
-      <img src="/uploads/h6.jpg" alt="Avatar">
-      <a style="color: black; text-decoration: none; margin-left: 20px;" href="http://localhost:3000/"> Đăng xuất </a>
-    </div>
-  </div>
+  <%- include('layouts/header') %> 
 
-  <div class="main-content-wrapper">
-    <!-- Sidebar -->
-    <nav class="sidebar">
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link text-white" href="/truyxuatbanglaixeoto">
-            <i class="icon fas fa-search"></i>
-            <span>Tra cứu thông tin GPLX</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" href="#">
-            <i class="icon fas fa-cog"></i>
-            <span>Quản lý</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" href="/account">
-            <i class="icon fas fa-users"></i>
-            <span>Tài khoản tổ chức</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" href="/licenseHolder">
-            <i class="icon fas fa-building"></i>
-            <span>Danh sách GPLX</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" href="#">
-            <i class="icon fas fa-chart-bar"></i>
-            <span>Thống kê doanh nghiệp</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" href="#">
-            <i class="icon fas fa-user-shield"></i>
-            <span>Phân quyền vai trò</span>
-          </a>
-        </li>
-      </ul>
+  <%- include('layouts/sidebar') %> 
+
+  <div class="container mt-4">
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a style="color: black; text-decoration: none;" href="http://localhost:3000/trangchu">
+                    <img    
+                    src="/uploads/home.png" style="width: 15px; margin-top: -4px;">
+                    Trang chủ
+                </a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Danh sách tài khoản người dùng</li>
+        </ol>
     </nav>
-    <div class="container mt-4">
-      <!-- Breadcrumb -->
-      <nav aria-label="breadcrumb">
-          <ol class="breadcrumb">
-              <li class="breadcrumb-item">
-                  <a style="color: black; text-decoration: none;" href="http://localhost:3000/trangchu">
-                      <img src="/uploads/home.png" style="width: 15px; margin-top: -4px;"> Trang chủ
-                  </a>
-              </li>
-              <li class="breadcrumb-item active" aria-current="page">Tài khoản </li>
-          </ol>
-      </nav>
-      <!-- Main content -->
-      <div class="main-content p-4 flex-grow-1">
-        <h3>Danh sách tài khoản tổ chức</h3>
+    <h3>Danh sách tài khoản người dùng</h3>
+
         <button class="btn mb-3" style="background-color: #e2366f; color: white;" data-bs-toggle="modal" data-bs-target="#accountModal">Thêm tài khoản người dùng</button>
 
         <!-- Table -->

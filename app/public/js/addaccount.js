@@ -17,8 +17,10 @@ async function fetchAccounts() {
                     <td>${account.Address}</td>
                     <td>${account.Gender}</td>
                     <td>${account.role}</td>
-                    <td class="status">${account.status}</td>
-                    <td>
+                     <td>
+                        <span class="status">${account.status}</span>
+                    </td>     
+                    <td>              
                         <button class="btn btn-warning btn-sm" onclick='openModal(${JSON.stringify(account)})'>Sửa</button>
                         <button class="btn btn-danger btn-sm" onclick="deleteAccount('${account._id}')">Xóa</button>
                     </td>
@@ -32,68 +34,6 @@ async function fetchAccounts() {
 }
 window.onload = fetchAccounts;
 
-// document.addEventListener('DOMContentLoaded', function () {
-//     const form = document.getElementById('accountForm');
-//     if (form) {
-//         form.addEventListener('submit', async function (e) {
-//             e.preventDefault(); // Prevent default form submission
-
-//             // Always use the add account URL and method
-//             const url = '/api/addAccount';
-//             const method = 'POST';
-
-//             // Retrieve form values
-//             const accountData = {
-//                 username: document.getElementById('username')?.value.trim(),
-//                 password: document.getElementById('password')?.value.trim(),
-//                 confirmPassword: document.getElementById('confirmPassword')?.value.trim(),
-//                 Name: document.getElementById('name')?.value.trim(),
-//                 email: document.getElementById('email')?.value.trim(),
-//                 SDT: document.getElementById('phone')?.value.trim(),
-//                 Address: document.getElementById('address')?.value.trim(),
-//                 Gender: document.getElementById('gender')?.value,
-//                 Role: document.getElementById('role')?.value,
-//                 // For image uploads, we can handle this separately if necessary
-//                 Image: document.getElementById('image')?.files[0]
-//             };
-
-//             // Validate required fields
-//             const validationError = validateAccountForm(accountData);
-//             if (validationError) {
-//                 alert(validationError);
-//                 return;
-//             }
-
-//             // Log accountData for debugging
-//             console.log('Dữ liệu đang được gửi:', accountData);
-
-//             try {
-//                 // Send JSON data to backend
-//                 const response = await fetch(url, {
-//                     method: method,
-//                     headers: {
-//                         'Content-Type': 'application/json'
-//                     },
-//                     body: JSON.stringify(accountData) // Convert to JSON string
-//                 });
-
-//                 // Handle response
-//                 if (!response.ok) {
-//                     const result = await response.json();
-//                     alert(result.message || 'Đã có lỗi xảy ra, vui lòng thử lại.');
-//                     return;
-//                 }
-
-//                 // If successful, notify the user and reload the page
-//                 alert('Thêm tài khoản thành công!');
-//                 location.reload();
-//             } catch (error) {
-//                 alert('Lỗi khi gửi dữ liệu. Vui lòng kiểm tra kết nối mạng.');
-//                 console.error('Error:', error);
-//             }
-//         });
-//     }
-// });
 
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('accountForm');

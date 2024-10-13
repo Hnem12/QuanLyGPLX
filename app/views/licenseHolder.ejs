@@ -11,65 +11,10 @@
   <link rel="icon" href="/uploads/h8.png" type="image/x-icon">
 </head>
 <body>
-  <div class="header">
-    <div class="logo">
-      <img src="/uploads/h7.png">
-      <div class="title">Trang Chủ</div>
-      <button id="toggleButton" class="btn btn-outline-light">
-        <i class="fas fa-chevron-left"></i>
-      </button>
-    </div>
-    <div class="user-info">
-      <div class="notification">🔔</div>
-      <div class="system-name"></div>
-       <img src="/uploads/h6.jpg" alt="Avatar">
-       <a style="color: black; text-decoration: none; margin-left: 20px;" href="http://localhost:3000/"> Đăng xuất </a>
-    </div>
-  </div>
+  
+  <%- include('layouts/header') %> 
 
-  <div class="main-content-wrapper">
-    <nav class="sidebar">
-         
-      <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link text-white" href="/truyxuatbanglaixeoto" >
-            
-            <i class="icon fas fa-search"></i>
-            <span>Tra cứu thông tin GPLX</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" href="#">
-            <i class="icon fas fa-cog"></i>
-            <span>Quản lý</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" href="/account">
-            <i class="icon fas fa-users"></i>
-            <span>Tài khoản tổ chức</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" href="/licenseHolder">
-            <i class="icon fas fa-building"></i>
-            <span>Danh sách GPLX</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" href="#">
-            <i class="icon fas fa-chart-bar"></i>
-            <span>Thống kê doanh nghiệp</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white" href="#">
-            <i class="icon fas fa-user-shield"></i>
-            <span>Phân quyền vai trò</span>
-          </a>
-        </li>
-      </ul>
-    </nav>
+  <%- include('layouts/sidebar') %> 
 
     <!-- Main content -->
     <div class="container mt-4">
@@ -89,7 +34,7 @@
       <h3>Danh sách giấy phép lái xe hiện hành</h3>
       <!-- Button to Open Modal -->
 <!-- Button to Open Modal -->
-<button class="btn mb-3" style="background-color: #e2366f; color: white;" data-bs-toggle="modal" data-bs-target="#addAccountModal"> Thêm GPLX</button>
+<button class="btn mb-3" style="background-color: #e2366f; color: white;" data-bs-toggle="modal" data-bs-target="#licenseHolderModal"> Thêm GPLX</button>
 
       <!-- Table -->
       <table class="table table-bordered">
@@ -106,8 +51,7 @@
             <th>Ngày hết hạn</th>
             <th>Giám đốc</th>
             <th>Trạng thái</th>
-            <th>Lỗi vi phạm</th>
-            
+            <th>Tác vụ</th>
           </tr>
         </thead>
         <tbody id="accountTableBody">
@@ -118,145 +62,87 @@
   </div>
 </div>
 
-
-<!-- Modal for adding user -->
-<div class="modal fade" id="addAccountModal" tabindex="-1" aria-labelledby="addAccountModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg"> <!-- Thay đổi kích thước modal thành lớn hơn -->
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="addAccountModalLabel">Thêm Chủ Sở Hữu</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <form id="addAccountForm">
-                  <div class="modal-left">
-                      <div class="mb-3">
-                          <label for="gplx" class="form-label">Mã GPLX</label>
-                          <input type="text" class="form-control" id="gplx" required>
-                      </div>
-                      <div class="mb-3">
-                          <label for="name" class="form-label">Tên</label>
-                          <input type="text" class="form-control" id="name" required>
-                      </div>
-                      <div class="mb-3">
-                          <label for="dob" class="form-label">Ngày sinh</label>
-                          <input type="date" class="form-control" id="dob" required>
-                      </div>
-                      <div class="mb-3">
-                          <label for="cccd" class="form-label">CCCD</label>
-                          <input type="text" class="form-control" id="cccd" required>
-                      </div>
-                      <div class="mb-3">
-                          <label for="phone" class="form-label">Số điện thoại</label>
-                          <input type="tel" class="form-control" id="phone" required>
-                      </div>
-                      <div class="mb-3">
-                          <label for="email" class="form-label">Email</label>
-                          <input type="email" class="form-control" id="email" required>
-                      </div>
-                  </div>
-                  <div class="modal-right">
-                      <div class="mb-3">
-                          <label for="address" class="form-label">Địa chỉ</label>
-                          <input type="text" class="form-control" id="address" required>
-                      </div>
-                      <div class="mb-3">
-                          <label for="issueDate" class="form-label">Ngày cấp</label>
-                          <input type="date" class="form-control" id="issueDate" required>
-                      </div>
-                      <div class="mb-3">
-                          <label for="expiryDate" class="form-label">Ngày hết hạn</label>
-                          <input type="date" class="form-control" id="expiryDate" required>
-                      </div>
-                      <div class="mb-3">
-                          <label for="ngaytrungtuyen" class="form-label">Ngày trúng tuyển</label>
-                          <input type="date" class="form-control" id="ngaytrungtuyen" required>
-                      </div>
-                      <div class="mb-3">
-                          <label for="hangGPLX" class="form-label">Hạng GPLX (Ô tô)</label>
-                          <select class="form-control" id="hangGPLX" required>
-                              <option value="B1">B1</option>
-                              <option value="B2">B2</option>
-                              <option value="C">C</option>
-                              <option value="D">D</option>
-                              <option value="E">E</option>
-                          </select>
-                      </div>
-                      <div class="mb-3">
-                          <label for="status" class="form-label">Trạng thái</label>
-                          <select class="form-control" id="status" required>
-                              <option value="Đã kích hoạt">Đã kích hoạt</option>
-                              <option value="Chưa kích hoạt">Chưa kích hoạt</option>
-                          </select>
-                      </div>
-                      <div class="mb-3">
-                          <label for="giamdoc" class="form-label">Giám đốc</label>
-                          <input type="text" class="form-control" id="giamdoc">
-                      </div>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Lưu</button>
-              </form>
-          </div>
-      </div>
-  </div>
-</div>
-
-
-  <!-- Modal chỉnh sửa -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-      <div class="modal-content">
-          <div class="modal-header">
-              <h5 class="modal-title" id="editModalLabel">Sửa Tài Khoản</h5>
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body">
-              <form id="editForm">
-                  <div class="mb-3">
-                      <label for="username" class="form-label">Tên người dùng</label>
-                      <input type="text" class="form-control" id="username" required>
-                  </div>
-                  <div class="mb-3">
-                      <label for="password" class="form-label">Mật khẩu</label>
-                      <input type="password" class="form-control" id="password" required>
-                  </div>
-                  <div class="mb-3">
-                      <label for="role" class="form-label">Vai trò</label>
-                      <select class="form-control" id="role" required>
-                          <option value="1">Admin</option>
-                          <option value="2">User</option>
-                      </select>
-                  </div>
-                  <div class="mb-3">
-                      <label for="phone" class="form-label">Số điện thoại</label>
-                      <input type="tel" class="form-control" id="phone" required>
-                  </div>
-                  <div class="mb-3">
-                      <label for="name" class="form-label">Tên đầy đủ</label>
-                      <input type="text" class="form-control" id="name" required>
-                  </div>
-                  <div class="mb-3">
-                      <label for="address" class="form-label">Địa chỉ</label>
-                      <input type="text" class="form-control" id="address" required>
-                  </div>
-                  <div class="mb-3">
-                      <label for="image" class="form-label">Hình ảnh (URL)</label>
-                      <input type="text" class="form-control" id="image">
-                  </div>
-                  <div class="mb-3">
-                      <label for="gender" class="form-label">Giới tính</label>
-                      <select class="form-control" id="gender" required>
-                          <option value="male">Nam</option>
-                          <option value="female">Nữ</option>
-                          <option value="other">Khác</option>
-                      </select>
-                  </div>
-              
-                  <button type="submit" class="btn btn-primary">Lưu Thay Đổi</button>
-              </form>
-          </div>
-      </div>
-  </div>
+<!-- Modal for adding and editing user -->
+<div class="modal fade" id="licenseHolderModal" tabindex="-1" aria-labelledby="licenseHolderModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="licenseHolderModalLabel">Thêm Chủ Sở Hữu</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="licenseHolderForm">
+                    <input type="hidden" id="holderId"> <!-- Hidden input for editing -->
+                    <div class="modal-left">
+                        <div class="mb-3">
+                            <label for="gplx" class="form-label">Mã GPLX</label>
+                            <input type="text" class="form-control" id="gplx" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Tên</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dob" class="form-label">Ngày sinh</label>
+                            <input type="date" class="form-control" id="dob" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="cccd" class="form-label">CCCD</label>
+                            <input type="text" class="form-control" id="cccd" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">Số điện thoại</label>
+                            <input type="tel" class="form-control" id="phone" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                    </div>
+                    <div class="modal-right">
+                        <div class="mb-3">
+                            <label for="address" class="form-label">Địa chỉ</label>
+                            <input type="text" class="form-control" id="address" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="issueDate" class="form-label">Ngày cấp</label>
+                            <input type="date" class="form-control" id="issueDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="expiryDate" class="form-label">Ngày hết hạn</label>
+                            <input type="date" class="form-control" id="expiryDate" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ngaytrungtuyen" class="form-label">Ngày trúng tuyển</label>
+                            <input type="date" class="form-control" id="ngaytrungtuyen" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="hangGPLX" class="form-label">Hạng GPLX (Ô tô)</label>
+                            <select class="form-control" id="hangGPLX" required>
+                                <option value="B1">B1</option>
+                                <option value="B2">B2</option>
+                                <option value="C">C</option>
+                                <option value="D">D</option>
+                                <option value="E">E</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="status" class="form-label">Trạng thái</label>
+                            <select class="form-control" id="status" required>
+                                <option value="Đã kích hoạt">Đã kích hoạt</option>
+                                <option value="Chưa kích hoạt">Chưa kích hoạt</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="giamdoc" class="form-label">Giám đốc</label>
+                            <input type="text" class="form-control" id="giamdoc">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 
@@ -266,6 +152,5 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
   <script src="/js/index.js"></script>
   <script src="/js/licenselHoder.js"></script>
-  <script src="/js/addlicenseHoder.js"></script>
 </body>
 </html>

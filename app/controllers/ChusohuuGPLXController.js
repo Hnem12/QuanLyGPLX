@@ -86,40 +86,42 @@ exports.addLicenseHolder = (req, res, next) => {
 
 
 // sửa danh mục 
-exports.updateCategory = (req, res, next) => {
-    var _id = req.params.id
-    var NewmaGPLX = req.body.maGPLX
-    var Newname = req.body.newname
-    var NewDateOfBirth =req.body.newDateOfBirth
-    var NewAddress =req.body.newaddress
-    var NewCCCD =req.body.newcCCD
-    var NewPhoneNumber =req.body.newphoneNumber
-    var NewEmail =req.body.newemail
-    var NewNgaycap =req.body.newngaycap
-    var NewNgayhethan =req.body.newngayhethan
-    var NewStatus =req.body.newstatus
-    var Newgiamdoc = req.body.giamdoc
-    var Newloivipham = req.body.loivipham
-    ChusohuuGPLXModel.findByIdAndUpdate(_id, {
-        Name: Newname,
-        DateOfBirth: NewDateOfBirth,
-        CCCD: NewCCCD, Address: NewAddress,
-        PhoneNumber:  NewPhoneNumber, Email: NewEmail, Ngaycap: NewNgaycap,
-         Ngayhethan: NewNgayhethan, Status: NewStatus,
-         Giamdoc: Newgiamdoc, Loivipham: Newloivipham, NewmaGPLX: NewmaGPLX
-    })
-        .then(data => {
-            if (data) {
-            res.json('Update thanh cong nhe')
-            }
-            else {
-                res.json("Update that bai")
-            }
-        })
-        .catch(err => {
-            res.status(500).json("Loi server 3")
-    })
-}
+exports.updateLicenseHolder = async (req, res) => {
+    try {
+        const _id = req.params.id; // Lấy ID từ URL
+        const updateData = {
+            MaGPLX: req.body.maGPLX,
+            Name: req.body.newname,
+            DateOfBirth: req.body.newDateOfBirth,
+            CCCD: req.body.newcCCD,
+            Address: req.body.newaddress,
+            HangGPLX: req.body.newHangGPLX,
+            PhoneNumber: req.body.newphoneNumber,
+            Email: req.body.newemail,
+            Ngaycap: req.body.newngaycap,
+            Ngayhethan: req.body.newngayhethan,
+            Ngaytrungtuyen: req.body.newngaytrungtuyen,
+            Status: req.body.newstatus,
+            Giamdoc: req.body.giamdoc,
+            Loivipham: req.body.loivipham
+        };
+
+        // Tìm đối tượng GPLX bằng ID và cập nhật thông tin
+        const licenseHolder = await LicenseHolder.findById(_id);
+
+        if (!licenseHolder) {
+            return res.status(404).json({ message: 'Không tìm thấy người dùng với ID này.' });
+        }
+
+        // Sử dụng method `updateInfo` đã được định nghĩa trong schema
+        await licenseHolder.updateInfo(updateData);
+
+        res.json({ message: 'Cập nhật thành công!' });
+    } catch (error) {
+        console.error('Lỗi khi cập nhật GPLX:', error);
+        res.status(500).json({ message: 'Đã xảy ra lỗi, vui lòng thử lại sau.' });
+    }
+};
 
 // xóa danh mục 
 exports.deleteCategory = (req, res, next) => {

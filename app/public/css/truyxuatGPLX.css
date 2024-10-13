@@ -82,7 +82,7 @@
   /* CSS cho phần sidebar */
   .sidebar {
     width: 200px; /* Chiều rộng mặc định của sidebar */
-    background-color: #ebebeb;
+    background-color: #af4e4e;
     height: 100%;
     padding: 1rem;
     color: rgb(104, 39, 39);
@@ -136,7 +136,7 @@
   #details {
     margin-top: 20px;
     padding: 15px;
-    background-color: #fff;
+    background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 5px;
     width: fit-content;
@@ -338,7 +338,7 @@ body {
 /* CSS cho phần sidebar */
 .sidebar {
   width: 200px; /* Chiều rộng mặc định của sidebar */
-  background-color: #ebebeb;
+  background-color: #ffffff;
   height: 100%;
   padding: 1rem;
   color: rgb(104, 39, 39);
@@ -370,6 +370,7 @@ body {
 
 .sidebar .icon {
   margin-right: 10px;
+  margin-left: -10px;
 }
 
 .sidebar.collapsed .nav-link span {
@@ -495,4 +496,45 @@ i {
       margin-top: 0.5rem; /* Space between input and button */
       width: 100%; /* Full width on small screens */
   }
+}
+
+.sidebar .nav-link.active {
+  background-color: #a86078; /* Màu nền khi được chọn */
+  color: white; /* Màu chữ khi được chọn */
+  border-radius: 5px; /* Bo góc nhẹ cho phần tử được chọn */
+  transition: background-color 0.3s; /* Hiệu ứng chuyển tiếp cho màu nền */
+}
+
+/* Hiệu ứng hover cho nav-link */
+.sidebar .nav-link:hover {
+  background-color: rgba(223, 112, 149, 0.7); /* Màu nền khi hover */
+  color: white; /* Màu chữ khi hover */
+}
+/* CSS cho phần sidebar */
+.sidebar .nav-link .icon {
+  transition: font-size 0.3s; /* Thêm hiệu ứng chuyển tiếp cho kích thước biểu tượng */
+}
+
+/* Kích thước biểu tượng khi sidebar mở rộng */
+.sidebar .nav-link .icon {
+  font-size: 20px; /* Kích thước lớn hơn cho biểu tượng khi sidebar mở */
+}
+
+/* Kích thước biểu tượng khi sidebar bị thu hẹp */
+.sidebar.collapsed .nav-link .icon {
+  font-size: 20px; /* Kích thước nhỏ hơn cho biểu tượng khi sidebar bị thu hẹp */
+}
+/* Đánh dấu phần tử hiện tại trong sidebar */
+.sidebar .nav-link.active {
+  background-color: #a86078; /* Màu nền khi được chọn */
+  color: white; /* Màu chữ khi được chọn */
+  border-radius: 5px; /* Bo góc nhẹ cho phần tử được chọn */
+  transition: background-color 0.3s; /* Hiệu ứng chuyển tiếp cho màu nền */
+}
+
+/* Hiệu ứng hover cho nav-link */
+.sidebar .nav-link:hover,
+.sidebar.collapsed .nav-link.active { /* Thêm vào đây */
+  background-color: rgba(223, 112, 149, 0.7); /* Màu nền khi hover */
+  color: white; /* Màu chữ khi hover */
 }

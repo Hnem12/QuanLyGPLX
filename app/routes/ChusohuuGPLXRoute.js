@@ -29,18 +29,29 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Cập nhật thông tin một chủ sở hữu GPLX
-router.put('/:id', async (req, res) => {
-  try {
-    const updatedHolder = await LicenseHolder.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!updatedHolder) {
-      return res.status(404).json({ message: 'Không tìm thấy chủ sở hữu GPLX để cập nhật' });
+router.put('/updateLicenseHolder/:id', async (req, res) => {
+    try {
+      const { id } = req.params; // Lấy ID từ URL
+      const updateData = req.body; // Dữ liệu cần cập nhật
+  
+      // Tìm và cập nhật GPLX theo ID
+      const updatedHolder = await LicenseHolder.findByIdAndUpdate(
+        id,
+        updateData,
+        { new: true, runValidators: true } // Trả về dữ liệu sau khi cập nhật & kiểm tra validators
+      );
+  
+      // Nếu không tìm thấy chủ sở hữu GPLX
+      if (!updatedHolder) {
+        return res.status(404).json({ message: 'Không tìm thấy chủ sở hữu GPLX để cập nhật' });
+      }
+  
+      res.json(updatedHolder); // Trả về kết quả cập nhật thành công
+    } catch (err) {
+      console.error('Lỗi khi cập nhật chủ sở hữu GPLX:', err);
+      res.status(400).json({ message: 'Lỗi khi cập nhật chủ sở hữu GPLX', error: err.message });
     }
-    res.json(updatedHolder);
-  } catch (err) {
-    res.status(400).json({ message: 'Lỗi khi cập nhật chủ sở hữu GPLX', error: err.message });
-  }
-});
+  });
 
 
 router.delete('/:id', async (req, res) => {

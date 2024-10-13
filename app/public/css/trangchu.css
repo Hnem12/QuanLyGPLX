@@ -237,3 +237,31 @@ i {
   overflow: hidden; /* Hide overflow text */
   text-overflow: ellipsis; /* Add ellipsis for overflow */
 }
+
+.image-container {
+  margin-top: 240px;
+  height: 10vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.image-container img {
+  max-width: 45%;
+  height: auto;
+}
+
+/* Đánh dấu phần tử hiện tại trong sidebar */
+.sidebar .nav-link.active {
+  background-color: #a86078; /* Màu nền khi được chọn */
+  color: white; /* Màu chữ khi được chọn */
+  border-radius: 5px; /* Bo góc nhẹ cho phần tử được chọn */
+  transition: background-color 0.3s; /* Hiệu ứng chuyển tiếp cho màu nền */
+}
+
+/* Hiệu ứng hover cho nav-link */
+.sidebar .nav-link:hover,
+.sidebar.collapsed .nav-link.active { /* Thêm vào đây */
+  background-color: rgba(223, 112, 149, 0.7); /* Màu nền khi hover */
+  color: white; /* Màu chữ khi hover */
+}
