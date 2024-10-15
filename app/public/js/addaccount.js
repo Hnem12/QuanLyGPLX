@@ -88,12 +88,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // If successful, notify the user and reload the page
                 alert(accountId ? 'Cập nhật tài khoản thành công!' : 'Thêm tài khoản thành công!');
+                resetForm();
                 location.reload();
             } catch (error) {
                 alert('Lỗi khi gửi dữ liệu. Vui lòng kiểm tra kết nối mạng.');
                 console.error('Error:', error);
             }
         });
+        const accountModalElement = document.getElementById('accountModal');
+        accountModalElement.addEventListener('hidden.bs.modal', resetForm); // Reset form when modal is closed
     }
 });
 
@@ -170,6 +173,21 @@ function openModal(accountData) {
     const accountModal = new bootstrap.Modal(document.getElementById('accountModal'));
     accountModal.show();
 }
+// Open modal for editing an existing account
+
+function displayError(message) {
+    // Implement your error display logic here (e.g., show in a div)
+    alert(message); // For now, we just use alert
+}
+
+// Function to reset the form
+function resetForm() {
+    document.getElementById('accountForm').reset(); // Reset form fields
+    // If you want to clear specific fields or reset to specific values, you can do so here
+    document.getElementById('accountId').value = ''; // Clear holderId
+    // Add more fields here if needed
+  }
+
 
 // Delete account function
 async function deleteAccount(id) {

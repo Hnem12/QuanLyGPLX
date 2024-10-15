@@ -1,17 +1,56 @@
+<link rel="stylesheet" href="css/trangchu.css">
 <div class="header">
-  <div class="logo">
-      <img src="/uploads/h7.png" alt="Logo">
-      <div class="title">
-          <a href="http://localhost:3000/trangchu" style="color: inherit; text-decoration: none;">Trang Chủ</a>
-      </div>
-      <button id="toggleButton" class="btn btn-outline-light">
-          <i class="fas fa-chevron-left"></i>
-      </button>
-  </div>
-  <div class="user-info">
-      <div class="notification">🔔</div>
-      <div class="system-name"></div>
-      <img src="/uploads/h6.jpg" alt="Avatar" style="border-radius: 50%; height: 40px; width: 40px; margin-left: 10px;">
-      <a style="color: black; text-decoration: none; margin-left: 20px;" href="http://localhost:3000/">Đăng xuất</a>
-  </div>
+    <div class="logo">
+        <img src="/uploads/h7.png" alt="Logo">
+        <div class="title">
+            <a href="http://localhost:3000/trangchu" style="color: white; font-family: Georgia, 'Times New Roman', Times, serif; text-decoration: none;">Trang Chủ</a>
+        </div>
+        <button id="toggleButton" class="btn btn-outline-light">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+    </div>
+    <div class="user-info">
+        <div class="notification">🔔</div>
+        <div class="username" id="usernameDisplay"></div>
+        <img src="/uploads/h6.jpg" alt="Avatar" style="border-radius: 50%; height: 40px; width: 40px; margin-left: 10px;">
+        <a href="#" class="logout-button" id="logoutButton">Đăng xuất</a>
+    </div>
 </div>
+
+<script>
+    // Fetch username from local storage and display it
+    document.addEventListener('DOMContentLoaded', () => {
+    const username = localStorage.getItem('username');
+    const usernameDisplay = document.getElementById('usernameDisplay');
+    if (username) {
+        usernameDisplay.textContent = username; 
+    } else {
+        usernameDisplay.textContent = 'Khách';
+    }
+});
+
+document.getElementById('logoutButton').addEventListener('click', (event) => {
+    event.preventDefault(); // Prevent the default link behavior
+
+    const confirmLogout = confirm('Bạn có chắc là muốn thoát không?'); // Ask for confirmation
+
+    if (confirmLogout) {
+        localStorage.removeItem('username'); // Clear username from local storage
+        localStorage.removeItem('token'); // Clear token from local storage
+        alert('Bạn đã đăng xuất thành công!'); // Notify the user
+
+        // Redirect to login page
+        window.location.href = "/login"; // Change to your logout redirection
+
+        // Clear previous history to prevent back navigation
+        setTimeout(() => {
+            window.history.pushState(null, null, window.location.href);
+            window.onpopstate = function () {
+                window.history.pushState(null, null, window.location.href);
+            };
+        }, 0);
+    }
+});
+
+
+</script>

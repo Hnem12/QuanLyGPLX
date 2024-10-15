@@ -22,18 +22,16 @@ router.get('/admin', checklogin, checkadmin,(req, res, next)=>{
     res.json('Xác Thực Thành Công Bạn Đăng nhập đúng tài khoản admin');
 })
 
-
-
 // phan trang account
 router.get('/phantrang', phantrangAccount);
 // Lấy dữ liệu từ database
 router.get('/', getAll);
 
 // lấy dữ liệu theo id
-router.get('/:id', getId);
+router.get('/getAccount/:id', getId);
 
 // Thêm mới dữ liệu vào db
-router.post('/', addAccount);
+router.post('/addAccount', addAccount);
 
 // Cập nhập dữ liệu trong db // doi mat khau
 router.put('/:id', changePassword);

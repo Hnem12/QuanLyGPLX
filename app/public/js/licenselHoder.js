@@ -9,7 +9,7 @@ async function fetchLicenseHolders() {
         <tr>
           <td>${index + 1}</td>    
           <td>${holder.MaGPLX}</td>
-          <td>${holder.Name}</td>
+           <td>${holder.Name}</td>
           <td>${new Date(holder.DateOfBirth).toLocaleDateString()}</td>
           <td>${holder.CCCD}</td>
           <td>${holder.Address}</td>
@@ -19,6 +19,7 @@ async function fetchLicenseHolders() {
           </td>
           <td>${new Date(holder.Ngaycap).toLocaleDateString()}</td>
           <td>${new Date(holder.Ngayhethan).toLocaleDateString()}</td>
+           <td>${holder.HangGPLX}</td>
           <td>${holder.Giamdoc}</td>
           <td>
               <span class="status">${holder.Status}</span>
@@ -27,18 +28,11 @@ async function fetchLicenseHolders() {
     <button class="btn btn-warning btn-sm" onclick='openModal(${JSON.stringify(holder)})'>Sửa</button>
     <button class="btn btn-danger btn-sm" onclick="deleteAccount('${holder._id}')">Xóa</button>
     </td>
-
-
-          </tr>
+    </tr>
           
       `;
       tableBody.insertAdjacentHTML('beforeend', row);
     });
-
-    // Chỉ cập nhật tên người dùng cho mục hệ thống chào mừng sau khi nhận dữ liệu của người đầu tiên
-    if (licenseHolders.length > 0) {
-      document.querySelector('.system-name').textContent = `Hệ thống quản lý GPLX - Xin chào, ${licenseHolders[0].Name}`;
-    }
 
   } catch (error) {
     console.error('Failed to fetch license holders:', error);
@@ -140,6 +134,7 @@ document.getElementById('licenseHolderForm').addEventListener('submit', async fu
       const result = await response.json();
       if (response.ok) {
           alert(result.message || 'Thao tác thành công!');
+          resetForm();
           location.reload(); // Reload the page after success
       } else {
           alert(result.message || 'Đã có lỗi xảy ra.');
@@ -149,3 +144,19 @@ document.getElementById('licenseHolderForm').addEventListener('submit', async fu
       console.error('Error:', error);
   }
 });
+
+const licenseHolderModal = document.getElementById('licenseHolderModal'); // Make sure this is the correct modal ID
+licenseHolderModal.addEventListener('hidden.bs.modal', resetForm);
+
+function displayError(message) {
+  // Implement your error display logic here (e.g., show in a div)
+  alert(message); // For now, we just use alert
+}
+
+// Function to reset the form
+function resetForm() {
+  document.getElementById('licenseHolderForm').reset(); // Reset form fields
+  // If you want to clear specific fields or reset to specific values, you can do so here
+  document.getElementById('holderId').value = ''; // Clear holderId
+  // Add more fields here if needed
+}

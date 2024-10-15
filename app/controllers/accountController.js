@@ -73,8 +73,6 @@ const register = async (req, res, next) => {
     }
 };
 
-
-
 // Đăng nhập
 const postlogin = async (req, res, next) => {
     const { username, password } = req.body;
@@ -150,10 +148,12 @@ const getAll = async (req, res, next) => {
     }
 };
 
-// Lấy tài khoản theo ID
 const getId = async (req, res, next) => {
     try {
         const account = await AccountModel.findById(req.params.id);
+        if (!account) {
+            return res.status(404).json('Tài khoản không tồn tại'); // Account not found
+        }
         res.json({
             username: account.username,
             role: account.role,
@@ -161,50 +161,49 @@ const getId = async (req, res, next) => {
             Name: account.Name,
             Address: account.Address,
             Image: account.Image,
-            Gender: account.Gender
+            Gender: account.Gender,
+            password: account.password // Include hashed password for comparison
         });
     } catch (error) {
+        console.error('Error fetching account:', error);
         res.status(500).json('Lỗi server');
     }
 };
+    
 
 const addAccount = async (req, res, next) => {
-    // Destructure the fields from the request body
     const { username, password, SDT, Name, Address, Image, Gender, email, role, status } = req.body;
 
     try {
         // Validate required fields
-        if (!username) {
+        if (!username || username.trim() === "") {
             return res.status(400).json({ success: false, message: 'Tên người dùng không được để trống' });
         }
-        if (!password) {
+        if (!password || password.trim() === "") {
             return res.status(400).json({ success: false, message: 'Mật khẩu không được để trống' });
         }
-        if (!SDT || !/^\d{10,11}$/.test(SDT)) { // Validate phone number format
+        if (!SDT || !/^\d{10,11}$/.test(SDT)) {
             return res.status(400).json({ success: false, message: 'Số điện thoại không hợp lệ' });
         }
-        if (!email || !/\S+@\S+\.\S+/.test(email)) { // Validate email format
+        if (!email || !/\S+@\S+\.\S+/.test(email)) {
             return res.status(400).json({ success: false, message: 'Email không hợp lệ' });
         }
-        if (!Name) {
+        if (!Name || Name.trim() === "") {
             return res.status(400).json({ success: false, message: 'Tên không được để trống' });
         }
-        if (!Address) {
+        if (!Address || Address.trim() === "") {
             return res.status(400).json({ success: false, message: 'Địa chỉ không được để trống' });
         }
- 
-        const existingAccount = await AccountModel.findOne({ 
-            $or: [{ username }, { email }] 
-        });
+
+        // Check if username or email already exists
+        const existingAccount = await AccountModel.findOne({ $or: [{ username }, { email }] });
         if (existingAccount) {
             return res.status(400).json({ success: false, message: 'Tên người dùng hoặc email đã tồn tại' });
         }
-        if (!role) {
-            return res.status(400).json({ success: false, message: 'Vai trò không được để trống' });
-        }
-        // Hash the password with bcrypt
-        const encryptedPassword = await bcrypt.hash(password, 10); // Use a salt rounds constant here
-        
+
+        // Hash the password
+        const encryptedPassword = await bcrypt.hash(password, saltRounds);
+
         // Create the new account
         const newAccount = await AccountModel.create({
             username,
@@ -225,6 +224,7 @@ const addAccount = async (req, res, next) => {
         return res.status(500).json({ success: false, message: 'Lỗi server' });
     }
 };
+
 
 
 // Đổi mật khẩu

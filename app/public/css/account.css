@@ -3,54 +3,7 @@ td {
     text-align: center;
     vertical-align: middle;
   }
-  /* CSS cho phần header */
-.header {
-    background-color: #e2366f;
-    color: rgb(0, 0, 0);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    font-family: 'Times New Roman', Times, serif, sans-serif;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
   
-  .logo {
-    display: flex;
-    align-items: center;
-  }
-  
-  .logo img {
-    height: 35px;
-    margin: 0 7px;
-  }
-  
-  .title {
-    font-size: 1.5em;
-    margin-left: 10px;
-  }
-  
-  .user-info {
-    display: flex;
-    align-items: center;
-  }
-  
-  .user-info img {
-    border-radius: 50%;
-    height: 40px;
-    width: 40px;
-    margin-left: 10px;
-  }
-  
-  .notification,
-  .system-name {
-    margin-right: 10px;
-  }
-  
-  /* CSS cho phần body và sidebar */
   body {
     height: 100vh;
     margin: 0;
@@ -60,17 +13,19 @@ td {
     font-family: 'Times New Roman', Times, serif, sans-serif;
   }
   
-  /* CSS cho phần sidebar */
   .sidebar {
     width: 200px; /* Chiều rộng mặc định của sidebar */
-    background-color: #ffffff;
-    height: 100%;
-    padding: 1rem;
+    background-color: #ffffff; /* Màu nền của sidebar */
+    height: 100vh; /* Chiều cao đầy đủ của viewport */
+    padding: 1rem; /* Khoảng cách bên trong */
     color: rgb(104, 39, 39);
-    transition: width 0.3s ease;
-    overflow-y: auto; 
+    font-size: 19px;
+    transition: width 0.3s ease; /* Hiệu ứng chuyển tiếp cho chiều rộng */
+    overflow-y: auto; /* Cho phép cuộn dọc */
+    border: 1px solid #ccc; /* Đường viền xung quanh sidebar */
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ cho sidebar */
+    position: fixed; /* Để sidebar cố định trong khi nội dung chính cuộn */
   }
-  
   .sidebar.collapsed {
     width: 80px; /* Chiều rộng khi sidebar bị thu gọn */
   }
@@ -218,4 +173,13 @@ tr:nth-child(even) {
 
 tr:hover {
   background-color: #ddd; /* Optional: Add hover effect */
+}
+.Canngang {
+  margin-left: 220px; /* Margin for expanded sidebar */
+  font-size:larger;
+  transition: margin-left 0.3s ease; /* Smooth transition */
+}
+
+.sidebar.collapsed + .Canngang {
+  margin-left: 100px; /* Adjusted margin for collapsed sidebar */
 }
