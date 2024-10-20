@@ -1,49 +1,67 @@
+let currentPage = 1;
+const page_size = 5; // Set the number of items per page
+
 async function fetchLicenseHolders() {
   try {
-    const response = await fetch('http://localhost:3001/api/licenseHolder'); // Đường dẫn đến API
-    const licenseHolders = await response.json(); // Thêm await để đảm bảo dữ liệu được nhận
+    const response = await fetch(`http://localhost:3001/api/licenseHolder?page=${currentPage}`); // API endpoint with pagination
+    const licenseHolders = await response.json(); // Wait for data to be received
     const tableBody = document.getElementById('accountTableBody');
+    tableBody.innerHTML = ''; // Clear previous rows
 
-    licenseHolders.forEach((holder, index) => {
-      const row = `
-        <tr>
-          <td>${index + 1}</td>    
-          <td>${holder.MaGPLX}</td>
-           <td>${holder.Name}</td>
-          <td>${new Date(holder.DateOfBirth).toLocaleDateString()}</td>
-          <td>${holder.CCCD}</td>
-          <td>${holder.Address}</td>
-          <td >
-            SĐT: ${holder.PhoneNumber} <br> 
-        Email: <span class="email" title="${holder.Email}">${holder.Email}</span>
-          </td>
-          <td>${new Date(holder.Ngaycap).toLocaleDateString()}</td>
-          <td>${new Date(holder.Ngayhethan).toLocaleDateString()}</td>
-           <td>${holder.HangGPLX}</td>
-          <td>${holder.Giamdoc}</td>
-          <td>
+    licenseHolders.slice(0, page_size).forEach((holder, index)  => {
+      if (holder.Status === 'Đã kích hoạt') { // Replace with your exact status string
+        const row = `
+          <tr>
+            <td>${(currentPage - 1) * page_size + index + 1}</td>
+            <td>${holder.MaGPLX}</td>
+            <td>${holder.Name}</td>
+            <td>${new Date(holder.DateOfBirth).toLocaleDateString()}</td>
+            <td>${holder.CCCD}</td>
+            <td>${holder.Address}</td>
+            <td>
+              SĐT: ${holder.PhoneNumber} <br> 
+              Email: <span class="email" title="${holder.Email}">${holder.Email}</span>
+            </td>
+            <td>${new Date(holder.Ngaycap).toLocaleDateString()}</td>
+            <td>${new Date(holder.Ngayhethan).toLocaleDateString()}</td>
+            <td>${holder.HangGPLX}</td>
+            <td>${holder.Giamdoc}</td>
+            <td>
               <span class="status">${holder.Status}</span>
-          </td>
-        <td>
-    <button class="btn btn-warning btn-sm" onclick='openModal(${JSON.stringify(holder)})'>Sửa</button>
-    <button class="btn btn-danger btn-sm" onclick="deleteAccount('${holder._id}')">Xóa</button>
-    </td>
-    </tr>
-          
-      `;
-      tableBody.insertAdjacentHTML('beforeend', row);
+            </td>
+            <td>
+              <button class="btn btn-warning btn-sm" onclick='openModal(${JSON.stringify(holder)})'>Sửa</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteAccount('${holder._id}')">Xóa</button>
+            </td>
+          </tr>
+        `;
+        tableBody.insertAdjacentHTML('beforeend', row);
+      }
     });
-
+    document.getElementById('currentPage').textContent = currentPage;
+    document.getElementById('prevPage').disabled = currentPage === 1;
+    document.getElementById('nextPage').disabled = currentPage === data.totalPages;
   } catch (error) {
     console.error('Failed to fetch license holders:', error);
   }
 }
 
-// Gọi hàm fetchLicenseHolders khi trang được load
+// Call fetchLicenseHolders when the page loads
 window.onload = async () => {
-  await fetchLicenseHolders(); // Lấy danh sách license holders
+  await fetchLicenseHolders(); // Fetch list of license holders
 };
 
+document.getElementById('prevPage').addEventListener('click', () => {
+  if (currentPage > 1) {
+      currentPage--;
+      fetchLicenseHolders();
+  }
+});
+
+document.getElementById('nextPage').addEventListener('click', () => {
+  currentPage++;
+  fetchLicenseHolders();
+});
 
 async function deleteAccount(id) {
   if (confirm('Bạn có chắc chắn muốn xóa chủ sở hữu GPLX này không?')) {

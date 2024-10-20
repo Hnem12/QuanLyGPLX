@@ -212,3 +212,37 @@ i {
 .sidebar.collapsed + .Canngang {
   margin-left: 80px; /* Adjusted margin for collapsed sidebar */
 }
+/* General dropdown item styles */
+.dropdown-menu {
+  background-color: white; /* Match dropdown background to sidebar */
+  border-radius: 0.5rem; /* Rounded corners */
+}
+
+/* Hover and active state styles for dropdown items */
+.dropdown-item:hover,
+.dropdown-item:focus,
+.dropdown-item.active {
+  background-color: rgba(223, 112, 149, 0.7); /* Change background on hover */
+  color: white; /* Ensure text remains white */
+}
+
+/* Active state for the currently selected dropdown item */
+.dropdown-item.active {
+  background-color: #a86078; /* Background color for active item */
+  color: white; /* Ensure text remains white */
+}
+
+/* Optional: Ensure icons are properly aligned */
+.dropdown-item i {
+  margin-right: 8px; /* Spacing between icon and text */
+}
+#paginationControls {
+  display: flex;
+  justify-content: center; /* Center the pagination controls */
+  align-items: center; /* Vertically center the buttons and text */
+  margin-top: 20px; /* Space above the pagination controls */
+}
+
+#paginationControls button {
+  margin: 0 10px; /* Space between buttons */
+}

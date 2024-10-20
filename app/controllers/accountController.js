@@ -252,7 +252,7 @@ const changePassword = async (req, res, next) => {
 
 const updatedAccount = async (req, res) => {
     const { id } = req.params;
-    const { username, password, role, phone, name, address, gender, email, status } = req.body;
+    const { username, password, role, phone, Name, Address, Gender, email, status } = req.body;
     const image = req.file ? req.file.path : null; // Lấy đường dẫn hình ảnh mới (nếu có)
 
     // Check if ID is valid
@@ -288,14 +288,14 @@ const updatedAccount = async (req, res) => {
         if (phone !== undefined && phone !== currentAccount.SDT) {
             updateData.SDT = phone;
         }
-        if (name !== undefined && name !== currentAccount.Name) {
-            updateData.Name = name;
+        if (Name !== undefined && Name !== currentAccount.Name) {
+            updateData.Name = Name;
         }
-        if (address !== undefined && address !== currentAccount.Address) {
-            updateData.Address = address;
+        if (Address !== undefined && Address !== currentAccount.Address) {
+            updateData.Address = Address;
         }
-        if (gender !== undefined && gender !== currentAccount.Gender) {
-            updateData.Gender = gender;
+        if (Gender !== undefined && Gender !== currentAccount.Gender) {
+            updateData.Gender = Gender;
         }
         if (email !== undefined && email !== currentAccount.email) {
             updateData.email = email;

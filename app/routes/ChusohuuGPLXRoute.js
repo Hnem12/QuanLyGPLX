@@ -4,6 +4,7 @@ const LicenseHolder = require('../models/ChusohuuGPLXModel');
 const { register } = require('../controllers/accountController');
 const { upload } = require('../controllers/accountController'); // Multer middleware
 const mongoose = require('mongoose');
+const LicenseHolderController = require('../controllers/ChusohuuGPLXController');
 
 // Lấy tất cả chủ sở hữu GPLX
 router.get('/licenseHolder', async (req, res) => {
@@ -14,7 +15,14 @@ router.get('/licenseHolder', async (req, res) => {
     res.status(500).json({ message: 'Lỗi khi lấy danh sách chủ sở hữu GPLX', error: err.message });
   }
 });
-
+router.get('/ApprovelicenselHoder', async (req, res) => {
+    try {
+      const holders = await LicenseHolder.find();
+      res.json(holders);
+    } catch (err) {
+      res.status(500).json({ message: 'Lỗi khi lấy danh sách chủ sở hữu GPLX', error: err.message });
+    }
+  });
 
 // Lấy một chủ sở hữu GPLX cụ thể theo ID
 router.get('/:id', async (req, res) => {
@@ -238,5 +246,7 @@ router.get('/search/:idOrGPLX', async (req, res) => {
         return res.status(500).json({ message: 'Lỗi khi tìm kiếm chủ sở hữu GPLX', error: err.message });
     }
 });
+
+router.get('/phantranglicenseHolders', LicenseHolderController.phantrangLicenseHolders);
 
 module.exports = router;

@@ -176,7 +176,8 @@ tr:hover {
 }
 .Canngang {
   margin-left: 220px; /* Margin for expanded sidebar */
-  font-size:larger;
+  font-size:  17px; /* Font size for content */
+
   transition: margin-left 0.3s ease; /* Smooth transition */
 }
 

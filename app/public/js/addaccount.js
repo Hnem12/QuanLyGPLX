@@ -37,7 +37,6 @@ async function fetchAccounts() {
 }
 window.onload = fetchAccounts;
 
-
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('accountForm');
     if (form) {
@@ -69,7 +68,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 formData.append('image', image); // Thêm tệp hình ảnh
             }
 
-            console.log('Account Data:', formData);
+            // Log FormData entries
+            console.log('Account Data:');
+            for (const [key, value] of formData.entries()) {
+                console.log(`${key}:`, value);
+            }
 
             // Validate required fields
             const validationError = validateAccountForm({
@@ -116,6 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
         accountModalElement.addEventListener('hidden.bs.modal', resetForm); // Đặt lại form khi modal đóng
     }
 });
+
 
 // Hàm để xác thực biểu mẫu tài khoản
 function validateAccountForm(accountData) {
