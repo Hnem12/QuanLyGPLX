@@ -8,70 +8,48 @@ const ejs = require('ejs');
 const mongoose = require('mongoose');
 const express = require('express');
 const cookieParser = require('cookie-parser');
-const multer = require('multer');
-const upload = multer({ dest: 'uploads/' });
 
-const register = async (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
-    }
-
+const register = async (req, res) => {
     try {
         const { username, password, role, SDT, Name, Address, Gender, email, status } = req.body;
+        const image = req.file ? req.file.path : null; // Get the image path
 
-        // Log the incoming request body
-        console.log('Incoming registration data:', req.body);
-
-        // Validate inputs
-        if (!username || !password || !SDT || !Name || !Address || !Gender || !email) {
-            return res.status(400).json({ message: 'Vui lòng điền đầy đủ thông tin' });
+        // Validate required fields
+        if (!username || !password || !email || !image) { // Check for required fields
+            return res.status(400).json({ message: 'Missing required fields!' });
         }
 
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Simple email format regex
-        if (!emailRegex.test(email)) {
-            return res.status(400).json({ message: 'Email không hợp lệ' });
-        }
-
-        // Check if the email already exists
-        const existingEmailUser = await AccountModel.findOne({ email });
-        if (existingEmailUser) {
-            return res.status(400).json({ message: 'Email này đã tồn tại' });
-        }
-
-        const existingUser = await AccountModel.findOne({ username });
+        // Check if the user or email already exists
+        const existingUser = await AccountModel.findOne({ email });
         if (existingUser) {
-            return res.status(400).json({ message: 'User này đã tồn tại' });
+            return res.status(400).json({ message: 'User already exists!' });
         }
 
-        // Validate role
-        const allowedRoles = ['User']; // Allow only 'user'
-        if (!allowedRoles.includes(role)) {
-            return res.status(400).json({ message: 'Vai trò không hợp lệ' });
-        }
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        // Encrypt password
-        const encryptedPassword = await bcrypt.hash(password, saltRounds);
-
+        // Create the new user account
         const newUser = await AccountModel.create({
             username,
-            password: encryptedPassword,
+            password: hashedPassword,
             role,
             SDT,
             Name,
             Address,
             Gender,
-            Image,
-            email, // Ensure email is included here
-            status // Default status
+            email,
+            status,
+            image, // Save image path to MongoDB
         });
 
-        return res.status(201).json({ message: 'Tạo tài khoản thành công', user: newUser });
+        res.status(201).json({ message: 'Account created successfully!', user: newUser });
     } catch (error) {
-        console.error('Lỗi khi tạo tài khoản:', error);
-        return res.status(500).json({ message: 'Tạo tài khoản thất bại', error: error.message });
+        console.error('Error creating account:', error);
+        res.status(500).json({ message: 'Account creation failed!', error: error.message });
     }
 };
+
+
 
 // Đăng nhập
 const postlogin = async (req, res, next) => {
@@ -85,26 +63,28 @@ const postlogin = async (req, res, next) => {
         const checkPassword = bcrypt.compareSync(password, account.password);
         if (!checkPassword) {
             return res.status(401).json('Mật khẩu không chính xác');
-        } else {
-            const token = jwt.sign({ _id: account._id }, 'Hnem');
-            res.cookie('token', token, { httpOnly: true });
-            return res.json({
-                message: 'Đăng nhập thành công',
-                userData: {
-                    username: account.username,
-                    role: account.role,
-                    SDT: account.SDT,
-                    Name: account.Name,
-                    Address: account.Address,
-                    Image: account.Image,
-                    Gender: account.Gender
-                }
-            });
         }
+
+        const token = jwt.sign({ _id: account._id }, 'Hnem');
+        res.cookie('token', token, { httpOnly: true });
+
+        return res.json({
+            message: 'Đăng nhập thành công',
+            userData: {
+                username: account.username,
+                role: account.role,
+                SDT: account.SDT,
+                Name: account.Name,
+                Address: account.Address,
+                image: account.image, // Image URL
+                Gender: account.Gender
+            }
+        });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
 };
+
 
 // Lấy trang đăng nhập
 const getlogin = (req, res, next) => {
@@ -172,10 +152,25 @@ const getId = async (req, res, next) => {
     
 
 const addAccount = async (req, res, next) => {
-    const { username, password, SDT, Name, Address, Image, Gender, email, role, status } = req.body;
+    // Lấy thông tin từ req.body và req.file
+    const { username, password, SDT, Name, Address, Gender, email, role, status } = req.body;
+    const image = req.file ? req.file.path : null; // Get the image path
+
+    console.log('Received account data:', {
+        username,
+        password,
+        SDT,
+        Name,
+        Address,
+        Gender,
+        email,
+        role,
+        status,
+        image
+    });
 
     try {
-        // Validate required fields
+        // Kiểm tra các trường bắt buộc
         if (!username || username.trim() === "") {
             return res.status(400).json({ success: false, message: 'Tên người dùng không được để trống' });
         }
@@ -195,27 +190,33 @@ const addAccount = async (req, res, next) => {
             return res.status(400).json({ success: false, message: 'Địa chỉ không được để trống' });
         }
 
-        // Check if username or email already exists
+        // Kiểm tra xem tên người dùng hoặc email đã tồn tại hay chưa
         const existingAccount = await AccountModel.findOne({ $or: [{ username }, { email }] });
         if (existingAccount) {
             return res.status(400).json({ success: false, message: 'Tên người dùng hoặc email đã tồn tại' });
         }
 
-        // Hash the password
-        const encryptedPassword = await bcrypt.hash(password, saltRounds);
+        // Mã hóa mật khẩu
+        let encryptedPassword;
+        try {
+            encryptedPassword = await bcrypt.hash(password, saltRounds);
+        } catch (error) {
+            console.error('Lỗi khi mã hóa mật khẩu:', error);
+            return res.status(500).json({ success: false, message: 'Lỗi khi mã hóa mật khẩu' });
+        }
 
-        // Create the new account
+        // Tạo tài khoản mới
         const newAccount = await AccountModel.create({
             username,
             password: encryptedPassword,
             SDT,
             Name,
             Address,
-            Image,
+            image, // Save image path to MongoDB
             email,
             Gender,
             role,
-            status
+            status,
         });
 
         return res.status(201).json({ success: true, message: 'Thêm tài khoản thành công', account: newAccount });
@@ -224,6 +225,7 @@ const addAccount = async (req, res, next) => {
         return res.status(500).json({ success: false, message: 'Lỗi server' });
     }
 };
+
 
 
 
@@ -248,10 +250,10 @@ const changePassword = async (req, res, next) => {
     }
 };
 
-
 const updatedAccount = async (req, res) => {
     const { id } = req.params;
     const { username, password, role, phone, name, address, gender, email, status } = req.body;
+    const image = req.file ? req.file.path : null; // Lấy đường dẫn hình ảnh mới (nếu có)
 
     // Check if ID is valid
     if (!id) {
@@ -267,6 +269,14 @@ const updatedAccount = async (req, res) => {
 
         // Prepare data for update
         const updateData = {};
+
+        // Validate fields
+        if (email && !/\S+@\S+\.\S+/.test(email)) {
+            return res.status(400).json({ success: false, message: 'Email không hợp lệ' });
+        }
+        if (phone && !/^\d{10,11}$/.test(phone)) {
+            return res.status(400).json({ success: false, message: 'Số điện thoại không hợp lệ' });
+        }
 
         // Only update fields if they have changed
         if (username !== undefined && username !== currentAccount.username) {
@@ -293,14 +303,14 @@ const updatedAccount = async (req, res) => {
         if (status !== undefined) {
             updateData.status = status; // If status is provided, update it
         }
+        if (image) {
+            updateData.image = image; // Cập nhật đường dẫn hình ảnh
+        }
 
         // Hash new password only if provided
         if (password) {
             updateData.password = await bcrypt.hash(password, 10);
         }
-
-        // Log the update data for debugging
-        console.log('Update Data:', updateData);
 
         // If there is nothing to update, return a message
         if (Object.keys(updateData).length === 0) {
@@ -308,14 +318,9 @@ const updatedAccount = async (req, res) => {
         }
 
         // Update the account
-        const result = await AccountModel.updateOne({ _id: id }, { $set: updateData });
+        const updatedAccount = await AccountModel.findByIdAndUpdate(id, { $set: updateData }, { new: true });
 
-        // Check the result of the update
-        if (result.nModified > 0) {
-            return res.json({ success: true, message: 'Tài khoản đã được cập nhật thành công!' });
-        } else {
-            return res.json({ success: true, message: 'Không có thay đổi nào được thực hiện hoặc các giá trị đã tồn tại.' });
-        }
+        return res.json({ success: true, message: 'Tài khoản đã được cập nhật thành công!', account: updatedAccount });
 
     } catch (error) {
         console.error('Error updating account:', error);
@@ -351,6 +356,10 @@ const phantrangAccount = async (req, res, next) => {
     }
 };
 
+const Xulyanh = async (req, res, next) => {
+  console.log(req.file.filename);
+};
+
 module.exports = {
     register,
     getlogin,
@@ -364,4 +373,5 @@ module.exports = {
     checklogin,
     checkadmin,
     phantrangAccount,
+    Xulyanh
 };

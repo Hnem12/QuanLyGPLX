@@ -10,7 +10,7 @@ const AccountSchema = new mongoose.Schema({
     Gender: { type: String, enum: ['Male', 'Female'], required: true },
     email: { type: String, required: true }, // Make sure this is present and required
     status: { type: String, default: 'Chưa kích hoạt' }, // New field for status with default value
-    image: { type: String, required: false }, // New field for storing image URL or path
+    image: { type: String, required: true }, // New field for storing image URL or path
 }, 
 {
     collection: 'account' // Specify the collection name here

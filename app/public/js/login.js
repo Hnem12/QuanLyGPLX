@@ -44,6 +44,7 @@ function login() {
 
         // Lưu tên người dùng vào localStorage
         localStorage.setItem('username', username);
+        localStorage.setItem('image', data.userData.image); // Store image URL
 
         // Chuyển hướng sang trang chủ sau khi đăng nhập thành công
         window.location.href = "/trangchu";

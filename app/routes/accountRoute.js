@@ -7,15 +7,20 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const jwt = require('jsonwebtoken');
 var cookieParser = require('cookie-parser');
-router.use(cookieParser())
+const { Xulyanh } = require('../controllers/accountController');
+const { imageUpload } = require('../middleware/upload');
+
+// router.post('/Xulyanh', imageUpload.single("image"), Xulyanh);
+// router.use("/images", express.static(path.join(__dirname, "uploads")));
+
+router.use(cookieParser());
 
 // Tao tài khoản
-router.post('/register', register);
+router.post('/register', imageUpload.single('image'), register);
 
-router.put('/updateTK/:id', updatedAccount);
+router.put('/updateTK/:id',imageUpload.single('image'), updatedAccount);
 
 // đăng nhập
-router.get('/login',getlogin)
 router.post('/login', postlogin);
 
 router.get('/admin', checklogin, checkadmin,(req, res, next)=>{
@@ -31,7 +36,7 @@ router.get('/', getAll);
 router.get('/getAccount/:id', getId);
 
 // Thêm mới dữ liệu vào db
-router.post('/addAccount', addAccount);
+router.post('/addAccount',imageUpload.single('image'), addAccount);
 
 // Cập nhập dữ liệu trong db // doi mat khau
 router.put('/:id', changePassword);

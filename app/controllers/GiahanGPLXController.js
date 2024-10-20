@@ -22,14 +22,16 @@ const LicenseController = {
     
     getLicenseRenewalByIdentifier: async (req, res) => {
         try {
-            const { identifier } = req.params;
-    
-            // Find by LicenseNumber or _id
+            const { gplxCode, issuingPlace } = req.params; // Extract all parameters
+        
+            // Normalize parameters
+            const normalizedGplxCode = gplxCode.trim();
+            const normalizedIssuingPlace = issuingPlace.trim();
+        
+            // Find by LicenseNumber, IssuingCountry, and IssuingPlace (case insensitive)
             const licenseRenewal = await LicenseRenewal.findOne({
-                $or: [
-                    { LicenseNumber: identifier }, 
-                    { _id: identifier }
-                ]
+                LicenseNumber: normalizedGplxCode,
+                IssuingPlace: { $regex: new RegExp(`^${normalizedIssuingPlace}$`, 'i') } // Case insensitive
             });
     
             if (!licenseRenewal) {
@@ -38,15 +40,15 @@ const LicenseController = {
     
             return res.status(200).json({
                 message: 'License renewal found',
-                data: licenseRenewal
+                data: licenseRenewal,
             });
         } catch (error) {
             return res.status(500).json({
                 message: 'Error fetching license renewal',
-                error: error.message
+                error: error.message,
             });
         }
-    },
+    },      
     
     getAllLicenseRenewals: async (req, res) => {
         try {

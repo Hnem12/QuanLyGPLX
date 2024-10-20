@@ -16,6 +16,6 @@ router.post('/licenses/:id/renew', LicenseController.renewLicense);
 
 router.get('/renewals/getall', LicenseController.getAllLicenseRenewals);
 
-router.get('/renewals/:identifier', LicenseController.getLicenseRenewalByIdentifier);
+router.get('/renewals/:gplxCode/:issuingPlace', LicenseController.getLicenseRenewalByIdentifier);
 
 module.exports = router;

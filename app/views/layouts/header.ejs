@@ -3,7 +3,7 @@
     <div class="logo">
         <img src="/uploads/h7.png" alt="Logo">
         <div class="title">
-            <a href="http://localhost:3000/trangchu" style="color: white; font-family: Georgia, 'Times New Roman', Times, serif; text-decoration: none;">Trang Chủ</a>
+            <a href="http://localhost:3001/trangchu" style="color: white; font-family: Georgia, 'Times New Roman', Times, serif; text-decoration: none;">Trang Chủ</a>
         </div>
         <button id="toggleButton" class="btn btn-outline-light">
             <i class="fas fa-chevron-left"></i>
@@ -12,22 +12,39 @@
     <div class="user-info">
         <div class="notification">🔔</div>
         <div class="username" id="usernameDisplay"></div>
-        <img src="/uploads/h6.jpg" alt="Avatar" style="border-radius: 50%; height: 40px; width: 40px; margin-left: 10px;">
+                <div class="avatar-container" style="display: flex; justify-content: center; align-items: center; height: 40px; width: 40px; overflow: hidden; border-radius: 50%; border: 2px solid #ccc;">
+            <img id="avatarImage" src="./uploads/h6.jpg" alt="Avatar" style="border-radius: 50%; height: 100%; width: 100%; object-fit: cover;">
+        </div>
         <a href="#" class="logout-button" id="logoutButton">Đăng xuất</a>
     </div>
 </div>
 
 <script>
-    // Fetch username from local storage and display it
-    document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const username = localStorage.getItem('username');
+    const userImage = localStorage.getItem('image'); // Lấy đường dẫn hình ảnh
     const usernameDisplay = document.getElementById('usernameDisplay');
+    const avatarImage = document.getElementById('avatarImage'); // Phần tử để hiển thị hình ảnh
+
+    console.log('Retrieved Username:', username);
+    console.log('Retrieved User Image URL:', userImage);
+    console.log('Avatar Image Element:', avatarImage); // Log the avatar image element
+
     if (username) {
         usernameDisplay.textContent = username; 
+        if (avatarImage) { // Check if avatarImage exists
+            avatarImage.src = userImage || './uploads/h6.jpg'; // Cập nhật đường dẫn hình ảnh hoặc sử dụng hình ảnh mặc định
+        } else {
+            console.error('Avatar image element not found!'); // Log an error if the element is not found
+        }
     } else {
         usernameDisplay.textContent = 'Khách';
+        if (avatarImage) { // Check if avatarImage exists
+            avatarImage.src = './uploads/h6.jpg'; // Hình ảnh mặc định nếu không có
+        }
     }
 });
+
 
 document.getElementById('logoutButton').addEventListener('click', (event) => {
     event.preventDefault(); // Prevent the default link behavior

@@ -34,12 +34,10 @@
 }
 
 .username {
-  font-weight: bold;
-  color: white;
-  margin-left: 10px;
-  margin-right: -10px;
-  font-size: 18px;
-  font-family:serif;
+  font-size: 16px; 
+  font-weight: bold; 
+  color: #ffffff; 
+  margin-left: 7px;
 }
 
 .logout-button {
@@ -120,13 +118,14 @@ body {
 .main-content-wrapper {
   display: flex;
   flex-grow: 1; 
-  overflow-y: hidden; /* Ngăn chặn cuộn dọc cho nội dung chính */
+  overflow-y: auto; /* Ngăn chặn cuộn dọc cho nội dung chính */
+
 }
 
 .main-content {
   flex-grow: 1;
   padding: 2rem;
-  overflow-y: hidden; /* Ngăn chặn cuộn dọc cho nội dung chính */
+  overflow-y: auto; /* Ngăn chặn cuộn dọc cho nội dung chính */
 }
 
 tr:nth-child(even) {

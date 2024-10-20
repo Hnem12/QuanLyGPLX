@@ -1,6 +1,6 @@
 async function fetchLicenseHolders() {
   try {
-    const response = await fetch('http://localhost:3000/api/licenseHolder'); // Đường dẫn đến API
+    const response = await fetch('http://localhost:3001/api/licenseHolder'); // Đường dẫn đến API
     const licenseHolders = await response.json(); // Thêm await để đảm bảo dữ liệu được nhận
     const tableBody = document.getElementById('accountTableBody');
 

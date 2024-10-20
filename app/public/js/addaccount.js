@@ -17,6 +17,9 @@ async function fetchAccounts() {
                     <td>${account.Address}</td>
                     <td>${account.Gender}</td>
                     <td>${account.role}</td>
+                   <td>
+                        <img src="${account.image}" alt="Account Image" style="width: 100px; height: auto;" />
+                    </td>
                      <td>
                         <span class="status">${account.status}</span>
                     </td>     
@@ -39,54 +42,67 @@ document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('accountForm');
     if (form) {
         form.addEventListener('submit', async function (e) {
-            e.preventDefault(); // Prevent default form submission
+            e.preventDefault(); // Ngăn chặn việc gửi biểu mẫu mặc định
 
-            // Check if we're adding or updating based on the presence of an accountId
+            // Kiểm tra xem có accountId không để xác định hành động (thêm hoặc sửa)
             const accountId = document.getElementById('accountId')?.value;
-            const url = accountId ? `/api/updateTK/${accountId}` : '/api/addAccount'; // Dynamic URL
-            const method = accountId ? 'PUT' : 'POST'; // Use PUT for updates, POST for adding
+            const url = accountId ? `/api/updateTK/${accountId}` : '/api/addAccount'; // URL động
+            const method = accountId ? 'PUT' : 'POST'; // Sử dụng PUT cho cập nhật, POST cho thêm mới
 
-            // Retrieve form values
-            const accountData = {
-                username: document.getElementById('username')?.value.trim(),
-                password: document.getElementById('password')?.value.trim(),
-                confirmPassword: document.getElementById('confirmPassword')?.value.trim(),
-                Name: document.getElementById('name')?.value.trim(),
-                email: document.getElementById('email')?.value.trim(),
-                SDT: document.getElementById('phone')?.value.trim(),
-                Address: document.getElementById('address')?.value.trim(),
-                Gender: document.getElementById('gender')?.value,
-                role: document.getElementById('role')?.value,
-                status: document.getElementById('status')?.value,
-                // For image uploads, handle it separately if necessary
-                Image: document.getElementById('image')?.files[0]
-            };
+            // Tạo đối tượng FormData để chứa dữ liệu
+            const formData = new FormData();
+            formData.append('username', document.getElementById('username')?.value.trim());
+            formData.append('password', document.getElementById('password')?.value.trim());
+            formData.append('confirmPassword', document.getElementById('confirmPassword')?.value.trim());
+            formData.append('Name', document.getElementById('name')?.value.trim());
+            formData.append('email', document.getElementById('email')?.value.trim());
+            formData.append('SDT', document.getElementById('phone')?.value.trim());
+            formData.append('Address', document.getElementById('address')?.value.trim());
+            formData.append('Gender', document.getElementById('gender')?.value);
+            formData.append('role', document.getElementById('role')?.value);
+            formData.append('status', document.getElementById('status')?.value);
+
+            // Lấy hình ảnh đã chọn và thêm vào FormData
+            const imageInput = document.getElementById('image'); // Giả sử có trường input cho hình ảnh
+            const image = imageInput.files[0];
+            if (image) {
+                formData.append('image', image); // Thêm tệp hình ảnh
+            }
+
+            console.log('Account Data:', formData);
 
             // Validate required fields
-            const validationError = validateAccountForm(accountData);
+            const validationError = validateAccountForm({
+                username: formData.get('username'),
+                password: formData.get('password'),
+                confirmPassword: formData.get('confirmPassword'),
+                Name: formData.get('Name'),
+                email: formData.get('email'),
+                SDT: formData.get('SDT'),
+                Address: formData.get('Address'),
+                Gender: formData.get('Gender'),
+                role: formData.get('role')
+            });
             if (validationError) {
                 alert(validationError);
                 return;
             }
 
             try {
-                // Send JSON data to backend
+                // Gửi FormData đến backend
                 const response = await fetch(url, {
                     method: method,
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(accountData) // Convert to JSON string
+                    body: formData, // Gửi FormData thay vì JSON
                 });
 
-                // Handle response
+                // Xử lý phản hồi
                 if (!response.ok) {
                     const result = await response.json();
                     alert(result.message || 'Đã có lỗi xảy ra, vui lòng thử lại.');
                     return;
                 }
 
-                // If successful, notify the user and reload the page
+                // Nếu thành công, thông báo cho người dùng và tải lại trang
                 alert(accountId ? 'Cập nhật tài khoản thành công!' : 'Thêm tài khoản thành công!');
                 resetForm();
                 location.reload();
@@ -95,27 +111,30 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.error('Error:', error);
             }
         });
+
         const accountModalElement = document.getElementById('accountModal');
-        accountModalElement.addEventListener('hidden.bs.modal', resetForm); // Reset form when modal is closed
+        accountModalElement.addEventListener('hidden.bs.modal', resetForm); // Đặt lại form khi modal đóng
     }
 });
 
-// Function to validate the account form
+// Hàm để xác thực biểu mẫu tài khoản
 function validateAccountForm(accountData) {
-    if (!accountData.username || !accountData.password || !accountData.Name || !accountData.email || !accountData.SDT || !accountData.Address || !accountData.Gender|| !accountData.role) {
+    if (!accountData.username || !accountData.password || !accountData.Name || !accountData.email || !accountData.SDT || !accountData.Address || !accountData.Gender || !accountData.role) {
         return 'Vui lòng điền đầy đủ các trường bắt buộc.';
     }
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailRegex.test(accountData.email)) {
         return 'Vui lòng nhập địa chỉ email hợp lệ.';
     }
-    // Check for password confirmation
+    // Kiểm tra xác nhận mật khẩu
     if (accountData.password !== accountData.confirmPassword) {
         return 'Mật khẩu và xác nhận mật khẩu không khớp.';
     }
 
-    return null; // No errors
+    return null; // Không có lỗi
 }
+
+// Hàm để đặt lại biểu mẫu
 
 
 // Open modal for both adding and editing accounts
