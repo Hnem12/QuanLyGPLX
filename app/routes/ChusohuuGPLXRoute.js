@@ -8,21 +8,83 @@ const LicenseHolderController = require('../controllers/ChusohuuGPLXController')
 
 // Lấy tất cả chủ sở hữu GPLX
 router.get('/licenseHolder', async (req, res) => {
-  try {
-    const holders = await LicenseHolder.find();
-    res.json(holders);
-  } catch (err) {
-    res.status(500).json({ message: 'Lỗi khi lấy danh sách chủ sở hữu GPLX', error: err.message });
-  }
-});
-router.get('/ApprovelicenselHoder', async (req, res) => {
     try {
-      const holders = await LicenseHolder.find();
-      res.json(holders);
-    } catch (err) {
-      res.status(500).json({ message: 'Lỗi khi lấy danh sách chủ sở hữu GPLX', error: err.message });
+      const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+      const pageSize = parseInt(req.query.pageSize) || 6; // Default to 6 items per page
+  
+      // Fetch all license holders
+      const allLicenseHolders = await LicenseHolder.find();
+  
+      // Sort license holders: 'Đã kích hoạt' should come first
+      const sortedLicenseHolders = allLicenseHolders.sort((a, b) => {
+        if (a.Status === 'Đã kích hoạt' && b.Status !== 'Đã kích hoạt') {
+          return -1; // 'a' comes first
+        } else if (a.Status !== 'Đã kích hoạt' && b.Status === 'Đã kích hoạt') {
+          return 1; // 'b' comes first
+        }
+        return 0; // Maintain original order if both are the same
+      });
+  
+      // Pagination logic
+      const totalRecords = sortedLicenseHolders.length; // Total number of sorted documents
+      const totalPages = Math.ceil(totalRecords / pageSize); // Calculate total pages
+  
+      // Get the required slice for the current page
+      const licenseHolders = sortedLicenseHolders.slice((page - 1) * pageSize, page * pageSize);
+  
+      res.status(200).json({
+        licenseHolders,
+        totalPages,
+        totalRecords,
+        currentPage: page,
+        hasNextPage: page < totalPages,
+        hasPrevPage: page > 1,
+      });
+    } catch (error) {
+      console.error('Error fetching license holders:', error);
+      res.status(500).json({ error: 'Failed to fetch license holders.' });
     }
   });
+  
+
+router.get('/ApprovelicenselHoder', async (req, res) => {
+  try {
+    const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+    const pageSize = parseInt(req.query.pageSize) || 6; // Default to 6 items per page
+
+    // Fetch all license holders
+    const allLicenseHolders = await LicenseHolder.find();
+
+    // Sort license holders: 'Đã kích hoạt' should come first
+    const sortedLicenseHolders = allLicenseHolders.sort((a, b) => {
+      if (a.Status === 'Chưa kích hoạt' && b.Status !== 'Chưa kích hoạt') {
+        return -1; // 'a' comes first
+      } else if (a.Status !== 'Chưa kích hoạt' && b.Status === 'Chưa kích hoạt') {
+        return 1; // 'b' comes first
+      }
+      return 0; // Maintain original order if both are the same
+    });
+
+    // Pagination logic
+    const totalRecords = sortedLicenseHolders.length; // Total number of sorted documents
+    const totalPages = Math.ceil(totalRecords / pageSize); // Calculate total pages
+
+    // Get the required slice for the current page
+    const licenseHolders = sortedLicenseHolders.slice((page - 1) * pageSize, page * pageSize);
+
+    res.status(200).json({
+      licenseHolders,
+      totalPages,
+      totalRecords,
+      currentPage: page,
+      hasNextPage: page < totalPages,
+      hasPrevPage: page > 1,
+    });
+  } catch (error) {
+    console.error('Error fetching license holders:', error);
+    res.status(500).json({ error: 'Failed to fetch license holders.' });
+  }
+});
 
 // Lấy một chủ sở hữu GPLX cụ thể theo ID
 router.get('/:id', async (req, res) => {
@@ -195,7 +257,6 @@ router.post('/addlicenseHolder', async (req, res) => {
   });
   
 
-
 router.get('/search/:idOrGPLX', async (req, res) => {
     const { idOrGPLX } = req.params; // The parameter can be either ID or MaGPLX
   
@@ -247,6 +308,5 @@ router.get('/search/:idOrGPLX', async (req, res) => {
     }
 });
 
-router.get('/phantranglicenseHolders', LicenseHolderController.phantrangLicenseHolders);
 
 module.exports = router;

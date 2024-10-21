@@ -1,170 +1,39 @@
-
-td {
-    text-align: center;
-    vertical-align: middle;
-  }
-  
-  body {
-    height: 100vh;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    overflow-y: hidden; /* Ẩn cuộn dọc cho body */
-    font-family: 'Times New Roman', Times, serif, sans-serif;
-  }
-  
-  .sidebar {
-    width: 200px; /* Chiều rộng mặc định của sidebar */
-    background-color: #ffffff; /* Màu nền của sidebar */
-    height: 100vh; /* Chiều cao đầy đủ của viewport */
-    padding: 1rem; /* Khoảng cách bên trong */
-    color: rgb(104, 39, 39);
-    font-size: 19px;
-    transition: width 0.3s ease; /* Hiệu ứng chuyển tiếp cho chiều rộng */
-    overflow-y: auto; /* Cho phép cuộn dọc */
-    border: 1px solid #ccc; /* Đường viền xung quanh sidebar */
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ cho sidebar */
-    position: fixed; /* Để sidebar cố định trong khi nội dung chính cuộn */
-  }
-  .sidebar.collapsed {
-    width: 80px; /* Chiều rộng khi sidebar bị thu gọn */
-  }
-  
-  .sidebar.collapsed .nav-link {
-    text-align: center;
-    justify-content: center;
-  }
-  
-  .sidebar h4 {
-    display: block;
-  }
-  
-  .sidebar.collapsed h4 {
-    display: none; /* Ẩn tiêu đề khi thu gọn */
-  }
-  
-  .sidebar .nav-link {
-    display: flex;
-    align-items: center;
-  }
-  
-  .sidebar .icon {
-    margin-right: 10px;
-    margin-left: -10px;
-  }
-  
-  .sidebar.collapsed .nav-link span {
-    display: none; /* Ẩn văn bản khi thu gọn */
-  }
-  
-  /* CSS cho phần nội dung chính */
-  .main-content-wrapper {
-    display: flex;
-    flex-grow: 1; 
-    overflow-y: auto; /* Cho phép cuộn dọc cho nội dung chính */
-  }
-  
-  .main-content {
-    flex-grow: 1;
-    padding: 2rem;
-    overflow-y: auto; /* Đảm bảo nội dung chính cuộn được nếu vượt quá chiều cao màn hình */
-  }
-  
-  th {
-    text-align: center;
-  }
-  
-  .thugon {
-    display: flex;
-    align-items: center;
-    padding: 1rem;
-    text-align: center;
-  }
-  
-  .thugon h4 {
-    margin: 0;
-  }
-  
-  /* Responsive thiết kế */
-  @media (max-width: 768px) {
-    .header {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
-    .sidebar {
-      width: 100px; /* Chiều rộng sidebar trên thiết bị nhỏ */
-    }
-  
-    .main-content {
-      padding: 1rem; /* Padding cho nội dung chính trên thiết bị nhỏ */
-    }
-  }
-  
-  span {
-    color: rgb(0, 0, 0);
-  }
-  
-  #toggleButton {
-    margin-left: 20px; 
-    font-size: 13px; 
-    cursor: pointer; 
-  }
-  
-  i {
-    color: black;
-  }
- 
-.status {
-  background-color: #e6faf1; /* Màu nền nhạt */
-  color: #1a7431; /* Màu chữ xanh */
-  padding: 1px; /* Khoảng cách bên trong */
-  border-radius: 5px; /* Bo góc nhẹ */
-  text-align: center; /* Căn giữa */
-  border: 1px #1a7431; /* Đường viền xanh quanh chữ */
-  display: inline-block; /* Hiển thị dưới dạng khối nội tuyến để chỉ bao quanh chữ */
-  font-size: 14px; /* Kích thước chữ */
-  font-weight: bold; /* Chữ đậm */
-}
-.sidebar .nav-link.active {
-  background-color: #a86078; /* Màu nền khi được chọn */
-  color: white; /* Màu chữ khi được chọn */
-  border-radius: 5px; /* Bo góc nhẹ cho phần tử được chọn */
-  transition: background-color 0.3s; /* Hiệu ứng chuyển tiếp cho màu nền */
+/* CSS cho phần body và sidebar */
+body {
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden; /* Ẩn cuộn dọc cho body */
+  font-family: 'Times New Roman', Times, serif, sans-serif;
 }
 
-/* Hiệu ứng hover cho nav-link */
-.sidebar .nav-link:hover {
-  background-color: rgba(223, 112, 149, 0.7); /* Màu nền khi hover */
-  color: white; /* Màu chữ khi hover */
-}
-/* CSS cho phần sidebar */
-.sidebar .nav-link .icon {
-  transition: font-size 0.3s; /* Thêm hiệu ứng chuyển tiếp cho kích thước biểu tượng */
+/* CSS cho phần nội dung chính */
+.main-content-wrapper {
+  display: flex;
+  flex-grow: 1; 
+  overflow-y: auto; /* Cho phép cuộn dọc cho nội dung chính */
 }
 
-/* Kích thước biểu tượng khi sidebar mở rộng */
-.sidebar .nav-link .icon {
-  font-size: 20px; /* Kích thước lớn hơn cho biểu tượng khi sidebar mở */
+.main-content {
+  flex-grow: 1;
+  padding: 2rem;
+  overflow-y: auto; /* Đảm bảo nội dung chính cuộn được nếu vượt quá chiều cao màn hình */
 }
 
-/* Kích thước biểu tượng khi sidebar bị thu hẹp */
-.sidebar.collapsed .nav-link .icon {
-  font-size: 20px; /* Kích thước nhỏ hơn cho biểu tượng khi sidebar bị thu hẹp */
-}
-/* Đánh dấu phần tử hiện tại trong sidebar */
-.sidebar .nav-link.active {
-  background-color: #a86078; /* Màu nền khi được chọn */
-  color: white; /* Màu chữ khi được chọn */
-  border-radius: 5px; /* Bo góc nhẹ cho phần tử được chọn */
-  transition: background-color 0.3s; /* Hiệu ứng chuyển tiếp cho màu nền */
+/* Table styling */
+table {
+  width: 100%; /* Make the table take full width */
+  margin: 0 auto; /* Center the table horizontally */
+  border-collapse: collapse; /* Remove gaps between table cells */
+  table-layout: fixed; /* Fix the layout to distribute columns evenly */
 }
 
-/* Hiệu ứng hover cho nav-link */
-.sidebar .nav-link:hover,
-.sidebar.collapsed .nav-link.active { /* Thêm vào đây */
-  background-color: rgba(223, 112, 149, 0.7); /* Màu nền khi hover */
-  color: white; /* Màu chữ khi hover */
+th, td {
+  text-align: center; /* Center the text inside the headers and cells */
+  padding: 10px; /* Add some padding for better spacing */
+  border: 1px solid #ddd; /* Optional: Add borders for visibility */
+  vertical-align: middle; /* Center content vertically */
 }
 
 tr:nth-child(even) {
@@ -174,13 +43,63 @@ tr:nth-child(even) {
 tr:hover {
   background-color: #ddd; /* Optional: Add hover effect */
 }
-.Canngang {
-  margin-left: 220px; /* Margin for expanded sidebar */
-  font-size:  17px; /* Font size for content */
 
+
+
+/* Status styling */
+.status {
+  background-color: #e6faf1; /* Màu nền nhạt */
+  color: #1a7431; /* Màu chữ xanh */
+  padding: 1px; /* Khoảng cách bên trong */
+  border-radius: 5px; /* Bo góc nhẹ */
+  text-align: center; /* Căn giữa */
+  border: 1px solid #1a7431; /* Đường viền xanh quanh chữ */
+  display: inline-block; /* Hiển thị dưới dạng khối nội tuyến để chỉ bao quanh chữ */
+  font-size: 14px; /* Kích thước chữ */
+  font-weight: bold; /* Chữ đậm */
+}
+
+
+span {
+  color: rgb(0, 0, 0);
+}
+
+
+i {
+  color: black;
+}
+
+
+
+
+/* Assuming the email column is the 6th column */
+.email {
+  display: inline-block; /* Make it inline-block to apply width */
+  max-width: 90px; /* Set a max width for the email */
+  white-space: nowrap; /* Prevent text from wrapping */
+  overflow: hidden; /* Hide overflow text */
+  text-overflow: ellipsis; /* Add ellipsis for overflow */
+}
+
+.Canngang {
+  margin-left: 205px; /* Margin for expanded sidebar */
   transition: margin-left 0.3s ease; /* Smooth transition */
 }
 
-.sidebar.collapsed + .Canngang {
-  margin-left: 100px; /* Adjusted margin for collapsed sidebar */
+
+
+
+/* Optional: Ensure icons are properly aligned */
+.dropdown-item i {
+  margin-right: 8px; /* Spacing between icon and text */
+}
+#paginationControls {
+  display: flex;
+  justify-content: center; /* Center the pagination controls */
+  align-items: center; /* Vertically center the buttons and text */
+  margin-top: 20px; /* Space above the pagination controls */
+}
+
+#paginationControls button {
+  margin: 0 10px; /* Space between buttons */
 }

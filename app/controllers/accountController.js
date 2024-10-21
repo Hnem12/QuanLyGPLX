@@ -356,9 +356,6 @@ const phantrangAccount = async (req, res, next) => {
     }
 };
 
-const Xulyanh = async (req, res, next) => {
-  console.log(req.file.filename);
-};
 
 module.exports = {
     register,
@@ -372,6 +369,5 @@ module.exports = {
     deleteAccount,
     checklogin,
     checkadmin,
-    phantrangAccount,
-    Xulyanh
+    phantrangAccount
 };

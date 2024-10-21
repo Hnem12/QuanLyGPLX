@@ -30,55 +30,7 @@
   button:hover {
     background-color: #45a049;
   }
-  
-  /* CSS cho phần sidebar */
-  .sidebar {
-    width: 200px; /* Chiều rộng mặc định của sidebar */
-    background-color: #ffffff; /* Màu nền của sidebar */
-    height: 100vh; /* Chiều cao đầy đủ của viewport */
-    padding: 1rem; /* Khoảng cách bên trong */
-    color: rgb(104, 39, 39);
-    font-size: 19px;
-    transition: width 0.3s ease; /* Hiệu ứng chuyển tiếp cho chiều rộng */
-    overflow-y: auto; /* Cho phép cuộn dọc */
-    border: 1px solid #ccc; /* Đường viền xung quanh sidebar */
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ cho sidebar */
-  }
-  body {
-    height: 100vh; /* Chiều cao màn hình */
-    margin: 0; /* Bỏ margin cho body */
-    display: flex; /* Dùng flexbox để sắp xếp các phần tử con */
-    flex-direction: row; /* Sắp xếp theo hàng ngang */
-  }
-  .sidebar.collapsed {
-    width: 80px; /* Chiều rộng khi sidebar bị thu gọn */
-  }
-  
-  .sidebar.collapsed .nav-link {
-    text-align: center;
-    justify-content: center;
-  }
-  
-  .sidebar h4 {
-    display: block;
-  }
-  
-  .sidebar.collapsed h4 {
-    display: none; /* Ẩn tiêu đề khi thu gọn */
-  }
-  
-  .sidebar .nav-link {
-    display: flex;
-    align-items: center;
-  }
-  
-  .sidebar .icon {
-    margin-right: 10px;
-  }
-  
-  .sidebar.collapsed .nav-link span {
-    display: none; /* Ẩn văn bản khi thu gọn */
-  }
+   
   
   /* CSS cho phần nội dung chính */
   .main-content-wrapper {
@@ -209,21 +161,7 @@
     margin-top: 1rem;
   }
   
-  /* Responsive thiết kế */
-  @media (max-width: 768px) {
-    .header {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
-    .sidebar {
-      width: 100px; /* Chiều rộng sidebar trên thiết bị nhỏ */
-    }
-  
-    .main-content {
-      padding: 1rem; /* Padding cho nội dung chính trên thiết bị nhỏ */
-    }
-  }
+ 
   
   span {
     color: rgb(0, 0, 0);
@@ -238,53 +176,6 @@
   i {
     color: black;
   }
-  /* CSS cho phần header */
-.header {
-  background-color: #e2366f;
-  color: rgb(0, 0, 0);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  font-family: 'Times New Roman', Times, serif, sans-serif;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-}
-
-.logo img {
-  height: 35px;
-  margin: 0 7px;
-}
-
-.title {
-  font-size: 1.5em;
-  margin-left: 10px;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-}
-
-.user-info img {
-  border-radius: 50%;
-  height: 40px;
-  width: 40px;
-  margin-left: 10px;
-}
-
-.notification,
-.system-name {
-  margin-right: 10px;
-}
-
 /* CSS cho phần body và sidebar */
 body {
   height: 100vh;
@@ -293,48 +184,6 @@ body {
   flex-direction: column;
   overflow-y: hidden; /* Ẩn cuộn dọc cho body */
   font-family: 'Times New Roman', Times, serif, sans-serif;
-}
-
-/* CSS cho phần sidebar */
-.sidebar {
-  width: 200px; /* Chiều rộng mặc định của sidebar */
-  background-color: #ffffff;
-  height: 100%;
-  padding: 1rem;
-  color: rgb(104, 39, 39);
-  transition: width 0.3s ease;
-  overflow-y: auto; 
-}
-
-.sidebar.collapsed {
-  width: 80px; /* Chiều rộng khi sidebar bị thu gọn */
-}
-
-.sidebar.collapsed .nav-link {
-  text-align: center;
-  justify-content: center;
-}
-
-.sidebar h4 {
-  display: block;
-}
-
-.sidebar.collapsed h4 {
-  display: none; /* Ẩn tiêu đề khi thu gọn */
-}
-
-.sidebar .nav-link {
-  display: flex;
-  align-items: center;
-}
-
-.sidebar .icon {
-  margin-right: 10px;
-  margin-left: -10px;
-}
-
-.sidebar.collapsed .nav-link span {
-  display: none; /* Ẩn văn bản khi thu gọn */
 }
 
 /* CSS cho phần nội dung chính */
@@ -354,41 +203,8 @@ th {
   text-align: center;
 }
 
-.thugon {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  text-align: center;
-}
-
-.thugon h4 {
-  margin: 0;
-}
-
-/* Responsive thiết kế */
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .sidebar {
-    width: 100px; /* Chiều rộng sidebar trên thiết bị nhỏ */
-  }
-
-  .main-content {
-    padding: 1rem; /* Padding cho nội dung chính trên thiết bị nhỏ */
-  }
-}
-
 span {
   color: rgb(0, 0, 0);
-}
-
-#toggleButton {
-  margin-left: 20px; 
-  font-size: 13px; 
-  cursor: pointer; 
 }
 
 i {
@@ -442,70 +258,16 @@ i {
   background-color: #0056b3; /* Darker shade on hover */
 }
 
-/* Add additional styling for mobile responsiveness if needed */
-@media (max-width: 576px) {
-  .input-group {
-      flex-direction: column; /* Stack elements on smaller screens */
-  }
 
-  .input-group label {
-      margin-bottom: 0.5rem; /* Space between label and input */
-  }
-
-  .btn {
-      margin-top: 0.5rem; /* Space between input and button */
-      width: 100%; /* Full width on small screens */
-  }
-}
-
-.sidebar .nav-link.active {
-  background-color: #a86078; /* Màu nền khi được chọn */
-  color: white; /* Màu chữ khi được chọn */
-  border-radius: 5px; /* Bo góc nhẹ cho phần tử được chọn */
-  transition: background-color 0.3s; /* Hiệu ứng chuyển tiếp cho màu nền */
-}
-
-/* Hiệu ứng hover cho nav-link */
-.sidebar .nav-link:hover {
-  background-color: rgba(223, 112, 149, 0.7); /* Màu nền khi hover */
-  color: white; /* Màu chữ khi hover */
-}
-/* CSS cho phần sidebar */
-.sidebar .nav-link .icon {
-  transition: font-size 0.3s; /* Thêm hiệu ứng chuyển tiếp cho kích thước biểu tượng */
-}
-
-/* Kích thước biểu tượng khi sidebar mở rộng */
-.sidebar .nav-link .icon {
-  font-size: 20px; /* Kích thước lớn hơn cho biểu tượng khi sidebar mở */
-}
-
-/* Kích thước biểu tượng khi sidebar bị thu hẹp */
-.sidebar.collapsed .nav-link .icon {
-  font-size: 20px; /* Kích thước nhỏ hơn cho biểu tượng khi sidebar bị thu hẹp */
-}
-/* Đánh dấu phần tử hiện tại trong sidebar */
-.sidebar .nav-link.active {
-  background-color: #a86078; /* Màu nền khi được chọn */
-  color: white; /* Màu chữ khi được chọn */
-  border-radius: 5px; /* Bo góc nhẹ cho phần tử được chọn */
-  transition: background-color 0.3s; /* Hiệu ứng chuyển tiếp cho màu nền */
-}
-
-/* Hiệu ứng hover cho nav-link */
-.sidebar .nav-link:hover,
-.sidebar.collapsed .nav-link.active { /* Thêm vào đây */
-  background-color: rgba(223, 112, 149, 0.7); /* Màu nền khi hover */
-  color: white; /* Màu chữ khi hover */
-}
 .Canngang {
-  position: relative; /* Để sử dụng width và margin một cách hiệu quả */
-  width: calc(100% - 210px); /* Chiều rộng cho sidebar mở rộng */
-  margin-left: 210px; /* Căn chỉnh để cách sidebar */
-  transition: width 0.3s ease, margin-left 0.3s ease; /* Hiệu ứng chuyển tiếp mượt mà */
-}
-
-.sidebar.collapsed + .Canngang {
-  width: calc(100% - 80px); /* Chiều rộng cho sidebar thu hẹp */
-  margin-left: 80px; /* Để đồng bộ với chiều rộng mới */
+  margin-top: 60px;
+  position: absolute; /* Use absolute positioning */
+  top: 0; /* Align to the top of the page */
+  left: 210px; /* Align to the left margin set */
+  right: 0; /* This will stretch to the right edge of the viewport */
+  height: 100vh; /* Full height of the viewport */
+  background-color: #f9f9f9; /* Optional: Background color for visibility */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: Box shadow for styling */
+  z-index: 10; /* Optional: Adjust stacking context */
+  font-size: 20px;
 }

@@ -8,62 +8,6 @@ body {
   font-family: 'Times New Roman', Times, serif, sans-serif;
 }
 
-/* CSS cho phần sidebar */
-.sidebar {
-  width: 200px; /* Chiều rộng mặc định của sidebar */
-  background-color: #ffffff; /* Màu nền của sidebar */
-  height: 100vh; /* Chiều cao đầy đủ của viewport */
-  padding: 1rem; /* Khoảng cách bên trong */
-  color: rgb(104, 39, 39);
-  font-size: 19px;
-  transition: width 0.3s ease; /* Hiệu ứng chuyển tiếp cho chiều rộng */
-  overflow-y: auto; /* Cho phép cuộn dọc */
-  border: 1px solid #ccc; /* Đường viền xung quanh sidebar */
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ cho sidebar */
-  position: fixed; /* Để sidebar cố định trong khi nội dung chính cuộn */
-}
-
-.sidebar.collapsed {
-  width: 80px; /* Chiều rộng khi sidebar bị thu gọn */
-}
-
-.sidebar.collapsed .nav-link {
-  text-align: center;
-  justify-content: center;
-}
-
-.sidebar h4 {
-  display: block;
-}
-
-.sidebar.collapsed h4 {
-  display: none; /* Ẩn tiêu đề khi thu gọn */
-}
-
-.sidebar .nav-link {
-  display: flex;
-  align-items: center;
-}
-
-.sidebar .icon {
-  margin-right: 10px;
-  margin-left: -10px;
-}
-
-/* Thêm tên người dùng khi sidebar bị thu gọn */
-.user-info.collapsed {
-  display: none; /* Ẩn tên người dùng khi thu gọn */
-}
-
-.sidebar.collapsed .user-info {
-  display: flex; /* Hiển thị tên khi sidebar bị thu hẹp */
-  align-items: center; /* Căn giữa nội dung */
-  margin-left: 10px; /* Khoảng cách bên trái */
-}
-
-.sidebar.collapsed .nav-link span {
-  display: none; /* Ẩn văn bản khi thu gọn */
-}
 
 /* CSS cho phần nội dung chính */
 .main-content-wrapper {
@@ -101,17 +45,6 @@ tr:hover {
   background-color: #ddd; /* Optional: Add hover effect */
 }
 
-/* Thugon styling */
-.thugon {
-  display: flex;
-  align-items: center;
-  padding: 1rem;
-  text-align: center;
-}
-
-.thugon h4 {
-  margin: 0;
-}
 
 /* Status styling */
 .status {
@@ -126,74 +59,17 @@ tr:hover {
   font-weight: bold; /* Chữ đậm */
 }
 
-/* Responsive thiết kế */
-@media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .sidebar {
-    width: 100px; /* Chiều rộng sidebar trên thiết bị nhỏ */
-  }
-
-  .main-content {
-    padding: 1rem; /* Padding cho nội dung chính trên thiết bị nhỏ */
-  }
-}
 
 span {
   color: rgb(0, 0, 0);
 }
 
-#toggleButton {
-  margin-left: 20px; 
-  font-size: 13px; 
-  cursor: pointer; 
-}
 
 i {
   color: black;
 }
 
-.sidebar .nav-link.active {
-  background-color: #a86078; /* Màu nền khi được chọn */
-  color: white; /* Màu chữ khi được chọn */
-  border-radius: 5px; /* Bo góc nhẹ cho phần tử được chọn */
-  transition: background-color 0.3s; /* Hiệu ứng chuyển tiếp cho màu nền */
-}
 
-/* Hiệu ứng hover cho nav-link */
-.sidebar .nav-link:hover {
-  background-color: rgba(223, 112, 149, 0.7); /* Màu nền khi hover */
-  color: white; /* Màu chữ khi hover */
-}
-
-/* Kích thước biểu tượng khi sidebar mở rộng */
-.sidebar .nav-link .icon {
-  transition: font-size 0.3s; /* Thêm hiệu ứng chuyển tiếp cho kích thước biểu tượng */
-  font-size: 20px; /* Kích thước lớn hơn cho biểu tượng khi sidebar mở */
-}
-
-/* Kích thước biểu tượng khi sidebar bị thu hẹp */
-.sidebar.collapsed .nav-link .icon {
-  font-size: 20px; /* Kích thước nhỏ hơn cho biểu tượng khi sidebar bị thu hẹp */
-}
-
-/* Đánh dấu phần tử hiện tại trong sidebar */
-.sidebar .nav-link.active {
-  background-color: #a86078; /* Màu nền khi được chọn */
-  color: white; /* Màu chữ khi được chọn */
-  border-radius: 5px; /* Bo góc nhẹ cho phần tử được chọn */
-  transition: background-color 0.3s; /* Hiệu ứng chuyển tiếp cho màu nền */
-}
-
-/* Hiệu ứng hover cho nav-link */
-.sidebar .nav-link:hover,
-.sidebar.collapsed .nav-link.active { /* Thêm vào đây */
-  background-color: rgba(223, 112, 149, 0.7); /* Màu nền khi hover */
-  color: rgb(255, 255, 255); /* Màu chữ khi hover */
-}
 
 /* Assuming the email column is the 6th column */
 .email {
@@ -209,33 +85,7 @@ i {
   transition: margin-left 0.3s ease; /* Smooth transition */
 }
 
-.sidebar.collapsed + .Canngang {
-  margin-left: 80px; /* Adjusted margin for collapsed sidebar */
-}
-/* General dropdown item styles */
-.dropdown-menu {
-  background-color: white; /* Match dropdown background to sidebar */
-  border-radius: 0.5rem; /* Rounded corners */
-}
 
-/* Hover and active state styles for dropdown items */
-.dropdown-item:hover,
-.dropdown-item:focus,
-.dropdown-item.active {
-  background-color: rgba(223, 112, 149, 0.7); /* Change background on hover */
-  color: white; /* Ensure text remains white */
-}
-
-/* Active state for the currently selected dropdown item */
-.dropdown-item.active {
-  background-color: #a86078; /* Background color for active item */
-  color: white; /* Ensure text remains white */
-}
-
-/* Optional: Ensure icons are properly aligned */
-.dropdown-item i {
-  margin-right: 8px; /* Spacing between icon and text */
-}
 #paginationControls {
   display: flex;
   justify-content: center; /* Center the pagination controls */

@@ -2,7 +2,7 @@ const { name } = require('ejs');
 const ChusohuuGPLXModel = require('../models/ChusohuuGPLXModel');
 const { check, validationResult } = require('express-validator');
 
-// hiển thị danh mục 
+// hiển thị toàn bộ chủ sở hữu GPLX 
 exports.getAll =  (req, res, next) => {
     ChusohuuGPLXModel.find({})
         .then(data => {
@@ -13,7 +13,7 @@ exports.getAll =  (req, res, next) => {
         res.status(500).json('Loi server 1')
     })
 }
-// tìm danh mục theo id
+// tìm GPLX theo id
 exports.getId =  (req, res, next) => {
     var _id = req.params.id
     ChusohuuGPLXModel.findById({ _id })
@@ -85,7 +85,7 @@ exports.addLicenseHolder = (req, res, next) => {
 };
 
 
-// sửa danh mục 
+// sửa GPLX
 exports.updateLicenseHolder = async (req, res) => {
     try {
         const _id = req.params.id; // Lấy ID từ URL
@@ -141,37 +141,3 @@ exports.deleteCategory = (req, res, next) => {
         res.status(500).json('loi server 4')
     })
 }
-
-const page_size = 5; // Set number of items per page
-
-const phantrangLicenseHolders = async (req, res) => {
-    let { page = 1 } = req.query; // Get the page from query, default to 1
-    page = parseInt(page); // Ensure 'page' is treated as a number
-
-    const skipAmount = (page - 1) * page_size; // Calculate the number of records to skip
-
-    try {
-        // Fetch license holders with pagination
-        const licenseHolders = await LicenseHolder.find({})
-            .skip(skipAmount)
-            .limit(page_size);
-
-        // Get the total number of license holders
-        const totalRecords = await LicenseHolder.countDocuments();
-
-        // Calculate the total number of pages
-        const totalPages = Math.ceil(totalRecords / page_size);
-
-        // Send the paginated data along with metadata
-        res.json({
-            licenseHolders,
-            totalPages,
-            totalRecords,
-          });
-    } catch (error) {
-        console.error('Error fetching license holders:', error);
-        res.status(500).json({ message: 'Lỗi server', error: error.message });
-    }
-};
-
-module.exports = { phantrangLicenseHolders };

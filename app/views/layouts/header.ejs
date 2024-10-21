@@ -1,73 +1,80 @@
-<link rel="stylesheet" href="css/trangchu.css">
+<link rel="stylesheet" href="css/header.css">
 <div class="header">
     <div class="logo">
         <img src="/uploads/h7.png" alt="Logo">
         <div class="title">
-            <a href="http://localhost:3001/trangchu" style="color: white; font-family: Georgia, 'Times New Roman', Times, serif; text-decoration: none;">Trang Chủ</a>
+            <a href="http://localhost:3001/trangchu" style="color: white; text-decoration: none;">Trang Chủ</a>
         </div>
-        <button id="toggleButton" class="btn btn-outline-light">
-            <i class="fas fa-chevron-left"></i>
-        </button>
     </div>
     <div class="user-info">
         <div class="notification">🔔</div>
-        <div class="username" id="usernameDisplay"></div>
-                <div class="avatar-container" style="display: flex; justify-content: center; align-items: center; height: 40px; width: 40px; overflow: hidden; border-radius: 50%; border: 2px solid #ccc;">
-            <img id="avatarImage" src="./uploads/h6.jpg" alt="Avatar" style="border-radius: 50%; height: 100%; width: 100%; object-fit: cover;">
+        <div class="username" id="usernameDisplay">  </div>
+        <div class="avatar-container">
+            <img id="avatarImage" src="./uploads/h6.jpg" alt="Avatar" style="cursor: pointer;">
+            <div class="dropdown-menu">
+                <ul>
+                    <li id="personalInfoButton">Thông tin cá nhân</li> <!-- Added ID for personal info -->
+                    <li id="logoutButton">Đăng xuất</li>
+                </ul>
+            </div>
         </div>
-        <a href="#" class="logout-button" id="logoutButton">Đăng xuất</a>
     </div>
 </div>
-
 <script>
-document.addEventListener('DOMContentLoaded', () => {
-    const username = localStorage.getItem('username');
-    const userImage = localStorage.getItem('image'); // Lấy đường dẫn hình ảnh
-    const usernameDisplay = document.getElementById('usernameDisplay');
-    const avatarImage = document.getElementById('avatarImage'); // Phần tử để hiển thị hình ảnh
-
-    console.log('Retrieved Username:', username);
-    console.log('Retrieved User Image URL:', userImage);
-    console.log('Avatar Image Element:', avatarImage); // Log the avatar image element
-
-    if (username) {
-        usernameDisplay.textContent = username; 
-        if (avatarImage) { // Check if avatarImage exists
-            avatarImage.src = userImage || './uploads/h6.jpg'; // Cập nhật đường dẫn hình ảnh hoặc sử dụng hình ảnh mặc định
+    document.addEventListener('DOMContentLoaded', () => {
+        const username = localStorage.getItem('username');
+        const userImage = localStorage.getItem('image'); // Get the image path from localStorage
+        const usernameDisplay = document.getElementById('usernameDisplay');
+        const avatarImage = document.getElementById('avatarImage');
+        const dropdownMenu = document.querySelector('.dropdown-menu');
+        const avatarContainer = document.querySelector('.avatar-container');
+        const logoutButton = document.getElementById('logoutButton');
+        const personalInfoButton = document.getElementById('personalInfoButton'); // Get the personal info button
+    
+        // Set username and avatar image
+        if (username) {
+            usernameDisplay.textContent = `Chào mừng ${username} đến với hệ thống quản lý GPLX`;
+            avatarImage.src = userImage || './uploads/h6.jpg'; // Fallback to default image
         } else {
-            console.error('Avatar image element not found!'); // Log an error if the element is not found
+            usernameDisplay.textContent = 'Khách';
+            avatarImage.src = './uploads/h6.jpg'; // Default image if none
         }
-    } else {
-        usernameDisplay.textContent = 'Khách';
-        if (avatarImage) { // Check if avatarImage exists
-            avatarImage.src = './uploads/h6.jpg'; // Hình ảnh mặc định nếu không có
-        }
-    }
-});
-
-
-document.getElementById('logoutButton').addEventListener('click', (event) => {
-    event.preventDefault(); // Prevent the default link behavior
-
-    const confirmLogout = confirm('Bạn có chắc là muốn thoát không?'); // Ask for confirmation
-
-    if (confirmLogout) {
-        localStorage.removeItem('username'); // Clear username from local storage
-        localStorage.removeItem('token'); // Clear token from local storage
-        alert('Bạn đã đăng xuất thành công!'); // Notify the user
-
-        // Redirect to login page
-        window.location.href = "/login"; // Change to your logout redirection
-
-        // Clear previous history to prevent back navigation
-        setTimeout(() => {
-            window.history.pushState(null, null, window.location.href);
-            window.onpopstate = function () {
-                window.history.pushState(null, null, window.location.href);
-            };
-        }, 0);
-    }
-});
-
-
-</script>
+    
+        // Toggle dropdown on avatar click
+        avatarContainer.addEventListener('click', function(event) {
+            event.stopPropagation(); // Prevent the event from bubbling up
+            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block'; // Toggle visibility
+        });
+    
+        // Hide dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!avatarContainer.contains(event.target)) {
+                dropdownMenu.style.display = 'none'; // Hide dropdown
+            }
+        });
+    
+        // Handle logout button click
+        logoutButton.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent default behavior of the logout link
+            const confirmLogout = confirm('Bạn có chắc là muốn thoát không?'); // Ask for confirmation
+    
+            if (confirmLogout) {
+                localStorage.removeItem('username'); // Clear username from localStorage
+                localStorage.removeItem('image');    // Clear image from localStorage if set
+                localStorage.removeItem('token');    // Clear token from localStorage
+    
+                alert('Bạn đã đăng xuất thành công!'); // Notify user of successful logout
+                window.location.href = "/login";      // Redirect to login page
+            }
+        });
+    
+        // Handle personal info button click
+        personalInfoButton.addEventListener('click', (event) => {
+            event.preventDefault(); // Prevent any default action
+            alert('Hiển thị thông tin cá nhân...'); // Replace this with actual functionality
+            // Implement the logic for showing personal info here
+            // You might want to navigate to another page or open a modal
+        });
+    });
+    </script>
+    
