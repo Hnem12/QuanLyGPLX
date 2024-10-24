@@ -13,7 +13,7 @@ body {
     height: 100vh; /* Chiều cao đầy đủ của viewport */
     padding: 1rem; /* Khoảng cách bên trong */
     color: rgb(104, 39, 39);
-    font-size: 19px;
+    font-size: 17px;
     transition: width 0.3s ease; /* Hiệu ứng chuyển tiếp cho chiều rộng */
     overflow-y: auto; /* Cho phép cuộn dọc */
     border: 1px solid #ccc; /* Đường viền xung quanh sidebar */
@@ -199,6 +199,6 @@ body {
   .sidebar .nav-link:hover,
   .sidebar.collapsed .nav-link.active { /* Thêm vào đây */
     background-color: rgba(223, 112, 149, 0.7); /* Màu nền khi hover */
-    color: white; /* Màu chữ khi hover */
+    color: #a86078; /* Màu chữ khi hover */
   }
   

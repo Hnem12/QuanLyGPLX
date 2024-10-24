@@ -1,4 +1,6 @@
 <link rel="stylesheet" href="css/header.css">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
 <div class="header">
     <div class="logo">
         <img src="/uploads/h7.png" alt="Logo">
@@ -13,68 +15,113 @@
             <img id="avatarImage" src="./uploads/h6.jpg" alt="Avatar" style="cursor: pointer;">
             <div class="dropdown-menu">
                 <ul>
-                    <li id="personalInfoButton">Thông tin cá nhân</li> <!-- Added ID for personal info -->
+                    <li id="personalInfoButton">Thông tin cá nhân</li>
+                    <li id="openPasswordModal" >Đổi Mật Khẩu</li>
                     <li id="logoutButton">Đăng xuất</li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const username = localStorage.getItem('username');
-        const userImage = localStorage.getItem('image'); // Get the image path from localStorage
-        const usernameDisplay = document.getElementById('usernameDisplay');
-        const avatarImage = document.getElementById('avatarImage');
-        const dropdownMenu = document.querySelector('.dropdown-menu');
-        const avatarContainer = document.querySelector('.avatar-container');
-        const logoutButton = document.getElementById('logoutButton');
-        const personalInfoButton = document.getElementById('personalInfoButton'); // Get the personal info button
-    
-        // Set username and avatar image
-        if (username) {
-            usernameDisplay.textContent = `Chào mừng ${username} đến với hệ thống quản lý GPLX`;
-            avatarImage.src = userImage || './uploads/h6.jpg'; // Fallback to default image
-        } else {
-            usernameDisplay.textContent = 'Khách';
-            avatarImage.src = './uploads/h6.jpg'; // Default image if none
-        }
-    
-        // Toggle dropdown on avatar click
-        avatarContainer.addEventListener('click', function(event) {
-            event.stopPropagation(); // Prevent the event from bubbling up
-            dropdownMenu.style.display = dropdownMenu.style.display === 'block' ? 'none' : 'block'; // Toggle visibility
-        });
-    
-        // Hide dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            if (!avatarContainer.contains(event.target)) {
-                dropdownMenu.style.display = 'none'; // Hide dropdown
-            }
-        });
-    
-        // Handle logout button click
-        logoutButton.addEventListener('click', (event) => {
-            event.preventDefault(); // Prevent default behavior of the logout link
-            const confirmLogout = confirm('Bạn có chắc là muốn thoát không?'); // Ask for confirmation
-    
-            if (confirmLogout) {
-                localStorage.removeItem('username'); // Clear username from localStorage
-                localStorage.removeItem('image');    // Clear image from localStorage if set
-                localStorage.removeItem('token');    // Clear token from localStorage
-    
-                alert('Bạn đã đăng xuất thành công!'); // Notify user of successful logout
-                window.location.href = "/login";      // Redirect to login page
-            }
-        });
-    
-        // Handle personal info button click
-        personalInfoButton.addEventListener('click', (event) => {
-            event.preventDefault(); // Prevent any default action
-            alert('Hiển thị thông tin cá nhân...'); // Replace this with actual functionality
-            // Implement the logic for showing personal info here
-            // You might want to navigate to another page or open a modal
-        });
-    });
-    </script>
+
+
+<div id="personalInfoModal" class="modal1">
+    <div class="modal-content1">
+        <h2 style="text-align: center;">Thông Tin Cá Nhân</h2>
+
+        <!-- Form chính với hai phần -->
+        <form id="updateForm" class="modal-form1">
+            <div class="form-sections-container">
+                <!-- Phần form bên trái -->
+                <div class="form-section1">
+                    <label for="usernameInput">Tên Đăng Nhập:</label>
+                    <input type="text" id="usernameInput" name="username" disabled>
+
+                    <label for="emailInput">Email:</label>
+                    <input type="text" id="emailInput" name="email" required>
+
+                    <label for="phoneInput">Số Điện Thoại:</label>
+                    <input type="text" id="phoneInput" name="phone" required>
+                </div>
+
+                <!-- Phần form bên phải -->
+                <div class="form-section2">
+                    <label for="roleInput">Vai trò:</label>
+                    <input type="text" id="roleInput" name="role" disabled>
+
+                    <label for="nameInput">Họ và Tên:</label>
+                    <input type="text" id="nameInput" name="name" required>
+
+                    <label for="genderInput">Giới Tính:</label>
+                    <select id="genderInput" name="gender" required>
+                        <option value="Male">Nam</option>
+                        <option value="Female">Nữ</option>
+                    </select>                    
+                </div>
+            </div>
+
+            <!-- Địa chỉ -->
+            <div class="updateanh">
+                <label for="addressInput">Địa Chỉ:</label>
+                <input type="text" id="addressInput" name="address" required>
+            </div>
+
+            <!-- Phần chọn ảnh đại diện -->
+            <div class="image-upload-container" >
+                <span>Chọn ảnh đại diện</span>
+                <label for="imageInput" style="cursor: pointer; position: relative;">
+                    <img id="imagePreview" src="./uploads/h6.jpg" alt="Avatar" >
+                    <img class="icon-overlay" src="https://img.icons8.com/ios/50/camera--v3.png" alt="Camera Icon">
+                </label>
+                <input type="file" id="imageInput" accept="image/*" style="display: none;">
+            </div>
+            
+            
+
+            <!-- Nút bấm -->
+            <div class="upload-section">
+                <button class="button1" type="submit">Cập Nhật Thông Tin</button>
+                <button class="button1" type="button" id="closeModalButton">Thoát</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="passwordChangeModal" class="custom-modal">
+    <div class="custom-modal-content">
+        <h2 style="text-align: center;">Đổi Mật Khẩu</h2>
+
+        <form id="passwordForm" class="custom-form">
+            <div class="custom-form-sections">
+                <div class="custom-form-section">
+                    <label for="currentPassword">Mật khẩu cũ:</label>
+                    <input type="password" id="currentPassword" name="currentPassword" required>
+
+                    <label for="newPassword">Mật khẩu mới:</label>
+                    <input type="password" id="newPassword" name="newPassword" required>
+
+                    <label for="confirmNewPassword">Nhập lại mật khẩu mới:</label>
+                    <input type="password" id="confirmNewPassword" name="confirmNewPassword" required>
+
+                    <!-- Tùy chọn xem mật khẩu -->
+                    <div class="show-password">
+                        <input type="checkbox" id="togglePasswordVisibility">
+                        <label for="togglePasswordVisibility">Hiển thị mật khẩu</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nút bấm -->
+            <div class="custom-button-group">
+                <button class="custom-button" type="submit">Cập Nhật</button>
+                <button class="custom-button" type="button" id="closePasswordModal">Thoát</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+
+<script src="js/header.js"> </script>
     

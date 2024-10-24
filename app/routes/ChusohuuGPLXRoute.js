@@ -7,71 +7,35 @@ const mongoose = require('mongoose');
 const LicenseHolderController = require('../controllers/ChusohuuGPLXController');
 
 // Lấy tất cả chủ sở hữu GPLX
-router.get('/licenseHolder', async (req, res) => {
-    try {
-      const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
-      const pageSize = parseInt(req.query.pageSize) || 6; // Default to 6 items per page
-  
-      // Fetch all license holders
-      const allLicenseHolders = await LicenseHolder.find();
-  
-      // Sort license holders: 'Đã kích hoạt' should come first
-      const sortedLicenseHolders = allLicenseHolders.sort((a, b) => {
-        if (a.Status === 'Đã kích hoạt' && b.Status !== 'Đã kích hoạt') {
-          return -1; // 'a' comes first
-        } else if (a.Status !== 'Đã kích hoạt' && b.Status === 'Đã kích hoạt') {
-          return 1; // 'b' comes first
-        }
-        return 0; // Maintain original order if both are the same
-      });
-  
-      // Pagination logic
-      const totalRecords = sortedLicenseHolders.length; // Total number of sorted documents
-      const totalPages = Math.ceil(totalRecords / pageSize); // Calculate total pages
-  
-      // Get the required slice for the current page
-      const licenseHolders = sortedLicenseHolders.slice((page - 1) * pageSize, page * pageSize);
-  
-      res.status(200).json({
-        licenseHolders,
-        totalPages,
-        totalRecords,
-        currentPage: page,
-        hasNextPage: page < totalPages,
-        hasPrevPage: page > 1,
-      });
-    } catch (error) {
-      console.error('Error fetching license holders:', error);
-      res.status(500).json({ error: 'Failed to fetch license holders.' });
-    }
-  });
-  
-
-router.get('/ApprovelicenselHoder', async (req, res) => {
+async function getLicenseHolders(req, res, targetStatus) {
   try {
-    const page = parseInt(req.query.page) || 1; // Default to page 1 if not provided
+    const page = parseInt(req.query.page) || 1; // Default to page 1
     const pageSize = parseInt(req.query.pageSize) || 6; // Default to 6 items per page
 
-    // Fetch all license holders
+    // Fetch all license holders from the database
     const allLicenseHolders = await LicenseHolder.find();
 
-    // Sort license holders: 'Đã kích hoạt' should come first
+    // Dynamic sorting based on the target status (e.g., 'Đã kích hoạt' or 'Chưa kích hoạt')
     const sortedLicenseHolders = allLicenseHolders.sort((a, b) => {
-      if (a.Status === 'Chưa kích hoạt' && b.Status !== 'Chưa kích hoạt') {
-        return -1; // 'a' comes first
-      } else if (a.Status !== 'Chưa kích hoạt' && b.Status === 'Chưa kích hoạt') {
-        return 1; // 'b' comes first
+      if (a.Status === targetStatus && b.Status !== targetStatus) {
+        return -1; // 'a' comes first if it matches the target status
+      } else if (a.Status !== targetStatus && b.Status === targetStatus) {
+        return 1; // 'b' comes first if it matches the target status
       }
-      return 0; // Maintain original order if both are the same
+      return 0; // Maintain original order if both statuses are the same
     });
 
-    // Pagination logic
-    const totalRecords = sortedLicenseHolders.length; // Total number of sorted documents
-    const totalPages = Math.ceil(totalRecords / pageSize); // Calculate total pages
+    // Calculate pagination details
+    const totalRecords = sortedLicenseHolders.length;
+    const totalPages = Math.ceil(totalRecords / pageSize);
 
-    // Get the required slice for the current page
-    const licenseHolders = sortedLicenseHolders.slice((page - 1) * pageSize, page * pageSize);
+    // Slice the required items for the current page
+    const licenseHolders = sortedLicenseHolders.slice(
+      (page - 1) * pageSize,
+      page * pageSize
+    );
 
+    // Send the paginated response
     res.status(200).json({
       licenseHolders,
       totalPages,
@@ -84,6 +48,16 @@ router.get('/ApprovelicenselHoder', async (req, res) => {
     console.error('Error fetching license holders:', error);
     res.status(500).json({ error: 'Failed to fetch license holders.' });
   }
+}
+
+// Route to get license holders with 'Đã kích hoạt' first
+router.get('/licenseHolder', (req, res) => {
+  getLicenseHolders(req, res, 'Đã kích hoạt');
+});
+
+// Route to get license holders with 'Chưa kích hoạt' first
+router.get('/ApprovelicenselHoder', (req, res) => {
+  getLicenseHolders(req, res, 'Chưa kích hoạt');
 });
 
 // Lấy một chủ sở hữu GPLX cụ thể theo ID
@@ -262,12 +236,9 @@ router.get('/search/:idOrGPLX', async (req, res) => {
   
     try {
         let holder = null;
-  
-        // First, check if the parameter is a valid ObjectId for ID search
-        if (mongoose.isValidObjectId(idOrGPLX)) {
+          if (mongoose.isValidObjectId(idOrGPLX)) {
             holder = await LicenseHolder.findById(idOrGPLX);
             if (holder) {
-                console.log('Found holder by ID:', holder);
                 return res.json({
                     message: 'Found holder by ID',
                     MaGPLX: holder.MaGPLX, // Returning MaGPLX
@@ -280,7 +251,6 @@ router.get('/search/:idOrGPLX', async (req, res) => {
 
         // Check if the holder was found by MaGPLX
         if (holder) {
-            console.log('Found holder by MaGPLX:', holder);
             return res.json({
                 message: 'Found holder by MaGPLX',
                 MaGPLX: holder.MaGPLX, // Returning MaGPLX
@@ -291,7 +261,6 @@ router.get('/search/:idOrGPLX', async (req, res) => {
 
         // Check if the holder was found by MaGPLX
         if (holder) {
-            console.log('Found holder by CCCD:', holder);
             return res.json({
                 message: 'Found holder by CCCD',
                 CCCD: holder.CCCD, // Returning MaGPLX

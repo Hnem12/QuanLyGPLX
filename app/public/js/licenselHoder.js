@@ -32,9 +32,7 @@ async function fetchLicenseHolders() {
             <td>${new Date(holder.Ngayhethan).toLocaleDateString()}</td>
             <td>${holder.HangGPLX}</td>
             <td>${holder.Giamdoc}</td>
-            <td>
-              <span class="status">${holder.Status}</span>
-            </td>
+            <td><span class="status">${holder.Status}</span></td>
             <td>
               <button class="btn btn-warning btn-sm" onclick='openModal(${JSON.stringify(holder)})'>Sửa</button>
               <button class="btn btn-danger btn-sm" onclick="deleteAccount('${holder._id}')">Xóa</button>
@@ -45,14 +43,16 @@ async function fetchLicenseHolders() {
       }
     });
 
-    document.getElementById('currentPage').textContent = currentPage;
+    // Update the pagination information
+    document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+
+    // Disable pagination buttons appropriately
     document.getElementById('prevPage').disabled = currentPage === 1;
     document.getElementById('nextPage').disabled = currentPage === totalPages;
   } catch (error) {
     console.error('Failed to fetch license holders:', error);
   }
 }
-
 
 // Call fetchLicenseHolders when the page loads
 window.onload = async () => {
@@ -71,6 +71,7 @@ document.getElementById('nextPage').addEventListener('click', () => {
   currentPage++;
   fetchLicenseHolders();
 });
+
 
 
 async function deleteAccount(id) {

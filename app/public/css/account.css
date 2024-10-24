@@ -50,7 +50,7 @@ tr:hover {
 .status {
   background-color: #e6faf1; /* Màu nền nhạt */
   color: #1a7431; /* Màu chữ xanh */
-  padding: 1px; /* Khoảng cách bên trong */
+  padding: 10px; /* Khoảng cách bên trong */
   border-radius: 5px; /* Bo góc nhẹ */
   text-align: center; /* Căn giữa */
   border: 1px solid #1a7431; /* Đường viền xanh quanh chữ */
@@ -93,13 +93,32 @@ i {
 .dropdown-item i {
   margin-right: 8px; /* Spacing between icon and text */
 }
+
 #paginationControls {
   display: flex;
-  justify-content: center; /* Center the pagination controls */
-  align-items: center; /* Vertically center the buttons and text */
-  margin-top: 20px; /* Space above the pagination controls */
+  justify-content: center;
+  align-items: center;
+  gap: 5px; /* Space between items */
+  margin-top: 20px;
+  flex-wrap: wrap; /* Make it responsive */
 }
 
 #paginationControls button {
-  margin: 0 10px; /* Space between buttons */
+  padding: 4px 8px; /* Increase button size for better clickability */
+  border: 1px solid #020202;
+  background-color: #e2366f;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  border-radius: 5px;
+}
+
+#paginationControls button:hover {
+  background-color: #e2366f;
+  transform: scale(1.05); /* Subtle zoom effect */
+}
+
+#paginationControls button:disabled {
+  background-color: #e2366f;
+  cursor: not-allowed;
+  opacity: 0.6;
 }

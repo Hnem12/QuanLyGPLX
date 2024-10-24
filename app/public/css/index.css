@@ -8,7 +8,6 @@ body {
   font-family: 'Times New Roman', Times, serif, sans-serif;
 }
 
-
 /* CSS cho phần nội dung chính */
 .main-content-wrapper {
   display: flex;
@@ -45,12 +44,11 @@ tr:hover {
   background-color: #ddd; /* Optional: Add hover effect */
 }
 
-
 /* Status styling */
 .status {
   background-color: #e6faf1; /* Màu nền nhạt */
   color: #1a7431; /* Màu chữ xanh */
-  padding: 1px; /* Khoảng cách bên trong */
+  padding: 5px; /* Khoảng cách bên trong */
   border-radius: 5px; /* Bo góc nhẹ */
   text-align: center; /* Căn giữa */
   border: 1px solid #1a7431; /* Đường viền xanh quanh chữ */
@@ -59,17 +57,13 @@ tr:hover {
   font-weight: bold; /* Chữ đậm */
 }
 
-
 span {
   color: rgb(0, 0, 0);
 }
 
-
 i {
   color: black;
 }
-
-
 
 /* Assuming the email column is the 6th column */
 .email {
@@ -85,14 +79,31 @@ i {
   transition: margin-left 0.3s ease; /* Smooth transition */
 }
 
-
 #paginationControls {
   display: flex;
-  justify-content: center; /* Center the pagination controls */
-  align-items: center; /* Vertically center the buttons and text */
-  margin-top: 20px; /* Space above the pagination controls */
+  justify-content: center;
+  align-items: center;
+  gap: 5px; /* Space between items */
+  margin-top: 20px;
+  flex-wrap: wrap; /* Make it responsive */
 }
 
 #paginationControls button {
-  margin: 0 10px; /* Space between buttons */
+  padding: 4px 8px; /* Increase button size for better clickability */
+  border: 1px solid #020202;
+  background-color: #e2366f;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  border-radius: 5px;
+}
+
+#paginationControls button:hover {
+  background-color: #a84d4d;
+  transform: scale(1.05); /* Subtle zoom effect */
+}
+
+#paginationControls button:disabled {
+  background-color: #e2366f;
+  cursor: not-allowed;
+  opacity: 0.6;
 }

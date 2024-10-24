@@ -3,17 +3,13 @@ const pageSize = 5; // Set the number of items per page
 
 async function fetchLicenseHolders() {
   try {
-    const response = await fetch(
-  `http://localhost:3001/api/ApprovelicenselHoder?page=${currentPage}&pageSize=${pageSize}`
-    );
-
+    const response = await fetch(`http://localhost:3001/api/ApprovelicenselHoder?page=${currentPage}&pageSize=${pageSize}`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
-    const skip = currentPage * pageSize;
+
     const data = await response.json();
-    console.log(data); // Log the full data response
-    const { licenseHolders, totalPages } = data; // Make sure licenseHolders is returned from the API
+    const { licenseHolders, totalPages } = data;
 
     const tableBody = document.getElementById('accountTableBody');
     tableBody.innerHTML = ''; // Clear previous rows
@@ -36,9 +32,7 @@ async function fetchLicenseHolders() {
             <td>${new Date(holder.Ngayhethan).toLocaleDateString()}</td>
             <td>${holder.HangGPLX}</td>
             <td>${holder.Giamdoc}</td>
-            <td>
-              <span class="status">${holder.Status}</span>
-            </td>
+            <td><span class="status">${holder.Status}</span></td>
             <td>
               <button class="btn btn-warning btn-sm" onclick='openModal(${JSON.stringify(holder)})'>Sửa</button>
               <button class="btn btn-danger btn-sm" onclick="deleteAccount('${holder._id}')">Xóa</button>
@@ -49,7 +43,10 @@ async function fetchLicenseHolders() {
       }
     });
 
-    document.getElementById('currentPage').textContent = currentPage;
+    // Update the pagination information
+    document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+
+    // Disable pagination buttons appropriately
     document.getElementById('prevPage').disabled = currentPage === 1;
     document.getElementById('nextPage').disabled = currentPage === totalPages;
   } catch (error) {
@@ -74,6 +71,7 @@ document.getElementById('nextPage').addEventListener('click', () => {
   currentPage++;
   fetchLicenseHolders();
 });
+
 
   
   async function deleteAccount(id) {

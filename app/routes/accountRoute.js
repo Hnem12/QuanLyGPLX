@@ -1,7 +1,7 @@
 const path= require('path')
 const express = require('express');
 var router = express.Router();
-const {register,getlogin,postlogin,getAll,getId,addAccount,changePassword,deleteAccount,checklogin,checkadmin,phantrangAccount, updatedAccount} = require('../controllers/accountController')
+const {register,getlogin,postlogin,getAll,getId,addAccount,changePassword,deleteAccount,checklogin,checkadmin,phantrangAccount, updatedAccount, updatedthongtin} = require('../controllers/accountController')
 const { check,validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -19,6 +19,7 @@ router.use(cookieParser());
 router.post('/register', imageUpload.single('image'), register);
 
 router.put('/updateTK/:id',imageUpload.single('image'), updatedAccount);
+router.put('/updatethongtin/:id',imageUpload.single('image'), updatedthongtin);
 
 // đăng nhập
 router.post('/login', postlogin);
@@ -33,13 +34,13 @@ router.get('/phantrang', phantrangAccount);
 router.get('/', getAll);
 
 // lấy dữ liệu theo id
-router.get('/getAccount/:id', getId);
+router.get('/account/:_id', getId);
 
 // Thêm mới dữ liệu vào db
 router.post('/addAccount',imageUpload.single('image'), addAccount);
 
 // Cập nhập dữ liệu trong db // doi mat khau
-router.put('/:id', changePassword);
+router.put('/change-password/:id', changePassword);
 
 // Xóa dữ liệu trong db
 router.delete('/:id', deleteAccount);

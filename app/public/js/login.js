@@ -19,7 +19,6 @@ function getCookie(cname) {
     }
     return "";
 }
-
 // Hàm xử lý đăng nhập
 function login() {
     const username = $('#username').val();
@@ -35,19 +34,24 @@ function login() {
         type: 'POST',
         data: {
             username: username,
-            password: password
+            password: password,
         }
     })
     .done(function(data) {
-        // Lưu token vào cookie với thời hạn 1 ngày
-        setCookie('token', data.token, 1);
+        console.log('Login response:', data); // Debug log
 
-        // Lưu tên người dùng vào localStorage
-        localStorage.setItem('username', username);
-        localStorage.setItem('image', data.userData.image); // Store image URL
+        // Kiểm tra xem ID có tồn tại trong response hay không
+        if (data.userData && data.userData._id) {
+            // Lưu ID và các thông tin cần thiết vào localStorage
+            localStorage.setItem('accountId', data.userData._id); 
+            localStorage.setItem('username', username); 
+            localStorage.setItem('image', data.userData.image);
 
-        // Chuyển hướng sang trang chủ sau khi đăng nhập thành công
-        window.location.href = "/trangchu";
+            // Chuyển hướng sau khi đăng nhập thành công
+            window.location.href = "/trangchu";
+        } else {
+            alert("Lỗi: Không nhận được ID người dùng từ server.");
+        }
     })
     .fail(function(err) {
         console.error("Login error:", err);
