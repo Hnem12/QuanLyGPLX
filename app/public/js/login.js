@@ -66,3 +66,32 @@ $(document).ready(function() {
         login();
     });
 });
+
+const modal = document.getElementById("forgotPasswordModal");
+const link = document.getElementById("forgotPasswordLink");
+const closeBtn = document.querySelector(".close");
+
+// Show modal with animation
+link.onclick = function (e) {
+  e.preventDefault();
+  modal.classList.add("show");
+  modal.style.display = "block";
+};
+
+// Close modal with animation
+closeBtn.onclick = function () {
+  modal.classList.remove("show");
+  setTimeout(() => {
+    modal.style.display = "none";
+  }, 300); // Wait for the animation to complete
+};
+
+// Close modal if the user clicks outside of it
+window.onclick = function (event) {
+  if (event.target === modal) {
+    modal.classList.remove("show");
+    setTimeout(() => {
+      modal.style.display = "none";
+    }, 300);
+  }
+};

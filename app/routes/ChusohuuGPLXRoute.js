@@ -12,28 +12,18 @@ async function getLicenseHolders(req, res, targetStatus) {
     const page = parseInt(req.query.page) || 1; // Default to page 1
     const pageSize = parseInt(req.query.pageSize) || 6; // Default to 6 items per page
 
-    // Fetch all license holders from the database
-    const allLicenseHolders = await LicenseHolder.find();
+    // Define query filter based on target status
+    const query = targetStatus ? { Status: targetStatus } : {};
 
-    // Dynamic sorting based on the target status (e.g., 'Đã kích hoạt' or 'Chưa kích hoạt')
-    const sortedLicenseHolders = allLicenseHolders.sort((a, b) => {
-      if (a.Status === targetStatus && b.Status !== targetStatus) {
-        return -1; // 'a' comes first if it matches the target status
-      } else if (a.Status !== targetStatus && b.Status === targetStatus) {
-        return 1; // 'b' comes first if it matches the target status
-      }
-      return 0; // Maintain original order if both statuses are the same
-    });
+    // Fetch paginated and sorted license holders from the database
+    const licenseHolders = await LicenseHolder.find(query)
+      .sort({ Status: 1 }) // Adjust sorting as needed; here it sorts by 'Status'
+      .skip((page - 1) * pageSize) // Skip records for pagination
+      .limit(pageSize); // Limit the number of records returned
 
-    // Calculate pagination details
-    const totalRecords = sortedLicenseHolders.length;
+    // Calculate total records for pagination
+    const totalRecords = await LicenseHolder.countDocuments(query); // Count total documents matching the query
     const totalPages = Math.ceil(totalRecords / pageSize);
-
-    // Slice the required items for the current page
-    const licenseHolders = sortedLicenseHolders.slice(
-      (page - 1) * pageSize,
-      page * pageSize
-    );
 
     // Send the paginated response
     res.status(200).json({
@@ -50,15 +40,17 @@ async function getLicenseHolders(req, res, targetStatus) {
   }
 }
 
+// Route to get license holders with 'Chưa kích hoạt' first
+router.get('/ApprovelicenselHoder', (req, res) => {
+  getLicenseHolders(req, res, 'Chưa kích hoạt');
+});
+
 // Route to get license holders with 'Đã kích hoạt' first
 router.get('/licenseHolder', (req, res) => {
   getLicenseHolders(req, res, 'Đã kích hoạt');
 });
 
-// Route to get license holders with 'Chưa kích hoạt' first
-router.get('/ApprovelicenselHoder', (req, res) => {
-  getLicenseHolders(req, res, 'Chưa kích hoạt');
-});
+
 
 // Lấy một chủ sở hữu GPLX cụ thể theo ID
 router.get('/:id', async (req, res) => {
@@ -218,9 +210,7 @@ router.post('/addlicenseHolder', async (req, res) => {
             message: 'Thêm chủ sở hữu GPLX thành công!',
             data: savedHolder
         });
-    } catch (err) {
-        console.error('Error creating license holder:', err); // Log the error
-  
+    } catch (err) {  
         // Return 500 status for server errors
         res.status(500).json({
             success: false,

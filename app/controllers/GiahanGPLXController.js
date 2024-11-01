@@ -52,17 +52,39 @@ const LicenseController = {
     
     getAllLicenseRenewals: async (req, res) => {
         try {
-            // Fetch all license renewals
-            const licenseRenewals = await LicenseRenewal.find(); // This retrieves all records
-            
+            // Get page number and limit from query parameters
+            const page = parseInt(req.query.page) || 1; // Default to page 1
+            const limit = parseInt(req.query.limit) || 5; // Default to limit of 10
+    
+            // Calculate the starting index for the query
+            const startIndex = (page - 1) * limit;
+    
+            // Fetch total count of license renewals
+            const totalCount = await LicenseRenewal.countDocuments();
+    
+            // Fetch license renewals with pagination
+            const licenseRenewals = await LicenseRenewal.find()
+                .skip(startIndex) // Skip documents to get to the starting index
+                .limit(limit); // Limit the number of documents returned
+    
+            // Check if any license renewals were found
             if (!licenseRenewals || licenseRenewals.length === 0) {
                 return res.status(404).json({ message: 'No license renewals found' });
             }
     
+            // Calculate total pages
+            const totalPages = Math.ceil(totalCount / limit);
+    
             // Send the response with the data
             return res.status(200).json({
                 message: 'All license renewals retrieved successfully',
-                data: licenseRenewals
+                data: licenseRenewals,
+                pagination: {
+                    totalCount,
+                    totalPages,
+                    currentPage: page,
+                    limit,
+                }
             });
         } catch (error) {
             // Log the error and return a 500 status

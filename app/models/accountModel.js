@@ -11,6 +11,8 @@ const AccountSchema = new mongoose.Schema({
     email: { type: String, required: true }, // Make sure this is present and required
     status: { type: String, default: 'Chưa kích hoạt' }, // New field for status with default value
     image: { type: String, required: true }, // New field for storing image URL or path
+    resetToken: String,
+    resetTokenExpiration: Date,
 }, 
 {
     collection: 'account' // Specify the collection name here

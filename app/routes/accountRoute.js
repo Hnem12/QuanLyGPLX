@@ -1,7 +1,7 @@
 const path= require('path')
 const express = require('express');
 var router = express.Router();
-const {register,getlogin,postlogin,getAll,getId,addAccount,changePassword,deleteAccount,checklogin,checkadmin,phantrangAccount, updatedAccount, updatedthongtin} = require('../controllers/accountController')
+const {register,getlogin,postlogin,getAll,getId,addAccount,changePassword,deleteAccount,checklogin,checkadmin,phantrangAccount, updatedAccount, updatedthongtin,forgotPassword, resetPassword} = require('../controllers/accountController')
 const { check,validationResult } = require('express-validator');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
@@ -10,11 +10,11 @@ var cookieParser = require('cookie-parser');
 const { Xulyanh } = require('../controllers/accountController');
 const { imageUpload } = require('../middleware/upload');
 
-// router.post('/Xulyanh', imageUpload.single("image"), Xulyanh);
-// router.use("/images", express.static(path.join(__dirname, "uploads")));
-
 router.use(cookieParser());
+router.post('/forgot-password', forgotPassword);
 
+// Route for resetting the password
+router.post('/reset-password/:token', resetPassword); // Ensure you handle the token in the request
 // Tao tài khoản
 router.post('/register', imageUpload.single('image'), register);
 

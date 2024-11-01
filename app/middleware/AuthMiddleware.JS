@@ -1,18 +1,37 @@
 const jwt = require('jsonwebtoken');
+const AccountModel = require('../models/accountModel');
 
-// Middleware to check if the user is logged in
-const checkAuthentication = (req, res, next) => {
-    const token = req.cookies.token;
-
-    if (!token) {
-        return res.redirect('/api/account/login'); // Redirect to login if no token is found
-    }
-
+// Middleware to check if user is logged in and extract role
+const authenticate = async (req, res, next) => {
     try {
-        const decoded = jwt.verify(token, 'Hnem'); // Verify the token
-        req.user = decoded; // Attach user data to the request
-        next(); // Continue to the requested route
-    } catch (err) {
-        return res.redirect('/api/account/login'); // Redirect to login if token is invalid
+        const token = req.cookies.token;
+        if (!token) {
+            return res.status(401).json({ message: 'Bạn chưa đăng nhập' });
+        }
+
+        const decoded = jwt.verify(token, 'Hnem');
+        const user = await AccountModel.findById(decoded._id);
+
+        if (!user) {
+            return res.status(403).json({ message: 'Người dùng không tồn tại' });
+        }
+
+        req.user = user; // Attach user to the request
+        next();
+    } catch (error) {
+        console.error('Authentication error:', error);
+        res.status(401).json({ message: 'Token không hợp lệ hoặc đã hết hạn' });
     }
 };
+
+// Middleware to authorize based on roles
+const authorize = (roles) => {
+    return (req, res, next) => {
+        if (!roles.includes(req.user.role)) {
+            return res.status(403).json({ message: 'Bạn không đủ quyền để truy cập' });
+        }
+        next();
+    };
+};
+
+module.exports = { authenticate, authorize };

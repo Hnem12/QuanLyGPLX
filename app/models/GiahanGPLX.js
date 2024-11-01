@@ -66,8 +66,8 @@ const LicenseRenewalSchema = new Schema({
     Status: {
         type: String,
         required: true,
-        enum: ['Valid', 'Expired'],  // Status: Valid or Expired
-        default: 'Valid'  // Default status is Valid
+        enum: ['Chưa hết hạn', 'Đã hết hạn'],  // Status: Valid or Expired
+        default: 'Đã hết hạn'  // Default status is Valid
     },
     LicenseNumber: {
         type: String,

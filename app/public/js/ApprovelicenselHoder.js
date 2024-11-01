@@ -59,21 +59,19 @@ window.onload = async () => {
   await fetchLicenseHolders(); // Fetch list of license holders
 };
 
-// Pagination buttons event listeners
-document.getElementById('prevPage').addEventListener('click', () => {
+// Pagination button functions
+function previousPage() {
   if (currentPage > 1) {
     currentPage--;
     fetchLicenseHolders();
   }
-});
+}
 
-document.getElementById('nextPage').addEventListener('click', () => {
+function nextPage() {
   currentPage++;
   fetchLicenseHolders();
-});
+}
 
-
-  
   async function deleteAccount(id) {
     if (confirm('Bạn có chắc chắn muốn xóa chủ sở hữu GPLX này không?')) {
         try {

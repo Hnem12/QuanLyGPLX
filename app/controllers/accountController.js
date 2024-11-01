@@ -8,6 +8,8 @@ const ejs = require('ejs');
 const mongoose = require('mongoose');
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 
 const register = async (req, res) => {
@@ -228,7 +230,87 @@ const addAccount = async (req, res, next) => {
         return res.status(500).json({ success: false, message: 'Lỗi server' });
     }
 };
+// const transporter = nodemailer.createTransport({
+//     service: 'gmail',
+//     auth: {
+//       user: 'your-email@gmail.com',  // Your Gmail address
+//       pass: 'your-app-password',     // The 16-digit app password
+//     },
+//   });
+  
+//   const mailOptions = {
+//     from: 'your-email@gmail.com',
+//     to: 'recipient@example.com',
+//     subject: 'Password Reset',
+//     text: 'Click the link to reset your password.',
+//   };
+  
+//   transporter.sendMail(mailOptions, (error, info) => {
+//     if (error) {
+//       return console.log('Error:', error);
+//     }
+//     console.log('Email sent:', info.response);
+//   });
 
+async function forgotPassword(req, res) {
+    const { email } = req.body; // Make sure email is defined
+
+    if (!email) {
+        return res.status(400).json({ message: 'Email is required.' });
+    }
+
+    try {
+        const user = await AccountModel.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        const token = crypto.randomBytes(20).toString('hex'); // Generate a random token
+
+        // Set up the email options
+        const mailOptions = {
+            from: 'your_email@gmail.com',
+            to: email, // Use the email variable here
+            subject: 'Password Reset Request',
+            text: `You requested a password reset. Click the link to reset: http://localhost:3001/reset-password/${token}`,
+        };
+
+        // Attempt to send the email
+        await transporter.sendMail(mailOptions);
+        res.status(200).json({ message: 'Reset email sent successfully' });
+    } catch (error) {
+        console.error('Error fetching user or sending email:', error);
+        return res.status(500).json({ message: 'An error occurred while processing your request.', error: error.message });
+    }
+}
+
+const resetPassword = async (req, res) => {
+    const { token } = req.params;
+    const { newPassword } = req.body;
+
+    try {
+        const user = await AccountModel.findOne({
+            resetToken: token,
+            resetTokenExpiration: { $gt: Date.now() },
+        });
+
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid or expired token' });
+        }
+
+        // Set new password and clear reset token
+        user.password = newPassword; // Hash the password before saving it
+        user.resetToken = undefined;
+        user.resetTokenExpiration = undefined;
+        await user.save();
+
+        res.json({ message: 'Password has been reset successfully!' });
+    } catch (error) {
+        console.error('Error resetting password:', error);
+        res.status(500).json({ message: 'An error occurred while resetting the password.' });
+    }
+};
 const changePassword = async (req, res) => {
     const { oldPassword, newPassword } = req.body;
     const { id } = req.params;
@@ -445,5 +527,7 @@ module.exports = {
     checklogin,
     checkadmin,
     phantrangAccount,
-    updatedthongtin
+    updatedthongtin,
+    forgotPassword,
+    resetPassword
 };

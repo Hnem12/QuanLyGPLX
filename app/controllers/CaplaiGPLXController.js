@@ -1,103 +1,105 @@
 const CaplaiGPLXModels = require('../models/CaplaiGPLXModels');
 const { check, validationResult } = require('express-validator');
 
-// hiển thị danh mục 
-exports.getAll =  (req, res, next) => {
+// Hiển thị danh sách cấp GPLX
+exports.getAll = (req, res, next) => {
     CaplaiGPLXModels.find({})
         .then(data => {
-            //  res.json(data)
-            res.render('danhmuc',{ danhmucs :data})
+            res.render('capGplx', { capGplx: data });
         })
         .catch(err => {
-        res.status(500).json('Loi server 1')
-    })
-}
-// tìm danh mục theo id
-exports.getId =  (req, res, next) => {
-    var _id = req.params.id
-    CaplaiGPLXModels.findById({ _id })
+            console.error(err);
+            res.status(500).json({ message: 'Lỗi server khi lấy danh sách cấp GPLX' });
+        });
+};
+
+// Tìm cấp GPLX theo ID
+exports.getId = (req, res, next) => {
+    const _id = req.params.id;
+    CaplaiGPLXModels.findById(_id)
         .then(data => {
-            res.json(data)
+            if (!data) {
+                return res.status(404).json({ message: 'Cấp GPLX không tồn tại' });
+            }
+            res.json(data);
         })
         .catch(err => {
-        res.status(500).json('Loi server 2')
-    })
-}
+            console.error(err);
+            res.status(500).json({ message: 'Lỗi server khi tìm cấp GPLX' });
+        });
+};
 
-exports.taodanhmuc= (req, res, next) => {
-    res.render('createDanhMuc')
-}
+// Tạo mới cấp GPLX
+exports.taocapGplx = (req, res, next) => {
+    res.render('createCapGplx');
+};
 
-
-exports.createCategory = (req, res, next) => {
-    const errors = validationResult(req)
+// Thực hiện tạo cấp GPLX
+exports.createCapGplx = (req, res, next) => {
+    const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(500).json({ errors: errors.array() });
+        return res.status(400).json({ errors: errors.array() });
     }
-    var Tendanhmuc = req.body.tendanhmuc
-    var Mota = req.body.mota
-    DanhmucModel.findOne({
-        tendanhmuc: Tendanhmuc,
-    })
-    .then(data => {
-        if (data) {
-        res.json('Danh mục này đã tồn tại')
-        }
-        else {
-            return CaplaiGPLXModels.create({
-                tendanhmuc: Tendanhmuc,
-                mota: Mota,
-            })
-        }
-    })
-        .then(data => {
-            if(data){
-                res.json('Tao danh muc thanh cong')
-                }
-        })
-        .catch(err => {
-        res.status(500).json('Tao danh muc that bai')
-    })
-}
 
-// sửa danh mục 
-exports.updateCategory = (req, res, next) => {
-    var _id = req.params.id
-    var Newtendanhmuc = req.body.newtendanhmuc
-    var NewmoTa=req.body.newmota
-    DanhmucModel.findByIdAndUpdate(_id, {
-        tendanhmuc: Newtendanhmuc,
-        mota: NewmoTa,
-    })
+    const { DateOfRenewal, NewExpiryDate, Lidocaplai, chusohuuGPLX_id } = req.body;
+
+    CaplaiGPLXModels.findOne({ chusohuuGPLX_id })
         .then(data => {
             if (data) {
-            res.json('Update thanh cong nhe')
-            }
-            else {
-                res.json("Update that bai")
+                return res.json({ message: 'Cấp GPLX này đã tồn tại' });
+            } else {
+                return CaplaiGPLXModels.create({
+                    DateOfRenewal,
+                    NewExpiryDate,
+                    Lidocaplai,
+                    chusohuuGPLX_id,
+                });
             }
         })
-        .catch(err => {
-            res.status(500).json("Loi server 3")
-    })
-}
-
-// xóa danh mục 
-exports.deleteCategory = (req, res, next) => {
-    var id = req.params.id;
-    DanhmucModel.deleteOne({
-        _id: id
-    })
         .then(data => {
-            if (data) {
-                res.json('Xoa thanh cong');
+            res.json({ message: 'Tạo cấp GPLX thành công', data });
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ message: 'Tạo cấp GPLX thất bại' });
+        });
+};
+
+// Sửa thông tin cấp GPLX
+exports.updateCapGplx = (req, res, next) => {
+    const _id = req.params.id;
+    const { NewDateOfRenewal, NewNewExpiryDate, NewLidocaplai } = req.body;
+
+    CaplaiGPLXModels.findByIdAndUpdate(_id, {
+        DateOfRenewal: NewDateOfRenewal,
+        NewExpiryDate: NewNewExpiryDate,
+        Lidocaplai: NewLidocaplai,
+    }, { new: true })
+        .then(data => {
+            if (!data) {
+                return res.status(404).json({ message: "Cấp GPLX không tồn tại" });
             }
-            else {
-                res.json('Xoa that bai')
+            res.json({ message: 'Cập nhật cấp GPLX thành công', data });
+        })
+        .catch(err => {
+            console.error(err);
+            res.status(500).json({ message: "Lỗi server khi cập nhật cấp GPLX" });
+        });
+};
+
+// Xóa cấp GPLX
+exports.deleteCapGplx = (req, res, next) => {
+    const id = req.params.id;
+    CaplaiGPLXModels.deleteOne({ _id: id })
+        .then(data => {
+            if (data.deletedCount > 0) {
+                res.json({ message: 'Xóa cấp GPLX thành công' });
+            } else {
+                res.status(404).json({ message: 'Cấp GPLX không tồn tại' });
             }
         })
         .catch(err => {
-        res.status(500).json('loiserver 4')
-    })
-}
-
+            console.error(err);
+            res.status(500).json({ message: 'Lỗi server khi xóa cấp GPLX' });
+        });
+};
