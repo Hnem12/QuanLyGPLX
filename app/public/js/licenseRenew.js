@@ -3,7 +3,7 @@ const pageSize = 5; // Set the number of items per page
 
 async function fetchLicenseHolders() {
   try {
-    const response = await fetch(`http://localhost:3001/api/renewals/getallRenew?page=${currentPage}&limit=${pageSize}`);
+    const response = await fetch(`/api/renewals/getallRenew?page=${currentPage}&limit=${pageSize}`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
