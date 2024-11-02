@@ -10,7 +10,7 @@ const Gioithieu = () => {
             <ol className="breadcrumb">
                 <li className="breadcrumb-item">
                     <a style={{ color: 'black', textDecoration: 'none' }} href="http://localhost:5000">
-                        <img src="http://localhost:3000/uploads/home.png" style={{ width: '15px', marginTop: '-4px' }} alt="home icon" />
+                        <img src="http://localhost:3001/uploads/home.png" style={{ width: '15px', marginTop: '-4px' , marginRight:'10px' }} alt="home icon" />
                         Trang chủ
                     </a>
                 </li>
@@ -26,7 +26,6 @@ const Gioithieu = () => {
                 Dịch vụ công Đổi giấy phép lái xe và Cấp mới giấy phép lái xe trực tuyến mức 4
             </p>
         </header>
-
 
         {/* Icon Section */}
         <section className="info-section">

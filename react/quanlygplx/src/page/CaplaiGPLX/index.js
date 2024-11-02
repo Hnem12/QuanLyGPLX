@@ -12,7 +12,7 @@ function GplxReissueForm() {
   useEffect(() => {
     const fetchApi = async () => {
         try {
-            const response = await fetch("http://localhost:3000/api/licenseHolder");
+            const response = await fetch("http://localhost:3001/api/licenseHolder");
             if (!response.ok) {
                 throw new Error("Network response was not ok");
             }

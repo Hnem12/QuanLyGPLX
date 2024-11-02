@@ -90,8 +90,11 @@
     background-color: #f8f9fa; // Màu nền cho breadcrumb
     padding: 10px 15px; // Padding cho breadcrumb
     border-radius: 5px; // Bo góc
+    font-size: 16px;
+    font-weight: bold; // Chữ đậm
     margin-bottom: -10px; // Khoảng cách dưới breadcrumb
     margin-top: -30px;
+    font-family: 'Times New Roman', Times, serif;
     .breadcrumb-item {
         display: inline-block;
         margin-right: 10px;

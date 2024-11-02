@@ -18,29 +18,29 @@ const LicenseSearch = () => {
         for (let i = 0; i < 6; i++) {
             captchaCode += chars[Math.floor(Math.random() * chars.length)];
         }
-        setCaptcha(captchaCode);
+        return captchaCode;
     };
 
     useEffect(() => {
-        const fetchApi = async () => {
+        const fetchDataAndGenerateCaptcha = async () => {
             setLoading(true);
             try {
-                const response = await fetch("http://localhost:3000/api/licenseHolder");
-                if (!response.ok) {
-                    throw new Error("Network response was not ok");
-                }
+                const response = await fetch("http://localhost:3001/api/licenseHolder");
+                if (!response.ok) throw new Error("Network response was not ok");
+
                 const result = await response.json();
-                setData(result);
+                console.log('Fetched data:', result);
+                setData(Array.isArray(result.licenseHolders) ? result.licenseHolders : []);
             } catch (error) {
                 console.error("Error fetching data:", error);
-                setError('Error fetching data. Please try again later.');
+                setError('Lỗi khi tải dữ liệu. Vui lòng thử lại sau.');
             } finally {
+                setCaptcha(generateCaptcha()); // Generate CAPTCHA after fetching data
                 setLoading(false);
             }
         };
 
-        fetchApi();
-        generateCaptcha();
+        fetchDataAndGenerateCaptcha();
     }, []);
 
     const handleSubmit = (e) => {
@@ -59,15 +59,16 @@ const LicenseSearch = () => {
             return;
         }
 
-        const foundHolder = data.find(item => 
-            item.MaGPLX === licenseNumber && 
-            new Date(item.DateOfBirth).toLocaleDateString() === enteredBirthDate
+        const foundHolder = data.find(
+            item =>
+                item.MaGPLX === licenseNumber &&
+                new Date(item.DateOfBirth).toLocaleDateString() === enteredBirthDate
         );
 
         if (foundHolder) {
             setHolder(foundHolder);
             setError('');
-            setShowModal(true);  // Hiển thị modal khi tìm thấy thông tin
+            setShowModal(true);
         } else {
             setError('Không tìm thấy thông tin giấy phép.');
             setHolder(null);
