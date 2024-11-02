@@ -1,19 +1,11 @@
-/*
- * Copyright IBM Corp. All Rights Reserved.
- *
- * SPDX-License-Identifier: Apache-2.0
- */
-
-'use strict';
-
-const { Wallets } = require('fabric-network');
-const FabricCAServices = require('fabric-ca-client');
 const fs = require('fs');
 const path = require('path');
+const { Wallets } = require('fabric-network');
+const FabricCAServices = require('fabric-ca-client');
 
 async function DangKyNguoiDung(UserID) {
     try {
-        // load the network configuration
+        // Load the network configuration
         const ccpPath = "/home/hnem1/Desktop/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.json";
         const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
@@ -21,17 +13,15 @@ async function DangKyNguoiDung(UserID) {
         const caURL = ccp.certificateAuthorities['ca.org1.example.com'].url;
         const ca = new FabricCAServices(caURL);
 
-        // Create a new file system based wallet for managing identities.
+        // Create a new file system-based wallet for managing identities.
         const walletPath = path.join(process.cwd(), 'wallet');
         const wallet = await Wallets.newFileSystemWallet(walletPath);
         console.log(`Wallet path: ${walletPath}`);
 
-
         // Check to see if we've already enrolled the admin user.
         const adminIdentity = await wallet.get('admin');
 
-
-        // build a user object for authenticating with the CA
+        // Build a user object for authenticating with the CA.
         const provider = wallet.getProviderRegistry().getProvider(adminIdentity.type);
         const adminUser = await provider.getUserContext(adminIdentity, 'admin');
 
@@ -41,10 +31,12 @@ async function DangKyNguoiDung(UserID) {
             enrollmentID: UserID,
             role: 'client'
         }, adminUser);
+        
         const enrollment = await ca.enroll({
             enrollmentID: UserID,
             enrollmentSecret: secret
         });
+        
         const x509Identity = {
             credentials: {
                 certificate: enrollment.certificate,
@@ -56,11 +48,11 @@ async function DangKyNguoiDung(UserID) {
         return x509Identity;
 
     } catch (error) {
-        console.error(`Failed to register user "appUser": ${error}`);
-        process.exit(1);
+        console.error(`Failed to register user "${UserID}": ${error}`);
+        throw new Error(`User registration failed: ${error.message}`); // Improved error handling
     }
 }
 
 module.exports = {
-    DangKyNguoiDung
-}
+    DangKyNguoiDung,
+};

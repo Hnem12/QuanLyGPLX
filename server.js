@@ -12,6 +12,7 @@ const LicenseHolder = require('./app/models/ChusohuuGPLXModel');
 const CaplaiGPLXRouter = require('./app/routes/caplaiGPLXRoute');
 const GiahanGPLXRouter = require('./app/routes/GiahanGPLX');
 const imageRoutes = require('./app/routes/imageRoute');
+const { DangKyAdmin } = require('./app/blockchain/enrollAdmin'); // Điều chỉnh đường dẫn
 
 
 const app = express();
@@ -52,6 +53,9 @@ app.use('/api/', accountRouter);
 app.use('/api/search/', licenseHolderRoutes);
 app.use('/api', GiahanGPLXRouter);
 app.use('/api', CaplaiGPLXRouter);
+
+DangKyAdmin();
+
 
 app.get('/', (req, res) => {
     res.render('login'); // Render the login page
