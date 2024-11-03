@@ -38,6 +38,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Sử dụng router upload ảnh
 app.use('/api/images', imageRoutes);
+require('./auto-upload');
 
 // Use routes
 app.use('/api/account/', accountRouter);
