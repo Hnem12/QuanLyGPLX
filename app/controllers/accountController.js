@@ -53,7 +53,6 @@ const register = async (req, res) => {
 };
 
 
-// Đăng nhập
 const postlogin = async (req, res, next) => {
     const { username, password } = req.body;
 
@@ -71,8 +70,12 @@ const postlogin = async (req, res, next) => {
             return res.status(401).json({ message: 'Mật khẩu không chính xác' });
         }
 
-        // Tạo JWT token
-        const token = jwt.sign({ _id: account._id }, 'Hnem', { expiresIn: '1d' });
+        // Tạo JWT token với username và role
+        const token = jwt.sign(
+            { _id: account._id, role: account.role }, // Thêm role vào token payload
+            'Hnem', // Replace 'Hnem' with your secret key
+            { expiresIn: '1d' }
+        );
 
         // Lưu token vào cookie
         res.cookie('token', token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // 1 ngày
@@ -83,7 +86,7 @@ const postlogin = async (req, res, next) => {
             userData: {
                 _id: account._id, // Lưu ý đổi thành _id để thống nhất với MongoDB
                 username: account.username,
-                role: account.role,
+                role: account.role, // Include role in the response data
                 SDT: account.SDT,
                 Name: account.Name,
                 Address: account.Address,

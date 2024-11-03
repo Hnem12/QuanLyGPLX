@@ -39,7 +39,7 @@ function LayoutDefault() {
                         </NavLink>
                     </Menu.Item>
                     <Menu.Item key="login">
-                        <NavLink to="http://localhost:3001/" className={({ isActive }) => (isActive ? 'active' : '')}>
+                        <NavLink to="https://quanligplx-hdu-edu-vn.onrender.com/" className={({ isActive }) => (isActive ? 'active' : '')}>
                             Đăng nhập
                         </NavLink>
                     </Menu.Item>

@@ -169,7 +169,7 @@ function GplxRenewForm() {
     const fetchApi = async (signal) => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:3001/api/renewals/getall', { signal });
+            const response = await fetch('https://quanligplx-hdu-edu-vn.onrender.com/api/renewals/getall', { signal });
 
             if (!response.ok) throw new Error('Network response was not ok');        
             const result = await response.json();
@@ -209,7 +209,7 @@ function GplxRenewForm() {
             return setError('Vui lòng điền đầy đủ thông tin giấy phép lái xe và nơi cấp.');
         }
     
-        const url = `http://localhost:3001/api/renewals/${encodeURIComponent(licenseNumber)}/${encodeURIComponent(issuingPlaces)}`;
+        const url = `https://quanligplx-hdu-edu-vn.onrender.com/api/renewals/${encodeURIComponent(licenseNumber)}/${encodeURIComponent(issuingPlaces)}`;
     
         try {
             const response = await fetch(url, {
@@ -320,7 +320,7 @@ const clearFormData = () => {
     
         try {
           // Gửi yêu cầu POST đến API
-          const response = await fetch('http://localhost:3001/api/images', {
+          const response = await fetch('https://quanligplx-hdu-edu-vn.onrender.com/api/images', {
             method: 'POST',
             body: formData,
           });

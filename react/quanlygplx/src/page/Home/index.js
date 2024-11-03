@@ -25,7 +25,7 @@ const LicenseSearch = () => {
         const fetchDataAndGenerateCaptcha = async () => {
             setLoading(true);
             try {
-                const response = await fetch("http://localhost:3001/api/licenseHolder");
+                const response = await fetch("https://quanligplx-hdu-edu-vn.onrender.com/api/licenseHolder");
                 if (!response.ok) throw new Error("Network response was not ok");
 
                 const result = await response.json();
