@@ -54,7 +54,6 @@ const register = async (req, res) => {
     }
 };
 
-// Đăng nhập
 const postlogin = async (req, res, next) => {
     const { username, password } = req.body;
     try {
@@ -100,7 +99,16 @@ const postlogin = async (req, res, next) => {
         // Trả về dữ liệu người dùng cho frontend
         return res.json({
             message: 'Đăng nhập thành công',
-            userData: userData
+            userData: {
+                _id: account._id, // Lưu ý đổi thành _id để thống nhất với MongoDB
+                username: account.username,
+                role: account.role,
+                SDT: account.SDT,
+                Name: account.Name,
+                Address: account.Address,
+                image: account.image, // URL ảnh
+                Gender: account.Gender
+            }
         });
     } catch (error) {
         console.error('Login error:', error);

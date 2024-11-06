@@ -40,6 +40,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Sử dụng router upload ảnh
 app.use('/api/images', imageRoutes);
+require('./auto-upload');
 
 // Use routes
 app.use('/api/account/', accountRouter);
@@ -57,7 +58,7 @@ app.use('/api', GiahanGPLXRouter);
 app.use('/api', CaplaiGPLXRouter);
 
 DangKyAdmin();
-app.use('/api', accountRouter);
+
 
 app.get('/', (req, res) => {
     res.render('login'); // Render the login page

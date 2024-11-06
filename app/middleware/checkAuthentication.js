@@ -27,4 +27,4 @@ const checkAuthentication = (req, res, next) => {
     }
 };
 
-module.exports = checkAuthentication;
+module.exports = checkAuthentication; 
