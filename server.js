@@ -13,6 +13,8 @@ const CaplaiGPLXRouter = require('./app/routes/caplaiGPLXRoute');
 const GiahanGPLXRouter = require('./app/routes/GiahanGPLX');
 const imageRoutes = require('./app/routes/imageRoute');
 const { DangKyAdmin } = require('./app/blockchain/enrollAdmin'); // Điều chỉnh đường dẫn
+const { queryGPLXData } = require('./app/blockchain/Truyvandulieu');
+
 
 
 const app = express();
@@ -55,7 +57,7 @@ app.use('/api', GiahanGPLXRouter);
 app.use('/api', CaplaiGPLXRouter);
 
 DangKyAdmin();
-
+app.use('/api', accountRouter);
 
 app.get('/', (req, res) => {
     res.render('login'); // Render the login page
@@ -77,40 +79,6 @@ app.post('/api/reissue-license', (req, res) => {
 
     // Gửi phản hồi về frontend
     res.json({ message: 'Dữ liệu đã được nhận thành công!', data: req.body });
-});
-
-app.post('/forgot-password', async (req, res) => {
-    const { email } = req.body;
-
-    try {
-        // Find the user by email
-        const user = await User.findOne({ email });
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
-
-        // Generate a reset token and set expiration
-        const token = crypto.randomBytes(32).toString('hex');
-        user.resetToken = token;
-        user.resetTokenExpiration = Date.now() + 3600000; // Token valid for 1 hour
-        await user.save();
-
-        // Create reset URL
-        const resetURL = `http://localhost:3001/reset-password/${token}`;
-
-        // Send the email
-        await transporter.sendMail({
-            to: user.email,
-            subject: 'Password Reset',
-            html: `<p>You requested a password reset. Click the link below to reset your password:</p>
-                   <a href="${resetURL}">Reset Password</a>`,
-        });
-
-        res.json({ message: 'Reset link sent to your email!' });
-    } catch (error) {
-        console.error('Error sending reset email:', error);
-        res.status(500).json({ message: 'An error occurred while sending the reset email.' });
-    }
 });
 
 app.use(checkAuthentication); 

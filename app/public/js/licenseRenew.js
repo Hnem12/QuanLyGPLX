@@ -3,13 +3,13 @@ const pageSize = 5; // Set the number of items per page
 
 async function fetchLicenseHolders() {
   try {
-    const response = await fetch(`/api/renewals/getallRenew?page=${currentPage}&limit=${pageSize}`);
+    const response = await fetch(`/api/renewals/getall?page=${currentPage}&limit=${pageSize}`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
 
     const data = await response.json();
-    const { renewals, totalPages } = data; // Adjusted according to server response structure
+    const { data: renewals, pagination } = data; // Extract renewals and pagination data
 
     const tableBody = document.getElementById('accountTableBody');
     tableBody.innerHTML = ''; // Clear previous rows
@@ -18,19 +18,20 @@ async function fetchLicenseHolders() {
       const row = `
         <tr>
           <td>${(currentPage - 1) * pageSize + index + 1}</td>
-          <td>${holder.Lidocaplai}</td> <!-- Assuming LicenseNumber is Lidocaplai -->
-          <td>${holder.chusohuuGPLX_id.Name}</td> <!-- Assuming Name is stored under chusohuuGPLX_id -->
-          <td>${new Date(holder.DateOfRenewal).toLocaleDateString()}</td>
-          <td>${holder.chusohuuGPLX_id.CCCD}</td> <!-- Assuming CCCD is stored under chusohuuGPLX_id -->
-          <td>${holder.chusohuuGPLX_id.Address}</td> <!-- Assuming Address is stored under chusohuuGPLX_id -->
+          <td>${holder.LicenseNumber}</td> <!-- LicenseNumber -->
+          <td>${holder.Name}</td> <!-- Name -->
+          <td>${new Date(holder.Renewals[0].renewalDate).toLocaleDateString()}</td> <!-- Renewal Date -->
+          <td>${holder.CCCD}</td> <!-- CCCD -->
+          <td>${holder.Address}</td> <!-- Address -->
           <td>
-            SĐT: ${holder.chusohuuGPLX_id.PhoneNumber} <br> <!-- Assuming PhoneNumber is stored under chusohuuGPLX_id -->
-            Email: <span class="email" title="${holder.chusohuuGPLX_id.Email}">${holder.chusohuuGPLX_id.Email}</span> <!-- Assuming Email is stored under chusohuuGPLX_id -->
+            SĐT: ${holder.PhoneNumber} <br> 
+            Email: <span class="email" title="${holder.Email}">${holder.Email}</span> <!-- Email -->
           </td>
-          <td>${new Date(holder.NewExpiryDate).toLocaleDateString()}</td>
-          <td>${holder.LicenseClass}</td>
-          <td>${holder.Giamdoc}</td>
-          <td><span class="status1">${holder.Status}</span></td>
+                    <td>${new Date(holder.ExpirationDate).toLocaleDateString()}</td> <!-- Original Expiration Date -->
+          <td>${new Date(holder.Renewals[0].newExpirationDate).toLocaleDateString()}</td> <!-- New Expiration Date -->
+          <td>${holder.LicenseClass}</td> <!-- License Class -->
+          <td>${holder.Giamdoc}</td> <!-- Giamdoc -->
+          <td><span class="status1">${holder.Status}</span></td> <!-- Status -->
           <td>
             <button class="btn btn-danger btn-sm" onclick="deleteAccount('${holder._id}')">Kiểm định</button>
           </td>
@@ -40,11 +41,11 @@ async function fetchLicenseHolders() {
     });
 
     // Update the pagination information
-    document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+    document.getElementById('pageInfo').textContent = `Page ${pagination.currentPage} of ${pagination.totalPages}`;
 
     // Disable pagination buttons appropriately
-    document.getElementById('prevPage').disabled = currentPage === 1;
-    document.getElementById('nextPage').disabled = currentPage === totalPages;
+    document.getElementById('prevPage').disabled = pagination.currentPage === 1;
+    document.getElementById('nextPage').disabled = pagination.currentPage === pagination.totalPages;
   } catch (error) {
     console.error('Failed to fetch license holders:', error);
     // Optionally, you could display an error message to the user here.

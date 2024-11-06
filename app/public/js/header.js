@@ -247,7 +247,7 @@ passwordForm.addEventListener('submit', async (event) => {
 
     try {
         // Sử dụng backticks để xây dựng URL
-        const response = await fetch(`http://localhost:3001/api/change-password/${accountId}`, {
+        const response = await fetch(`/api/change-password/${accountId}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -271,3 +271,165 @@ passwordForm.addEventListener('submit', async (event) => {
         alert('Đã xảy ra lỗi, vui lòng thử lại sau.');
     }
 });
+
+// Get DOM elements
+const openKeyModalButton = document.getElementById('openKeyModal'); // Button to open the key modal
+const closeKeyModalButton = document.querySelector('#keyModal .close'); // Close button in the key modal
+const keyModal = document.getElementById('keyModal'); // Key modal element
+const privateKeyField = document.getElementById('privateKeyField'); // Element to display the private key
+const keyActions = document.getElementById('keyActions'); // Actions for downloading and copying keys
+const privateKeyLabel = document.getElementById('privateKeyLabel'); // Label for private key
+const keyLabel = document.getElementById('KeyLabel'); // Key confirmation label
+
+// Function to toggle the visibility of the key modal
+function toggleKeyModal(display) {
+    keyModal.style.display = display; // Show or hide the key modal based on the display parameter
+    keyLabel.style.display = display === 'block' ? 'block' : 'none'; // Show KeyLabel when modal is opened
+}
+
+// Function to close the key modal and reset the state
+function closeKeyModal() {
+    toggleKeyModal('none'); // Hide the modal
+    resetKeyModal(); // Reset input fields and visibility
+}
+
+// Function to reset modal input fields and labels
+function resetKeyModal() {
+    privateKeyField.value = ''; // Clear the private key field
+    privateKeyField.hidden = true; // Hide the input field for the private key
+    keyActions.style.display = 'none'; // Hide the key action buttons
+    privateKeyLabel.style.display = 'none'; // Hide private key label
+    keyLabel.style.display = 'none'; // Hide KeyLabel
+    document.getElementById('generateKeyBtn').style.display = 'inline-block'; // Show the generate button
+    document.querySelector('.Xepngang button:last-child').style.display = 'inline-block'; // Show the cancel button
+}
+
+// Function to generate user key
+window.generateUserKey = async function() {
+    const accountId = localStorage.getItem('accountId'); // Retrieve accountId from localStorage
+    if (!accountId) {
+        return alert('Account ID không tồn tại. Vui lòng đăng nhập lại.'); // Alert user if account ID is missing
+    }
+
+    try {
+        const userData = await fetchUserData(accountId);
+        if (userData?.privateKey) {
+            displayExistingKey(userData.privateKey); // Display existing private key
+        } else {
+            const newKeyResult = await generateNewKey(accountId);
+            if (newKeyResult) {
+                displayNewKey(newKeyResult.privateKey); // Display newly generated private key
+            }
+        }
+    } catch (error) {
+        console.error('Error generating key:', error);
+    }
+};
+
+// Function to fetch user data
+async function fetchUserData(accountId) {
+    const response = await fetch(`/api/account/${accountId}`);
+    if (!response.ok) throw new Error('Failed to fetch user data.'); // Throw error if response is not ok
+    return response.json();
+}
+
+// Function to generate a new key
+async function generateNewKey(accountId) {
+    const response = await fetch(`/api/Taokhoanguoidung/${accountId}`, { method: 'POST' });
+    if (!response.ok) {
+        const result = await response.json();
+        alert(result.message || 'Có lỗi xảy ra khi cấp khóa.'); // Alert user with message or default error
+        throw new Error('Failed to generate new key.'); // Throw error if response is not ok
+    }
+    return response.json(); // Return response JSON
+}
+
+// Function to display an existing key
+function displayExistingKey(privateKey) {
+    privateKeyField.value = privateKey; // Show the private key in the input field
+    privateKeyField.hidden = false; // Show the private key field
+    privateKeyLabel.style.display = 'block'; // Show the private key label
+    keyActions.style.display = 'flex'; // Show the actions for downloading and copying keys
+    toggleKeyModal('block'); // Show modal to display the private key
+    keyLabel.style.display = 'none'; // Hide the KeyLabel
+}
+
+// Function to display a newly generated key
+function displayNewKey(privateKey) {
+    alert('Khóa đã được cấp thành công!'); // Key generation success
+    displayExistingKey(privateKey); // Display the private key
+    // Hide buttons after successful key generation
+    document.getElementById('generateKeyBtn').style.display = 'none'; // Hide the generate button
+    document.querySelector('.Xepngang button:last-child').style.display = 'none'; // Hide the cancel button
+    
+    // Store key-related information in localStorage for use in other parts of the application
+    // Assuming the certificate, mspId, and type are fetched from the server response
+    const { certificate, mspId, type } = fetchCertificateAndType(); // Define a function that returns these values
+    localStorage.setItem('certificate', certificate);
+    localStorage.setItem('mspId', mspId);
+    localStorage.setItem('type', type);
+}
+
+// Function to download the key as a .txt file
+function downloadKey() {
+    const key = privateKeyField.value; // Get the key from the input field
+    const blob = new Blob([key], { type: 'text/plain' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'private_key.txt'; // Specify the file name
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link); // Clean up the link element
+}
+
+// Function to copy the key to the clipboard
+function copyToClipboard() {
+    privateKeyField.select(); // Select the text in the input field
+    document.execCommand('copy'); // Copy the text to the clipboard
+    alert('Khóa đã được sao chép vào clipboard!'); // Alert the user
+}
+
+// Event listeners for opening and closing the modal
+openKeyModalButton.addEventListener('click', () => toggleKeyModal('block'));
+closeKeyModalButton.addEventListener('click', closeKeyModal);
+
+// Close the modal when clicking outside of it
+window.addEventListener('click', (event) => {
+    if (event.target === keyModal) {
+        closeKeyModal();
+    }
+});
+
+// Function to check public key and update UI accordingly
+async function checkPublicKey() {
+    const accountId = localStorage.getItem('accountId'); // Retrieve accountId from localStorage
+    if (!accountId) {
+        return alert('Account ID không tồn tại. Vui lòng đăng nhập lại.'); // Alert user if account ID is missing
+    }
+
+    try {
+        const response = await fetch(`/api/LayCA/${accountId}`);
+        const userData = await response.json();
+
+        if (response.ok) {
+            const keyCAField = document.getElementById('KeyCA');
+            if (userData?.publicKey) {
+                keyCAField.value = userData.publicKey; // Display the public key
+                keyCAField.hidden = false; // Show the public key field
+                document.getElementById('publicKeyStatus').style.display = 'none'; // Hide the no key message
+            } else {
+                keyCAField.hidden = true; // Hide the public key field
+                document.getElementById('publicKeyStatus').style.display = 'block'; // Show the no key message
+            }
+        } else {
+            alert(userData.message || 'Có lỗi xảy ra khi kiểm tra khóa công khai.'); // Alert user with message or default error
+        }
+    } catch (error) {
+        console.error('Error checking public key:', error);
+        alert('Có lỗi xảy ra khi kiểm tra khóa công khai. Vui lòng thử lại.'); // Error handling
+    }
+}
+
+// Event listener for checking the public key when creating a key
+document.getElementById('generateKeyBtn').addEventListener('click', checkPublicKey);
+

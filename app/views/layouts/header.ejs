@@ -17,13 +17,41 @@
                 <ul>
                     <li id="personalInfoButton">Thông tin cá nhân</li>
                     <li id="openPasswordModal" >Đổi Mật Khẩu</li>
-                    <li id="logoutButton">Đăng xuất</li>
+                    <li id="openKeyModal"> Tạo khóa</li>
+                    <li id="logoutButton"> Đăng xuất</li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
 
+<div id="keyModal" class="modal2">
+    <div class="modal-content">
+        <div style="display: flex;">
+            <h2>Cấp khóa cho người dùng</h2>
+            <span style="margin-left: 150px;" class="close" onclick="closeKeyModal()">&times;</span>
+        </div>
+            <p id="KeyLabel" style="display: none;">Bạn có muốn cấp khóa cho người dùng này không???</p> 
+        <input type="text" id="KeyCA" style="margin-top: -5px; font-weight: bold; width: 100%; padding: 10px; border: 2px solid #4CAF50; border-radius: 5px;" readonly hidden />
+        <!-- Message to indicate if the public key exists -->
+        <p id="publicKeyStatus" style="color: red; display: none; margin-top: 5px;">Chưa có khóa công khai.</p>
+             
+        <div class="Xepngang">
+            <button id="generateKeyBtn" onclick="generateUserKey()">Xác nhận cấp khóa</button>
+            <button style="margin-left:10px;" onclick="closeKeyModal()">Hủy</button>
+        </div>
+
+        <p id="privateKeyLabel" style="display: none; margin-top: -5px;">Khóa bí mật</p> <!-- Label for private key, initially hidden -->
+        <!-- Textbox để hiển thị khóa riêng -->
+        <input type="text" id="privateKeyField" style="margin-top: -5px; font-weight: bold; width: 100%; padding: 10px; border: 2px solid #4CAF50; border-radius: 5px;" readonly hidden /> <!-- Field to display the private key -->
+
+            <!-- Nút tải khóa về và sao chép -->
+            <div class="Xepngang" style="margin-top: 10px; display: none;" id="keyActions">
+                <button onclick="downloadKey()">Tải về (.txt)</button>
+                <button style="margin-left: 10px;" onclick="copyToClipboard()">Sao chép</button>
+        </div>
+    </div>
+</div>
 
 <div id="personalInfoModal" class="modal1">
     <div class="modal-content1">

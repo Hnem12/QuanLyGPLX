@@ -5,6 +5,8 @@ const { register } = require('../controllers/accountController');
 const { upload } = require('../controllers/accountController'); // Multer middleware
 const mongoose = require('mongoose');
 const LicenseHolderController = require('../controllers/ChusohuuGPLXController');
+const { addNewGPLXtoBlockchain, updateGPLXData, TruyvanData } = require('../controllers/ChusohuuGPLXController'); // Multer middleware
+const { queryGPLXData } = require('../blockchain/Truyvandulieu'); 
 
 // Lấy tất cả chủ sở hữu GPLX
 async function getLicenseHolders(req, res, targetStatus) {
@@ -265,6 +267,27 @@ router.get('/search/:idOrGPLX', async (req, res) => {
         console.error('Search error:', err);
         return res.status(500).json({ message: 'Lỗi khi tìm kiếm chủ sở hữu GPLX', error: err.message });
     }
+});
+router.post('/createData', addNewGPLXtoBlockchain);
+
+router.put('/updateData', updateGPLXData);
+
+router.post('/truyvanData', async (req, res) => {
+  try {
+      const { idSignature, MaGPLX } = req.body;
+
+      if (!idSignature || !MaGPLX) {
+          return res.status(400).json({ success: false, message: 'idSignature and MaGPLX are required' });
+      }
+
+      // Execute the blockchain query
+      const gplxData = await queryGPLXData(MaGPLX);
+
+      return res.status(200).json({ success: true, data: gplxData });
+  } catch (error) {
+      console.error('Error querying GPLX:', error);
+      return res.status(500).json({ success: false, message: 'Failed to query GPLX data' });
+  }
 });
 
 

@@ -373,3 +373,83 @@ input:focus {
 .custom-modal {
   display: none; /* Ẩn modal mặc định */
 }
+
+.modal2 {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgba(0, 0, 0, 0.8); /* Dark overlay with higher opacity */
+}
+
+.modal-content {
+  background-color: #fff; /* White background */
+  margin: 5% auto; /* Adjusted margin for better centering */
+  padding: 30px;
+  border-radius: 10px; /* Rounded corners */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  width: 90%; /* Full width of modal */
+  max-width: 600px; /* Maximum width for larger screens */
+}
+
+.close {
+  color: #ff3d3d; /* Change close button color to red */
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #c00000; /* Darker red on hover */
+  text-decoration: none;
+  cursor: pointer;
+}
+
+h2 {
+  color: #333; /* Darker text color for headings */
+  margin-bottom: 20px; /* Spacing below heading */
+}
+
+button {
+  background-color: #007bff; /* Primary button color */
+  color: white; /* Button text color */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px 20px; /* Padding for buttons */
+  cursor: pointer; /* Pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+
+button:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+#privateKeyField {
+  background-color: #f9f9f9; /* Màu nền sáng cho ô nhập liệu */
+  color: #333; /* Màu chữ tối để dễ đọc */
+  border: 2px solid #4CAF50; /* Màu viền xanh */
+  border-radius: 5px; /* Bo góc cho viền */
+  padding: 10px; /* Khoảng cách bên trong */
+  font-size: 16px; /* Kích thước chữ */
+  transition: border-color 0.3s; /* Hiệu ứng chuyển đổi khi hover */
+}
+
+#privateKeyField:focus {
+  border-color: #45a049; /* Thay đổi màu viền khi ô nhập liệu được chọn */
+  outline: none; /* Ẩn viền mặc định */
+}
+#privateKeyField:hover {
+  border-color: #45a049; /* Thay đổi màu viền khi di chuột qua */
+}
+
+.Xepngang {
+  display: flex; /* Sử dụng flexbox */
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  align-items: center; /* Căn giữa theo chiều dọc (nếu cần) */
+  margin-top: 20px; /* Khoảng cách phía trên nếu cần */
+}

@@ -34,8 +34,7 @@ async function fetchLicenseHolders() {
             <td>${holder.Giamdoc}</td>
             <td><span class="status">${holder.Status}</span></td>
             <td>
-              <button class="btn btn-warning btn-sm" onclick='openModal(${JSON.stringify(holder)})'>Sửa</button>
-              <button class="btn btn-danger btn-sm" onclick="deleteAccount('${holder._id}')">Xóa</button>
+             <button class="btn btn-danger btn-sm" onclick="deleteAccount('${holder._id}')">Kiểm định</button>
             </td>
           </tr>
         `;

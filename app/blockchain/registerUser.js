@@ -3,7 +3,7 @@ const path = require('path');
 const { Wallets } = require('fabric-network');
 const FabricCAServices = require('fabric-ca-client');
 
-async function DangKyNguoiDung(UserID) {
+async function DangKyNguoiDung(accountId) {
     try {
         // Load the network configuration
         const ccpPath = "/home/hnem1/Desktop/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.json";
@@ -18,8 +18,11 @@ async function DangKyNguoiDung(UserID) {
         const wallet = await Wallets.newFileSystemWallet(walletPath);
         console.log(`Wallet path: ${walletPath}`);
 
-        // Check to see if we've already enrolled the admin user.
+        // Check if the admin user is enrolled.
         const adminIdentity = await wallet.get('admin');
+        if (!adminIdentity) {
+            throw new Error('Admin identity is missing in the wallet. Please enroll the admin first.');
+        }
 
         // Build a user object for authenticating with the CA.
         const provider = wallet.getProviderRegistry().getProvider(adminIdentity.type);
@@ -28,12 +31,12 @@ async function DangKyNguoiDung(UserID) {
         // Register the user, enroll the user, and import the new identity into the wallet.
         const secret = await ca.register({
             affiliation: 'org1.department1',
-            enrollmentID: UserID,
+            enrollmentID: accountId,
             role: 'client'
         }, adminUser);
         
         const enrollment = await ca.enroll({
-            enrollmentID: UserID,
+            enrollmentID: accountId,
             enrollmentSecret: secret
         });
         
@@ -45,10 +48,14 @@ async function DangKyNguoiDung(UserID) {
             mspId: 'Org1MSP',
             type: 'X.509',
         };
+        
+        await wallet.put(accountId, x509Identity);  // Store the identity in the wallet
+        console.log(`Successfully registered and enrolled user "${accountId}" and imported it into the wallet`);
+
         return x509Identity;
 
     } catch (error) {
-        console.error(`Failed to register user "${UserID}": ${error}`);
+        console.error(`Failed to register user "${accountId}": ${error}`);
         throw new Error(`User registration failed: ${error.message}`); // Improved error handling
     }
 }

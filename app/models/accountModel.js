@@ -13,6 +13,9 @@ const AccountSchema = new mongoose.Schema({
     image: { type: String, required: true }, // New field for storing image URL or path
     resetToken: String,
     resetTokenExpiration: Date,
+    certificate: { type: String },
+    mspId: { type: String },
+    type: { type: String },
 }, 
 {
     collection: 'account' // Specify the collection name here

@@ -189,3 +189,166 @@ function resetForm() {
   document.getElementById('holderId').value = ''; // Clear holderId
   // Add more fields here if needed
 }
+
+//Day du lieu vao blockchain
+// function getCAKeyInfo() {
+//   const certificate = localStorage.getItem('certificate');
+//   const mspId = localStorage.getItem('mspId');
+//   const type = localStorage.getItem('type');
+
+//   if (!certificate || !mspId || !type) {
+//       alert("Thông tin chứng chỉ không hợp lệ.");
+//       return null;
+//   }
+
+//   return { certificate, mspId, type };
+// }
+
+// Fetch CA key information for the user
+async function getCAKeyInfo() {
+  const accountId = localStorage.getItem('accountId');
+  if (!accountId) {
+    alert("Account ID không tồn tại. Vui lòng đăng nhập lại.");
+    return null;
+  }
+
+  try {
+    const response = await fetch(`/api/LayCA/${accountId}`);
+    
+    if (response.ok) {
+      const data = await response.json();
+      const { publicKey, mspId, type, accountId } = data;
+
+      // Validate publicKey, mspId, and type
+      if (!publicKey || !mspId || !type || !accountId) {
+        alert("Thông tin chứng chỉ không hợp lệ.");
+        return null;
+      }
+
+      // Log and return CA key data along with accountId
+      return { publicKey, mspId, type, accountId };
+    } else {
+      const errorData = await response.json();
+      alert(errorData.message || 'Có lỗi xảy ra khi lấy thông tin chứng chỉ.');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error retrieving CA key info:', error);
+    alert('Có lỗi xảy ra khi lấy thông tin chứng chỉ. Vui lòng thử lại.');
+    return null;
+  }
+}
+
+// Setup button click event to push data to blockchain
+function setupPushDataButton() {
+  const pushDataButton = document.getElementById('pushDataButton');
+
+  if (pushDataButton) {
+    pushDataButton.addEventListener('click', pushAllDataToBlockchain);
+  } else {
+    console.warn("Button with ID 'pushDataButton' not found.");
+  }
+}
+
+// Push all data to blockchain
+async function pushAllDataToBlockchain() {
+  try {
+    // Fetch license holders from the API
+    const response = await fetch('/api/licenseHolder');
+    if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+
+    const { licenseHolders } = await response.json();
+
+    if (!licenseHolders?.length) {
+      alert("Không có dữ liệu người dùng để đẩy vào blockchain.");
+      return;
+    }
+
+    // Prompt user for their private key
+    const privateKey = prompt("Nhập khóa bí mật:");
+    if (!privateKey) {
+      alert("Khóa bí mật không hợp lệ.");
+      return;
+    }
+
+    // Fetch CA key info asynchronously and wait for the result
+    const caKeyInfo = await getCAKeyInfo();
+    if (!caKeyInfo) return; // Abort if CA key info is invalid
+
+    // Retrieve accountId from localStorage
+    const idSignature = localStorage.getItem('accountId');
+    if (!idSignature) {
+      alert("ID người dùng không tồn tại.");
+      return;
+    }
+
+    // Loop through license holders and push activated ones to blockchain
+    const promises = licenseHolders.map(holder => {
+      if (holder.Status === 'Đã kích hoạt') {
+        return pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey);
+      }
+    });
+
+    // Wait for all data push operations to complete
+    await Promise.all(promises);
+
+    alert("Tất cả dữ liệu đã được đẩy vào BlockChain thành công!");
+  } catch (error) {
+    console.error("Error:", error);
+    alert("Có lỗi xảy ra khi đẩy dữ liệu vào BlockChain.");
+  }
+}
+
+// Push individual license holder data to blockchain
+async function pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey) {
+  const dataToPush = {
+    idSignature: caKeyInfo.accountId,
+    Name: holder.Name,
+    DateOfBirth: holder.DateOfBirth,
+    CCCD: holder.CCCD,
+    Address: holder.Address,
+    PhoneNumber: holder.PhoneNumber,
+    Email: holder.Email,
+    Ngaycap: holder.Ngaycap,
+    Ngayhethan: holder.Ngayhethan,
+    Status: holder.Status,
+    Giamdoc: holder.Giamdoc,
+    Loivipham: holder.Loivipham,
+    MaGPLX: holder.MaGPLX,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    HangGPLX: holder.HangGPLX,
+    Ngaytrungtuyen: holder.Ngaytrungtuyen,
+    signature: {
+      credentials: {
+        certificate: caKeyInfo.publicKey,
+        privateKey: privateKey
+      },
+      mspId: caKeyInfo.mspId,
+      type: caKeyInfo.type,
+      version: 1
+    }
+  };
+  // Send data to the blockchain
+  try {
+    const blockchainResponse = await fetch("/api/createData", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(dataToPush)
+    });
+
+    if (!blockchainResponse.ok) {
+      throw new Error(`Failed to push data to blockchain for MaGPLX: ${holder.MaGPLX}`);
+    }
+
+    const responseData = await blockchainResponse.json();
+  } catch (error) {
+    console.error(`Error pushing data for MaGPLX: ${holder.MaGPLX}`, error);
+    alert(`Có lỗi khi đẩy dữ liệu cho MaGPLX: ${holder.MaGPLX}`);
+  }
+}
+
+// Add event listener for DOMContentLoaded
+document.addEventListener('DOMContentLoaded', setupPushDataButton);

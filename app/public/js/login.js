@@ -46,6 +46,11 @@ function login() {
             localStorage.setItem('accountId', data.userData._id); 
             localStorage.setItem('username', username); 
             localStorage.setItem('image', data.userData.image);
+            
+            // Lưu chứng chỉ, mspId, và type
+            localStorage.setItem('certificate', data.userData.certificate); // Lưu chứng chỉ
+            localStorage.setItem('mspId', data.userData.mspId); // Lưu mspId
+            localStorage.setItem('type', data.userData.type); // Lưu type
 
             // Chuyển hướng sau khi đăng nhập thành công
             window.location.href = "/trangchu";
@@ -58,6 +63,7 @@ function login() {
         alert("Đăng nhập thất bại. Vui lòng kiểm tra lại thông tin đăng nhập.");
     });
 }
+
 
 // Gán sự kiện cho nút đăng nhập
 $(document).ready(function() {

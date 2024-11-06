@@ -10,7 +10,9 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-
+const {DangKyNguoiDung} = require('../blockchain/registerUser');
+const { Wallets } = require('fabric-network'); // Import Wallets from fabric-network
+const { revokeUserKey } = require('../blockchain/deleteUserKey');
 
 const register = async (req, res) => {
     try {
@@ -52,16 +54,15 @@ const register = async (req, res) => {
     }
 };
 
-
 // Đăng nhập
 const postlogin = async (req, res, next) => {
     const { username, password } = req.body;
-
     try {
         // Tìm tài khoản theo tên đăng nhập
         const account = await AccountModel.findOne({ username });
 
         if (!account) {
+            console.error('Account not found for username:', username);
             return res.status(401).json({ message: 'Tài khoản không tồn tại hoặc không chính xác' });
         }
 
@@ -71,25 +72,35 @@ const postlogin = async (req, res, next) => {
             return res.status(401).json({ message: 'Mật khẩu không chính xác' });
         }
 
-        // Tạo JWT token
-        const token = jwt.sign({ _id: account._id }, 'Hnem', { expiresIn: '1d' });
+        // Tạo JWT token với username và role
+        const token = jwt.sign(
+            { _id: account._id, role: account.role }, // Thêm role vào token payload
+            'Hnem', // Replace 'Hnem' with your secret key
+            { expiresIn: '1d' }
+        );
 
         // Lưu token vào cookie
         res.cookie('token', token, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // 1 ngày
 
+        // Prepare user data for response
+        const userData = {
+            _id: account._id, // Lưu ý đổi thành _id để thống nhất với MongoDB
+            username: account.username,
+            role: account.role, // Include role in the response data
+            SDT: account.SDT,
+            Name: account.Name,
+            Address: account.Address,
+            image: account.image, // URL ảnh
+            Gender: account.Gender,
+            certificate: account.certificate, // Thêm trường certificate
+            mspId: account.mspId, // Thêm trường mspId
+            type: account.type // Thêm trường type
+        };
+
         // Trả về dữ liệu người dùng cho frontend
         return res.json({
             message: 'Đăng nhập thành công',
-            userData: {
-                _id: account._id, // Lưu ý đổi thành _id để thống nhất với MongoDB
-                username: account.username,
-                role: account.role,
-                SDT: account.SDT,
-                Name: account.Name,
-                Address: account.Address,
-                image: account.image, // URL ảnh
-                Gender: account.Gender
-            }
+            userData: userData
         });
     } catch (error) {
         console.error('Login error:', error);
@@ -98,10 +109,108 @@ const postlogin = async (req, res, next) => {
 };
 
 
-
 // Lấy trang đăng nhập
 const getlogin = (req, res, next) => {
     res.render('login');
+};
+
+const createKeyForUser = async (req, res) => {
+    const { accountId } = req.params;
+
+        // Validate the format of accountId
+        if (!mongoose.Types.ObjectId.isValid(accountId)) {
+            return res.status(400).json({ message: 'Invalid account ID format.' });
+        }
+
+        try {
+            // Check if the user already has a certificate
+            const existingUser = await AccountModel.findById(accountId);
+            if (existingUser && existingUser.certificate) {
+                return res.status(400).json({ message: 'Khóa đã tồn tại cho người dùng này.' });
+            }
+
+            // Generate user key using DangKyNguoiDung and retrieve the certificate info
+            const generatedKey = await DangKyNguoiDung(accountId);
+
+            // Prepare data to update MongoDB, excluding the private key
+            const userUpdateData = {
+                certificate: generatedKey.credentials.certificate,
+                mspId: generatedKey.mspId,
+                type: generatedKey.type,
+            };
+
+            // Update the user's account with the public key details
+            await AccountModel.updateOne({ _id: accountId }, { $set: userUpdateData });
+
+            // Send the CA information along with the private key to the client
+            res.status(200).json({
+                certificate: generatedKey.credentials.certificate,
+                mspId: generatedKey.mspId,
+                type: generatedKey.type,
+                privateKey: generatedKey.credentials.privateKey // Private key for immediate use
+            });
+        } catch (error) {
+            console.error(`Error creating keys for user with ID ${accountId}:`, error);
+            res.status(500).json({ message: 'Failed to create key', error: error.message });
+        }
+    };
+
+
+    const getPublicKeyForUser = async (req, res) => {
+        const { accountId } = req.params; // Lấy accountId từ tham số yêu cầu
+    
+        // Xác thực định dạng accountId
+        if (!mongoose.Types.ObjectId.isValid(accountId)) {
+            return res.status(400).json({ message: 'Invalid account ID format.' });
+        }
+    
+        try {
+            // Tìm kiếm người dùng theo accountId
+            const account = await AccountModel.findById(accountId);
+            
+            // Kiểm tra xem tài khoản có tồn tại không
+            if (!account) {
+                return res.status(404).json({ message: 'Account not found.' });
+            }
+    
+            // Kiểm tra xem tài khoản có khóa công khai không
+            if (!account.certificate) {
+                return res.status(404).json({ message: 'No public key found for this account.' });
+            }
+    
+            // Gửi khóa công khai và thông tin bổ sung về cho người dùng, cùng với accountId
+            res.status(200).json({ 
+                accountId: account._id,  // Trả về accountId
+                publicKey: account.certificate,
+                mspId: account.mspId,    // Giả sử mspId được lưu trong AccountModel
+                type: account.type       // Giả sử type được lưu trong AccountModel
+            });
+        } catch (error) {
+            res.status(500).json({ message: 'Failed to retrieve public key', error: error.message });
+        }
+    };
+    
+    
+
+const revokeKeyController = async (req, res) => {
+    try {
+        // Extract accountId and signature from the request body
+        const { accountId, signature } = req.body;
+
+        // Validate that required fields are provided
+        if (!accountId || !signature) {
+            return res.status(400).json({ success: false, message: "accountId and signature are required" });
+        }
+
+        // Attempt to revoke the user key
+        const result = await revokeUserKey(accountId, signature);
+
+        // Send success response with the revocation result
+        res.status(200).json({ success: true, message: result.message });
+    } catch (error) {
+        console.error('Error revoking user key:', error);
+        res.status(500).json({ success: false, message: "Failed to revoke user key" });
+    }
 };
 
 // Kiểm tra đăng nhập
@@ -518,6 +627,7 @@ module.exports = {
     register,
     getlogin,
     postlogin,
+    createKeyForUser,
     getAll,
     getId,
     updatedAccount,
@@ -526,7 +636,9 @@ module.exports = {
     deleteAccount,
     checklogin,
     checkadmin,
+    getPublicKeyForUser,
     phantrangAccount,
+    revokeKeyController,
     updatedthongtin,
     forgotPassword,
     resetPassword
