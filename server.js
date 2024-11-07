@@ -61,15 +61,15 @@ DangKyAdmin();
 
 
 app.get('/', (req, res) => {
-    res.render('login'); // Render the login page
+    res.render('Account/Login'); // Render the login page
 });
 
 app.get('/login', (req, res) => {
-    res.render('login'); // Render the login page
+    res.render('Account/Login'); // Render the login page
 });
 
 app.get('/register', (req, res) => {
-    res.render('register'); // Render the register page
+    res.render('Account/Register'); // Render the register page
 });
 
 app.post('/api/reissue-license', (req, res) => {
@@ -85,26 +85,26 @@ app.post('/api/reissue-license', (req, res) => {
 app.use(checkAuthentication); 
 
 app.get('/account',checkAuthentication, (req, res) => {
-    res.render('Account'); // Render the register page
+    res.render('Account/Account'); // Render the register page
 });
 
 app.get('/licenseHolder',checkAuthentication, (req, res) => {
-    res.render('licenseHolder'); // Render the register page
+    res.render('LicenseHolder/LicenseHolder'); // Render the register page
 
 });
 app.get('/ApprovelicenselHoder',checkAuthentication, (req, res) => {
-    res.render('ApprovelicenselHoder'); // Render the register page
+    res.render('LicenseHolder/ApprovelicenselHoder'); // Render the register page
 });
 
 app.get('/renewals',checkAuthentication, (req, res) => {
-    res.render('LicenseRenewal'); // Render the register page
+    res.render('LicenseHolder/LicenseRenewal'); // Render the register page
 });
 app.get('/renew',checkAuthentication, (req, res) => {
-    res.render('licenseRenew'); // Render the register page
+    res.render('LicenseHolder/LicenseRenew'); // Render the register page
 });
 
 app.get('/trangchu',checkAuthentication, (req, res) => {
-    res.render('index'); // Render the index page
+    res.render('Home/index'); // Render the index page
 });
 
 app.get('/api/account/', async (req, res) => {
@@ -118,7 +118,7 @@ app.get('/api/account/', async (req, res) => {
   });
   
   app.get('/truyxuatbanglaixeoto', (req, res) => {
-    res.render('truyxuatbanglaixeoto'); // Render the license retrieval page
+    res.render('Home/Truyxuatbanglaixeoto'); // Render the license retrieval page
 });
 app.get('/api/licenseHolder/search/:MaGPLX', async (req, res) => {
     try {

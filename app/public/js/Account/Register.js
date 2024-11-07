@@ -38,7 +38,7 @@ async function createAccount() {
 
         if (response.ok) {
             alert('Account created successfully');
-            window.location.href = '/api/account/login';
+            window.location.href = '/';
         } else {
             const errorData = await response.json();
             alert('Account creation error: ' + errorData.message);

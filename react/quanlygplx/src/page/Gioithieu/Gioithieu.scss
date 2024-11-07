@@ -1,0 +1,116 @@
+.service-page {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+
+.info-section {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+
+    .info-item {
+        text-align: center;
+
+        img {
+            width: 50px; // Chiều rộng hình ảnh
+            height: 50px; // Chiều cao hình ảnh
+            margin-bottom: 10px; // Khoảng cách dưới hình ảnh
+        }
+
+        p {
+            font-size: 14px; // Kích thước chữ cho mô tả icon
+        }
+    }
+}
+
+.services-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left; // Căn trái cho văn bản
+    }
+
+    th {
+        background-color: #f2f2f2;
+        font-weight: bold; // Làm chữ đậm
+    }
+}
+
+.sidebar {
+    margin-top: 20px;
+
+    h3 {
+        font-size: 18px;
+        margin-bottom: 10px;
+        font-weight: bold; // Làm chữ đậm
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+
+        li {
+            margin-bottom: 5px;
+            font-size: 14px; // Kích thước chữ cho danh sách
+        }
+    }
+}
+
+.info-section {
+    display: flex;
+    justify-content: space-around; // Giữ khoảng cách đều giữa các item
+    margin-bottom: 20px;
+
+    .info-item {
+        text-align: center;
+        width: 30%; // Thiết lập chiều rộng để tăng kích thước của các item
+        padding: 20px; // Khoảng đệm bên trong cho item
+
+        img {
+            width: 90px; // Chiều rộng hình ảnh
+            height: 90px; // Chiều cao hình ảnh
+            margin-bottom: 10px; // Khoảng cách dưới hình ảnh
+        }
+
+        p {
+            font-size: 14px; // Kích thước chữ cho mô tả icon
+            margin: 0; // Loại bỏ khoảng cách mặc định
+            line-height: 1.5; // Tăng khoảng cách giữa các dòng để dễ đọc
+        }
+    }
+}
+
+.breadcrumb {
+    background-color: #f8f9fa; // Màu nền cho breadcrumb
+    padding: 10px 15px; // Padding cho breadcrumb
+    border-radius: 5px; // Bo góc
+    font-size: 16px;
+    font-weight: bold; // Chữ đậm
+    margin-bottom: -10px; // Khoảng cách dưới breadcrumb
+    margin-top: -30px;
+    font-family: 'Times New Roman', Times, serif;
+    .breadcrumb-item {
+        display: inline-block;
+        margin-right: 10px;
+
+        &:not(:last-child)::after {
+            content: '>';
+            margin-left: 10px;
+        }
+    }
+
+    a {
+        color: #007bff; // Màu link
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline; // Hiệu ứng hover
+        }
+    }
+}

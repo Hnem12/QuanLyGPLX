@@ -5,16 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quản lý chủ sở hữu GPLX</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/LicenseHolder/index.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="icon" href="/uploads/h8.png" type="image/x-icon">
 </head>
 <body>
   
-  <%- include('layouts/header') %> 
+    <%- include('../layouts/header') %> 
 
-  <%- include('layouts/sidebar') %> 
+    <%- include('../layouts/sidebar') %> 
   
 <div class="Canngang">
   <!-- Main content -->
@@ -29,29 +29,13 @@
                     Trang chủ
                 </a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">Danh sách giấy phép lái xe hiện hành</li>
+            <li class="breadcrumb-item active" aria-current="page">Danh sách cấp lại giấy phép lái xe</li>
         </ol>
     </nav>
-    <h3>Danh sách giấy phép lái xe hiện hành</h3>
+    <h3>Danh sách cấp lại giấy phép lái xe</h3>
     <!-- Button to Open Modal -->
-<!-- Button to open the modal on the left -->
-<div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-    <button class="btn mb-3" 
-            style="background-color: #e2366f; color: white; font-size: 20px;" 
-            data-bs-toggle="modal" 
-            data-bs-target="#licenseHolderModal">
-        Thêm mới giấy phép lái xe
-    </button>
-
-    <!-- Button to push data into the blockchain on the right -->
-    <button id="pushDataButton" class="btn mb-3" 
-    style="background-color: #e2366f; color: white; font-size: 20px;" 
-    type="button">
-    Đẩy dữ liệu vào BlockChain
-</button>
-
-</div>
-
+<!-- Button to Open Modal -->
+<button class="btn mb-3" style="background-color: #e2366f; color: white; font-size: 20px;" data-bs-toggle="modal" data-bs-target="#licenseHolderModal"> Thêm giấy phép lái xe</button>
 
     <!-- Table -->
     <table class="table table-bordered">
@@ -90,14 +74,14 @@
   <div class="modal-dialog modal-lg">
       <div class="modal-content">
           <div class="modal-header">
-              <h5 class="modal-title" style="text-align: center; width: 100%;" id="licenseHolderModalLabel">Thêm Chủ Sở Hữu</h5>                      
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>    
+              <h5 class="modal-title" style="text-align: center; width: 100%;" id="licenseHolderModalLabel"> Cấp lại GPLX</Canvas></h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
           <div class="modal-body">
               <form id="licenseHolderForm">
                   <input type="hidden" id="holderId"> <!-- Hidden input for editing -->
                   <div class="modal-left">
-                      <div class="mb-3">    
+                      <div class="mb-3">
                           <label for="gplx" class="form-label">Mã GPLX</label>
                           <input type="text" class="form-control" id="gplx" required>
                       </div>
@@ -169,12 +153,10 @@
 </div>
 </div>
   
-
-
   <!-- Bootstrap JS (bundle includes Popper.js) -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-  <script src="/js/index.js"></script>
-  <script src="/js/licenselHoder.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.js"></script>
+  <script src="/js/LicenseHolder/LicenseRenew.js"></script>
 </body>
 </html>
