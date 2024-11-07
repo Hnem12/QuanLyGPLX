@@ -57,7 +57,6 @@ app.use('/api/search/', licenseHolderRoutes);
 app.use('/api', GiahanGPLXRouter);
 app.use('/api', CaplaiGPLXRouter);
 
-DangKyAdmin();
 
 
 app.get('/', (req, res) => {
