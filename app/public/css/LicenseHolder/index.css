@@ -6,6 +6,7 @@ body {
   flex-direction: column;
   overflow-y: hidden; /* Ẩn cuộn dọc cho body */
   font-family: 'Times New Roman', Times, serif, sans-serif;
+  background: #fff;
 }
 
 /* CSS cho phần nội dung chính */
@@ -23,50 +24,87 @@ body {
 
 /* Table styling */
 table {
-  width: 100%; /* Make the table take full width */
-  margin: 0 auto; /* Center the table horizontally */
-  border-collapse: collapse; /* Remove gaps between table cells */
-  table-layout: fixed; /* Fix the layout to distribute columns evenly */
+  width: 100%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  table-layout: fixed; /* Cố định độ rộng cột */
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ nhẹ cho bảng */
+  border: none; /* Loại bỏ viền bảng */
+
 }
 
-th, td {
-  text-align: center; /* Center the text inside the headers and cells */
-  padding: 10px; /* Add some padding for better spacing */
-  border: 1px solid #ddd; /* Optional: Add borders for visibility */
-  vertical-align: middle; /* Center content vertically */
+/* Table container */
+.table-container {
+  overflow-x: auto; /* Cuộn ngang nếu cần */
+  margin: 0; /* Loại bỏ khoảng cách thừa */
+  width: 100%; /* Đảm bảo container chiếm toàn bộ chiều rộng */
+  box-sizing: border-box; /* Đảm bảo padding không làm thay đổi kích thước */
+  border: none; /* Bỏ viền container */
+  padding: 0; /* Loại bỏ khoảng cách giữa container và bảng */
 }
 
-tr:nth-child(even) {
-  background-color: #f2f2f2; /* Optional: Add a background color to alternate rows */
+
+
+.table th, .table td {
+  text-align: center; /* Canh giữa nội dung */
+  vertical-align: middle; /* Canh giữa theo chiều dọc */
+  border: none; /* Loại bỏ viền ô */
+  padding: 10px; /* Khoảng cách giữa nội dung và viền */
 }
 
-tr:hover {
-  background-color: #ddd; /* Optional: Add hover effect */
+.table th {
+  background-color: #f0f0f0; /* Màu nền tiêu đề bảng */
+  font-weight: bold;
 }
+
+.table tr:nth-child(odd) {
+  background-color: #fff; /* Màu nền hàng lẻ */
+}
+
+.table tr:nth-child(even) {
+  background-color: #f9f9f9; /* Màu nền hàng chẵn */
+}
+
+.table tr:hover {
+  background-color: #f1f1f1; /* Hiệu ứng hover */
+}
+table.table thead th {
+  text-align: center;
+  padding: 8px;
+  background-color: #f0f0f0;
+  font-weight: bold;
+  border-bottom: 1px solid #aaa;
+}
+
+
 
 /* Status styling */
 .status {
-  background-color: #e6faf1; /* Màu nền nhạt */
-  color: #1a7431; /* Màu chữ xanh */
-  padding: 5px; /* Khoảng cách bên trong */
-  border-radius: 5px; /* Bo góc nhẹ */
-  text-align: center; /* Căn giữa */
-  border: 1px solid #1a7431; /* Đường viền xanh quanh chữ */
-  display: inline-block; /* Hiển thị dưới dạng khối nội tuyến để chỉ bao quanh chữ */
-  font-size: 14px; /* Kích thước chữ */
-  font-weight: bold; /* Chữ đậm */
+  background-color: #d0f0d4; /* Lighter green background */
+  color: #2a7f3f; /* Darker green text color */
+  padding: 10px; /* Padding inside */
+  border-radius: 5px; /* Rounded corners */
+  text-align: center; /* Center text */
+  display: inline-block; /* Inline block display to wrap around text */
+  font-size: 14px; /* Font size */
+  font-weight: bold; /* Bold text */
 }
+
+/* Status styling */
 .status1 {
-  background-color: #e6faf1; /* Màu nền nhạt */
-  color: #ff0505; /* Màu chữ xanh */
-  padding: 5px; /* Khoảng cách bên trong */
-  border-radius: 5px; /* Bo góc nhẹ */
-  text-align: center; /* Căn giữa */
-  border: 1px solid #ff3300; /* Đường viền xanh quanh chữ */
-  display: inline-block; /* Hiển thị dưới dạng khối nội tuyến để chỉ bao quanh chữ */
-  font-size: 14px; /* Kích thước chữ */
-  font-weight: bold; /* Chữ đậm */
+  background-color: #f8cdcd; /* Lighter green background */
+  color: #e60000;
+  padding: 10px; /* Padding inside */
+  border-radius: 5px; /* Rounded corners */
+  text-align: center; /* Center text */
+  display: inline-block; /* Inline block display to wrap around text */
+  font-size: 14px; /* Font size */
+  font-weight: bold; /* Bold text */
 }
+
+
+
 span {
   color: rgb(0, 0, 0);
 }
@@ -75,45 +113,190 @@ i {
   color: black;
 }
 
-/* Assuming the email column is the 6th column */
+/* Email column styling */
 .email {
-  display: inline-block; /* Make it inline-block to apply width */
-  max-width: 90px; /* Set a max width for the email */
-  white-space: nowrap; /* Prevent text from wrapping */
-  overflow: hidden; /* Hide overflow text */
-  text-overflow: ellipsis; /* Add ellipsis for overflow */
+  display: inline-block;
+  max-width: 90px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  text-align: left;
+  padding-right: 10px; /* Added padding */
 }
 
+/* Sidebar adjustments */
 .Canngang {
   margin-left: 205px; /* Margin for expanded sidebar */
-  transition: margin-left 0.3s ease; /* Smooth transition */
+  transition: margin-left 0.3s ease;
 }
-
+/* Pagination Controls Styling */
 #paginationControls {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px; /* Space between items */
+  gap: 10px;
   margin-top: 20px;
-  flex-wrap: wrap; /* Make it responsive */
+  flex-wrap: wrap;
 }
 
 #paginationControls button {
-  padding: 4px 8px; /* Increase button size for better clickability */
+  padding: 6px 12px;
   border: 1px solid #020202;
   background-color: #e2366f;
   cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
+  transition: all 0.3s ease-in-out;
   border-radius: 5px;
 }
 
 #paginationControls button:hover {
-  background-color: #a84d4d;
-  transform: scale(1.05); /* Subtle zoom effect */
+  background-color: #ff4500;
+  transform: scale(1.1);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 #paginationControls button:disabled {
-  background-color: #e2366f;
+  background-color: #ccc;
   cursor: not-allowed;
-  opacity: 0.6;
+  opacity: 0.7;
+}
+
+#paginationControls #pageInfo {
+  font-size: 16px;
+  color: #333;
+  font-weight: bold;
+}
+/* Checkbox adjustments */
+.row-checkbox, #select-all {
+  accent-color: steelblue;
+}
+
+.button-cell {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  padding: 0;
+}
+
+/* Button styling */
+.button-tacvu {
+  background: steelblue;
+  width: 35px;
+  height: 35px;
+  border: none;
+  border-radius: 3px; /* Tăng độ tròn */
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+  transition: all 0.3s ease-in-out;
+  min-width: 35px;
+  min-height: 35px; /* Ensure buttons maintain a minimum size */
+}
+
+.button-tacvu:hover {
+  background: darkorange;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Tăng bóng */
+  transform: scale(1.05); /* Phóng lớn hơn chút */
+}
+
+.column-width-tacvu { width: 65px; }
+.column-width-anh { width: 140px; }
+.column-width-thongtin { width: 170px; }
+.column-width-status1 { width: 130px; }
+
+.column-width-status { width: 120px; }
+.column-width-select { width: 94px; }
+.column-width-ngaysinh { width: 112px; }
+
+
+.hidden { display: none; }
+
+
+/* View button styling */
+.btn-view {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .main-content-wrapper {
+    flex-direction: column;
+    margin-left: 0;
+  }
+
+  #paginationControls button {
+    padding: 6px 10px; /* Adjust button size */
+  }
+
+  .table-container {
+    padding: 10px; /* Reduced padding */
+  }
+
+  .email {
+    max-width: 100px; /* Shorten email max width for mobile */
+  }
+
+  /* Optional: Reduce font sizes for smaller screens */
+  .table-container, .main-content-wrapper {
+    font-size: 0.9rem;
+  }
+}
+
+/* Aspect ratio handling */
+.aspect-ratio-16-9, .aspect-ratio-4-3 {
+  position: relative;
+  width: 100%;
+}
+
+.aspect-ratio-16-9 {
+  padding-top: 56.25%; /* 16:9 aspect ratio */
+}
+
+.aspect-ratio-4-3 {
+  padding-top: 75%; /* 4:3 aspect ratio */
+}
+
+.aspect-ratio-16-9 img, .aspect-ratio-4-3 img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.breadcrumb-item a {
+    color: #495057;
+}
+.breadcrumb-item.active {
+    font-weight: bold;
+}
+h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+}
+.table {
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+}
+.btn-primary {
+    background-color: #e2366f;
+    border-color: #e2366f;
+}
+.btn-primary:hover {
+    background-color: #c92a57;
+    border-color: #c92a57;
 }

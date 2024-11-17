@@ -1,0 +1,112 @@
+/* CSS cho phần body và sidebar */
+body {
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden; /* Ẩn cuộn dọc cho body */
+    font-family: 'Times New Roman', Times, serif, sans-serif;
+  }
+  
+  /* CSS cho phần nội dung chính */
+  .main-content-wrapper {
+    display: flex;
+    flex-grow: 1; 
+    overflow-y: auto; /* Cho phép cuộn dọc cho nội dung chính */
+  }
+  
+  .main-content {
+    flex-grow: 1;
+    padding: 2rem;
+    overflow-y: auto; /* Đảm bảo nội dung chính cuộn được nếu vượt quá chiều cao màn hình */
+  }
+  
+  /* Table styling */
+  table {
+    width: 100%; /* Make the table take full width */
+    margin: 0 auto; /* Center the table horizontally */
+    border-collapse: collapse; /* Remove gaps between table cells */
+    table-layout: fixed; /* Fix the layout to distribute columns evenly */
+  }
+  
+  th, td {
+    text-align: center; /* Center the text inside the headers and cells */
+    padding: 10px; /* Add some padding for better spacing */
+    border: 1px solid #ddd; /* Optional: Add borders for visibility */
+    vertical-align: middle; /* Center content vertically */
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f2f2f2; /* Optional: Add a background color to alternate rows */
+  }
+  
+  tr:hover {
+    background-color: #ddd; /* Optional: Add hover effect */
+  }
+  
+  
+  span {
+    color: rgb(0, 0, 0);
+  }
+  
+  
+  i {
+    color: black;
+  }
+  
+  
+  
+  
+  /* Assuming the email column is the 6th column */
+  .email {
+    display: inline-block; /* Make it inline-block to apply width */
+    max-width: 90px; /* Set a max width for the email */
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflow text */
+    text-overflow: ellipsis; /* Add ellipsis for overflow */
+  }
+  
+  .Canngang {
+    margin-left: 205px; /* Margin for expanded sidebar */
+    transition: margin-left 0.3s ease; /* Smooth transition */
+  }
+  
+  
+  
+  
+  /* Optional: Ensure icons are properly aligned */
+  .dropdown-item i {
+    margin-right: 8px; /* Spacing between icon and text */
+  }
+  
+  #paginationControls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px; /* Space between items */
+    margin-top: 20px;
+    flex-wrap: wrap; /* Make it responsive */
+  }
+  
+  #paginationControls button {
+    padding: 4px 8px; /* Increase button size for better clickability */
+    border: 1px solid #020202;
+    background-color: #e2366f;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    border-radius: 5px;
+  }
+  
+  #paginationControls button:hover {
+    background-color: #e2366f;
+    transform: scale(1.05); /* Subtle zoom effect */
+  }
+  
+  #paginationControls button:disabled {
+    background-color: #e2366f;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  .modal-dialog {
+    max-width: 80%; /* Adjust this to your preferred size */
+  }

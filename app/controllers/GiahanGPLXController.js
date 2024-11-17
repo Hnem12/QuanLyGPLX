@@ -1,186 +1,147 @@
-const LicenseRenewal = require('../models/GiahanGPLX');  // Import the LicenseRenewal model
+const { name } = require('ejs');
+const GiahanGPLXModel = require('../models/GiahanGPLX');
+const { check, validationResult } = require('express-validator');
+const { pushDataBlockchain } = require('../blockchain/Daydulieuvao');
+const moment = require('moment');
 
-// Controller for managing GPLX (driver's license)
-const LicenseController = {
+const addLicenseHolderRewals = async (req, res) => {
+    try {
+        // Validate input data
+        const { 
+            MaGPLX, Name, DateOfBirth, CCCD, Address, PhoneNumber, Email, Ngaycap, Ngayhethan, Status, Giamdoc, Ngaytrungtuyen, HangGPLX 
+        } = req.body;
 
-    // Add a new license
-    addLicense: async (req, res) => {
-        try {
-            const newLicense = new LicenseRenewal(req.body);
-            const savedLicense = await newLicense.save();
-            return res.status(201).json({
-                message: 'License added successfully!',
-                data: savedLicense
-            });
-        } catch (error) {
-            return res.status(500).json({
-                message: 'Error adding license',
-                error: error.message
+        // Handle image path (null if no file is uploaded)
+        const image = req.file ? req.file.path : null;
+
+        // Required fields validation
+        if (!MaGPLX || !Name || !DateOfBirth || !CCCD || !Address || !PhoneNumber || !Email || !Ngaycap || !Ngayhethan || !Giamdoc || !Ngaytrungtuyen || !HangGPLX) {
+            return res.status(400).json({
+                success: false,
+                message: 'Mã GPLX, tên, ngày sinh, CCCD, địa chỉ, số điện thoại, email, ngày cấp, ngày hết hạn, giám đốc, ngày trúng tuyển, và hạng GPLX là bắt buộc.'
             });
         }
-    },
-    
-    getLicenseRenewalByIdentifier: async (req, res) => {
-        try {
-            const { gplxCode, issuingPlace } = req.params; // Extract all parameters
-        
-            // Normalize parameters
-            const normalizedGplxCode = gplxCode.trim();
-            const normalizedIssuingPlace = issuingPlace.trim();
-        
-            // Find by LicenseNumber, IssuingCountry, and IssuingPlace (case insensitive)
-            const licenseRenewal = await LicenseRenewal.findOne({
-                LicenseNumber: normalizedGplxCode,
-                IssuingPlace: { $regex: new RegExp(`^${normalizedIssuingPlace}$`, 'i') } // Case insensitive
-            });
-    
-            if (!licenseRenewal) {
-                return res.status(404).json({ message: 'License renewal not found' });
-            }
-    
-            return res.status(200).json({
-                message: 'License renewal found',
-                data: licenseRenewal,
-            });
-        } catch (error) {
-            return res.status(500).json({
-                message: 'Error fetching license renewal',
-                error: error.message,
+                
+        // Check for existing license holder
+        const existingHolder = await GiahanGPLXModel.findOne({ MaGPLX });
+        if (existingHolder) {
+            return res.status(400).json({
+                success: false,
+                message: 'Mã GPLX đã tồn tại.'
             });
         }
-    },      
-    
-    getAllLicenseRenewals: async (req, res) => {
-        try {
-            // Get page number and limit from query parameters
-            const page = parseInt(req.query.page) || 1; // Default to page 1
-            const limit = parseInt(req.query.limit) || 5; // Default to limit of 10
-    
-            // Calculate the starting index for the query
-            const startIndex = (page - 1) * limit;
-    
-            // Fetch total count of license renewals
-            const totalCount = await LicenseRenewal.countDocuments();
-    
-            // Fetch license renewals with pagination
-            const licenseRenewals = await LicenseRenewal.find()
-                .skip(startIndex) // Skip documents to get to the starting index
-                .limit(limit); // Limit the number of documents returned
-    
-            // Check if any license renewals were found
-            if (!licenseRenewals || licenseRenewals.length === 0) {
-                return res.status(404).json({ message: 'No license renewals found' });
-            }
-    
-            // Calculate total pages
-            const totalPages = Math.ceil(totalCount / limit);
-    
-            // Send the response with the data
-            return res.status(200).json({
-                message: 'All license renewals retrieved successfully',
-                data: licenseRenewals,
-                pagination: {
-                    totalCount,
-                    totalPages,
-                    currentPage: page,
-                    limit,
-                }
-            });
-        } catch (error) {
-            // Log the error and return a 500 status
-            console.log(error.message);  // Log error for debugging
-            return res.status(500).json({
-                message: 'Error fetching license renewals',
-                error: error.message
-            });
-        }
-    },
-    
-    // Update a license by ID
-    updateLicense: async (req, res) => {
-        try {
-            const { id } = req.params; // ID từ URL
-            const { LicenseNumber, gender, nationality } = req.body; // Mã GPLX, giới tính và quốc tịch từ body nếu cần
 
-            // Tìm giấy phép theo ID hoặc mã GPLX
-            const updatedLicense = await LicenseRenewal.findOneAndUpdate(
-                { 
-                    $or: [
-                        { _id: id }, // Tìm theo ObjectId
-                        { LicenseNumber: LicenseNumber } // Tìm theo mã GPLX
-                    ] 
-                },
-                { gender, nationality, ...req.body }, // Cập nhật các trường mới
-                { new: true } // Trả về tài liệu đã cập nhật
-            );
-    
-            if (!updatedLicense) {
-                return res.status(404).json({
-                    message: 'License not found'
+        // Validate Email
+        const emailPattern = /.+\@.+\..+/;
+        if (!emailPattern.test(Email)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email không hợp lệ.'
+            });
+        }
+
+        // Validate Dates using moment.js
+        if (!moment(DateOfBirth, 'YYYY-MM-DD', true).isValid()) {
+            return res.status(400).json({
+                success: false,
+                message: 'Ngày sinh không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).'
+            });
+        }
+
+        const dateFields = [Ngaycap, Ngayhethan, Ngaytrungtuyen];
+        for (let field of dateFields) {
+            if (!moment(field, 'YYYY-MM-DD', true).isValid()) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Ngày ${field} không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).`
                 });
             }
-    
-            return res.status(200).json({
-                message: 'License updated successfully!',
-                data: updatedLicense
-            });
-        } catch (error) {
-            return res.status(500).json({
-                message: 'Error updating license',
-                error: error.message
-            });
         }
-    },
-    
-    // Delete a license by ID
-    deleteLicense: async (req, res) => {
-        try {
-            const licenseId = req.params.id;
-            const deletedLicense = await LicenseRenewal.findByIdAndDelete(licenseId);
-            if (!deletedLicense) {
-                return res.status(404).json({
-                    message: 'License not found'
-                });
-            }
-            return res.status(200).json({
-                message: 'License deleted successfully!',
-                data: deletedLicense
-            });
-        } catch (error) {
-            return res.status(500).json({
-                message: 'Error deleting license',
-                error: error.message
-            });
-        }
-    },
 
-    // Renew a license by adding a new renewal entry
-    renewLicense: async (req, res) => {
-        try {
-            const licenseId = req.params.id;
-            const renewalData = req.body;
+        // Create new LicenseHolder
+        const licenseHolderRewals = new GiahanGPLXModel({
+            MaGPLX,
+            Name,
+            DateOfBirth,
+            CCCD,
+            Address,
+            PhoneNumber,
+            Email,
+            Ngaycap,
+            Ngayhethan,
+            Status: 'Chờ kiểm định',
+            Giamdoc,
+            Ngaytrungtuyen,
+            HangGPLX,
+            image
+        });
 
-            // Find the license and add a renewal entry
-            const license = await LicenseRenewal.findById(licenseId);
-            if (!license) {
-                return res.status(404).json({
-                    message: 'License not found'
-                });
-            }
+        // Save to DB
+        const savedHolder = await licenseHolderRewals.save();
 
-            await license.addRenewal(renewalData);  // Add renewal data using the model's method
+        // Respond with success
+        res.status(201).json({
+            success: true,
+            message: 'Thêm GPLX thành công!',
+            data: savedHolder
+        });
 
-            return res.status(200).json({
-                message: 'License renewed successfully!',
-                data: license
-            });
-        } catch (error) {
-            return res.status(500).json({
-                message: 'Error renewing license',
-                error: error.message
-            });
-        }
+    } catch (err) {
+        // Handle errors
+        console.error('Error:', err);
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi khi tạo chủ sở hữu GPLX',
+            error: err.message
+        });
     }
 };
 
-module.exports = LicenseController;
+const getAllGiahanGPLX = async (req, res) => {
+    try {
+        // Get page and pageSize from query parameters, default to 1 and 5 if not provided
+        const page = parseInt(req.query.page) || 1;
+        const pageSize = parseInt(req.query.pageSize) || 5;
+        
+        // Calculate the number of records to skip based on the page
+        const skip = (page - 1) * pageSize;
+
+        // Count the total number of records
+        const totalRecords = await GiahanGPLXModel.countDocuments();
+
+        // Calculate the total number of pages
+        const totalPages = Math.ceil(totalRecords / pageSize);
+
+        // Fetch the records with pagination
+        const kiemdinhGPLXList = await GiahanGPLXModel.find()
+            .skip(skip)      // Skip the records based on the page number
+            .limit(pageSize) // Limit the records to the pageSize
+            .exec();
+
+        // If no records found
+        if (!kiemdinhGPLXList.length) {
+            return res.status(404).json({ message: 'Không có dữ liệu' });
+        }
+
+        // Return the results with pagination details
+        return res.status(200).json({
+            kiemdinhGPLXList,
+            totalRecords,
+            totalPages,
+            currentPage: page,
+            pageSize
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Có lỗi khi lấy dữ liệu kiểm định GPLX',
+            error: error.message
+        });
+    }
+};
+
+
+module.exports = {
+    addLicenseHolderRewals,
+    getAllGiahanGPLX
+}

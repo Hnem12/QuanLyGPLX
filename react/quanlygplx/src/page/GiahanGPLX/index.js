@@ -287,7 +287,7 @@ const clearFormData = () => {
 };
 
 
-            const handleCheckboxChange = (e) => {
+    const handleCheckboxChange = (e) => {
                 setIsChecked(e.target.checked); // Cập nhật state khi checkbox được chọn hoặc bỏ chọn
             };
     const handleFileChange = (info, field) => {
@@ -575,7 +575,7 @@ const clearFormData = () => {
           <input type='file' accept='image/*' style={{display: 'none'}} onChange={Themanhlensave} ref={selectedFile}></input>
         </td>
         <td>
-            <p>
+            <p> 
             Cho phép định dạng .pdf, .jpg, .jpeg, .docx, .png và dung lượng tối đa 1MB
             </p>
         </td>

@@ -13,7 +13,7 @@ const LicenseRenewalSchema = new Schema({
         type: Date,
         required: true
     },
-    CCCD: {  // National ID
+    CCCD: {
         type: String,
         required: true,
         unique: true,
@@ -24,24 +24,10 @@ const LicenseRenewalSchema = new Schema({
         required: true,
         trim: true
     },
-    Nationality: {
-        type: String,
-        required: true
-    },
-    Gender: {
-        type: String,
-        enum: ['Nam', 'Nữ'], // Có thể mở rộng thêm nếu cần
-        required: true
-    },
-    IssuingPlace: {  // Place of Issue
+    HangGPLX: {
         type: String,
         required: true,
-        trim: true
-    },
-    LicenseClass: {
-        type: String,
-        required: true,
-        enum: ['B1', 'B2', 'C', 'D', 'E'], // List of available license classes
+        enum: ['B1', 'B2', 'C', 'D', 'E'], // Danh sách các hạng GPLX có sẵn
         trim: true
     },
     PhoneNumber: {
@@ -55,45 +41,37 @@ const LicenseRenewalSchema = new Schema({
         trim: true,
         match: /.+\@.+\..+/
     },
-    IssueDate: {
+    Ngaycap: {
         type: Date,
         required: true
     },
-    ExpirationDate: {
+    Ngayhethan: {
+        type: Date,
+        required: true
+    },
+    Ngaytrungtuyen: {
         type: Date,
         required: true
     },
     Status: {
         type: String,
-        required: true,
-        enum: ['Chưa hết hạn', 'Đã hết hạn'],  // Status: Valid or Expired
-        default: 'Đã hết hạn'  // Default status is Valid
+        enum: ['Đã hết hạn', 'Chờ kiểm định', "Đã kích hoạt"],
+        default: 'Chờ kiểm định'
     },
-    LicenseNumber: {
+    Giamdoc: {
+        type: String,
+        required: true
+    },
+    Loivipham: {
+        type: String,
+        default: 'Không có'
+    },
+    MaGPLX: {
         type: String,
         required: true,
         unique: true
     },
-    Renewals: [
-        {
-            renewalDate: {
-                type: Date,
-                required: true
-            },
-            newExpirationDate: {
-                type: Date,
-                required: true
-            },
-            renewedBy: {
-                type: String,
-                required: true
-            },
-            comments: {
-                type: String,
-                default: 'Renewal successful'
-            }
-        }
-    ]
+    image: { type: String, required: true }  
 }, {
     collection: 'licenseRenewals',
     timestamps: true  // Automatically create createdAt and updatedAt fields

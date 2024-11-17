@@ -25,7 +25,8 @@ body {
     position: relative; /* Để định vị cho pseudo-element */
     flex: 1;
     padding: 82px; /* Thêm padding */
-    background-image: url('../uploads/h1.jpg');
+    background-image: url('/uploads/h1.jpg');
+
     background-size: cover; /* Phủ kín div */
     background-position: center; /* Căn giữa hình ảnh */
     color: rgb(255, 255, 255); /* Đổi màu chữ cho dễ nhìn */

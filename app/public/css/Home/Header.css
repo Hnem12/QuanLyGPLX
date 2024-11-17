@@ -1,5 +1,4 @@
 
-  /* Responsive thiết kế */
   @media (max-width: 768px) {
     .header {
       flex-direction: column;
@@ -42,7 +41,29 @@
 .title {
   font-size: 1.5em;
   margin-left: 10px;
+  color: white; 
+  text-decoration: none;
 }
+
+/* Liên kết sang trọng */
+/* Link đơn giản và tinh tế */
+.simple-elegant-link {
+  color: #ffffff; /* Màu trắng sang trọng */
+  text-decoration: none; /* Bỏ gạch chân */
+  font-weight: 500; /* Độ đậm vừa phải */
+  font-size: 1.8rem; /* Kích thước chữ lớn hơn một chút */
+  font-family: 'Playfair Display', serif; /* Font serif thanh lịch */
+  letter-spacing: 1px; /* Khoảng cách giữa các ký tự */
+  transition: color 0.3s ease; /* Hiệu ứng chuyển màu mượt */
+}
+
+.simple-elegant-link:hover {
+  color: #f0e68c; /* Chỉ thay đổi màu vàng nhạt khi hover */
+}
+
+
+
+
 
 .user-info {
   display: flex;
@@ -97,7 +118,7 @@
   }
   
   .username {
-    font-size: 16px; 
+    font-size: 18px; 
     font-weight: bold; 
     color: #ffffff; /* Màu sắc chữ */
     margin-left: 7px;
@@ -105,7 +126,6 @@
     padding: 5px; /* Khoảng cách xung quanh chữ */
     border-radius: 5px; /* Bo tròn góc */
     transition: transform 0.3s; /* Hiệu ứng khi hover */
-    margin-right: -10px;
 }
 
 .username:hover {
@@ -156,6 +176,7 @@
  .logout-button:hover {
         background-color: rgba(224, 35, 35, 0.849); /* Darken the button on hover */
       }/* Modal */
+
 .modal1 {
   display: none;
   position: fixed;
@@ -178,7 +199,7 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  margin-top: -5px;
+  margin-top: 10px;
 }
 
 /* Hai phần form cạnh nhau */
@@ -386,7 +407,7 @@ input:focus {
   background-color: rgba(0, 0, 0, 0.8); /* Dark overlay with higher opacity */
 }
 
-.modal-content {
+.modal-content2 {
   background-color: #fff; /* White background */
   margin: 5% auto; /* Adjusted margin for better centering */
   padding: 30px;
@@ -395,6 +416,7 @@ input:focus {
   width: 90%; /* Full width of modal */
   max-width: 600px; /* Maximum width for larger screens */
 }
+
 
 .close {
   color: #ff3d3d; /* Change close button color to red */

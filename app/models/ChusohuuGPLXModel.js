@@ -55,9 +55,8 @@ const ChusohuuGPLXSchema = new Schema({
     },
     Status: {
         type: String,
-        required: true,
-        enum: ['Đã kích hoạt', 'Chưa kích hoạt'],
-        default: 'Đã kích hoạt'
+        enum: ['Đã kích hoạt', 'Chờ kiểm định'],
+        default: 'Chờ kiểm định'
     },
     Giamdoc: {
         type: String,
@@ -71,7 +70,8 @@ const ChusohuuGPLXSchema = new Schema({
         type: String,
         required: true,
         unique: true
-    }
+    },
+    image: { type: String, required: true }     
 }, {
     collection: 'chusohuuGPLX',
     timestamps: true // Tự động tạo trường createdAt và updatedAt

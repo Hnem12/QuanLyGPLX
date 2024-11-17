@@ -3,30 +3,84 @@ const { Schema } = mongoose;
 
 const CaplaiGPLXSchema = new Schema(
   {
-    DateOfRenewal: {
-      type: Date,
-      required: true, // Date when the license was renewed
-    },
-    NewExpiryDate: {
-      type: Date,
-      required: true, // New expiry date for the renewed license
-    },
-    Lidocaplai: {
+    Name: {
       type: String,
-      required: true, // Reason for renewal (e.g., 'Bị hỏng')
-    },
-    chusohuuGPLX_id: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'ChusohuuGPLXModel',
-      required: true, // This field is required
-      index: true, // Indexing for performance
-    },
+      required: true,
+      trim: true
+  },
+  Lidocaplai: {
+    type: String,
+    trim: true
+  },
+  DateOfBirth: {
+      type: Date,
+      required: true
+  },
+  CCCD: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true
+  },
+  Address: {
+      type: String,
+      required: true,
+      trim: true
+  },
+  HangGPLX: {
+      type: String,
+      required: true,
+      enum: ['B1', 'B2', 'C', 'D', 'E'], // Danh sách các hạng GPLX có sẵn
+      trim: true
+  },
+  PhoneNumber: {
+      type: String,
+      required: true,
+      trim: true
+  },
+  Email: {
+      type: String,
+      required: true,
+      trim: true,
+      match: /.+\@.+\..+/
+  },
+  Ngaycap: {
+      type: Date,
+      required: true
+  },
+  Ngayhethan: {
+      type: Date,
+      required: true
+  },
+  Ngaytrungtuyen: {
+      type: Date,
+      required: true
+  },
+  Status: {
+      type: String,
+      enum: ['Đã kích hoạt', 'Chờ kiểm định'],
+      default: 'Chờ kiểm định'
+  },
+  Giamdoc: {
+      type: String,
+      required: true
+  },
+  Loivipham: {
+      type: String,
+      default: 'Không có'
+  },
+  MaGPLX: {
+      type: String,
+      required: true,
+      unique: true
+  },
+  image: { type: String, required: true } 
   },
   {
-    timestamps: true, // Automatically add createdAt and updatedAt timestamps
-    collection: 'caplaiGPLX', // Specify the collection name
+    timestamps: true,
+    collection: 'caplaiGPLX',
   }
 );
 
-const CaplaiGPLXModels = mongoose.model('CaplaiGPLX', CaplaiGPLXSchema);
+const CaplaiGPLXModels = mongoose.model('caplaiGPLX', CaplaiGPLXSchema);
 module.exports = CaplaiGPLXModels;

@@ -12,5 +12,5 @@
   border: 2px solid #e2366f; /* Màu và độ dày của khung */
   border-radius: 8px; /* Bo tròn nhẹ các góc của khung */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Bóng đổ nhẹ cho hình ảnh */
-  padding: 5px; /* Khoảng cách giữa ảnh và khung */
+  padding: 10px; /* Khoảng cách giữa ảnh và khung */
 }

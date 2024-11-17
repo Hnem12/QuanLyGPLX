@@ -5,6 +5,8 @@ let allAccounts = [];
 
 // Fetch accounts and initialize pagination
 async function fetchAccounts() {
+    const spinner = document.getElementById('loadingSpinner');
+    spinner.classList.remove('d-none');
     try {
         const response = await fetch('/api/account');
         allAccounts = await response.json();
@@ -13,7 +15,10 @@ async function fetchAccounts() {
         updatePageControls();
     } catch (error) {
         console.error('Failed to fetch accounts:', error);
-    }
+    }finally {
+        // Hide the loading spinner
+        spinner.classList.add('d-none');
+      }
 }
 
 // Display accounts for the current page

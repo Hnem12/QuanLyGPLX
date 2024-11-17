@@ -2,6 +2,10 @@ let currentPage = 1;
 const pageSize = 5; // Set the number of items per page
 
 async function fetchLicenseHolders() {
+  // Show the loading spinner
+  const spinner = document.getElementById('loadingSpinner');
+  spinner.classList.remove('d-none');
+
   try {
     const response = await fetch(`/api/licenseHolder?page=${currentPage}&pageSize=${pageSize}`);
     if (!response.ok) {
@@ -21,6 +25,7 @@ async function fetchLicenseHolders() {
             <td>${(currentPage - 1) * pageSize + index + 1}</td>
             <td>${holder.MaGPLX}</td>
             <td>${holder.Name}</td>
+            <td> <img src="${holder.image}" alt="Account Image" style="width: 125px; height: 100px;" /> </td>
             <td>${new Date(holder.DateOfBirth).toLocaleDateString()}</td>
             <td>${holder.CCCD}</td>
             <td>${holder.Address}</td>
@@ -30,12 +35,9 @@ async function fetchLicenseHolders() {
             </td>
             <td>${new Date(holder.Ngaycap).toLocaleDateString()}</td>
             <td>${new Date(holder.Ngayhethan).toLocaleDateString()}</td>
-            <td>${holder.HangGPLX}</td>
-            <td>${holder.Giamdoc}</td>
             <td><span class="status">${holder.Status}</span></td>
             <td>
-              <button class="btn btn-warning btn-sm" onclick='openModal(${JSON.stringify(holder)})'>Sửa</button>
-              <button class="btn btn-danger btn-sm" onclick="deleteAccount('${holder._id}')">Xóa</button>
+                <button class="button-tacvu" onclick='openModal(${JSON.stringify(holder)})'>Xem</button>
             </td>
           </tr>
         `;
@@ -51,6 +53,9 @@ async function fetchLicenseHolders() {
     document.getElementById('nextPage').disabled = currentPage === totalPages;
   } catch (error) {
     console.error('Failed to fetch license holders:', error);
+  } finally {
+    // Hide the loading spinner
+    spinner.classList.add('d-none');
   }
 }
 
@@ -72,28 +77,6 @@ document.getElementById('nextPage').addEventListener('click', () => {
   fetchLicenseHolders();
 });
 
-
-
-async function deleteAccount(id) {
-  if (confirm('Bạn có chắc chắn muốn xóa chủ sở hữu GPLX này không?')) {
-      try {
-          const response = await fetch(`/api/deleteLicenseHolder/${id}`, {
-              method: 'DELETE'
-          });
-
-          const result = await response.json();
-          if (response.ok) {
-              alert('Xóa thành công!');
-              location.reload(); // Tải lại trang sau khi xóa
-          } else {
-              alert(result.message || 'Lỗi khi xóa, vui lòng thử lại.');
-          }
-      } catch (error) {
-          console.error('Lỗi:', error);
-          alert('Lỗi khi gửi yêu cầu xóa. Vui lòng kiểm tra kết nối mạng.');
-      }
-  }
-}
 
 // Function to open modal for editing
 function openModal(holder) {
@@ -120,7 +103,7 @@ function openModal(holder) {
   document.getElementById('giamdoc').value = holder.Giamdoc || '';
 
   // Change modal title
-  document.getElementById('licenseHolderModalLabel').innerText = 'Sửa Chủ Sở Hữu';
+  document.getElementById('licenseHolderModalLabel').innerText = 'Thông tin Chủ Sở Hữu';
 
   // Show the modal using Bootstrap's Modal API
   const licenseHolderModal = new bootstrap.Modal(document.getElementById('licenseHolderModal'));
@@ -135,44 +118,62 @@ document.getElementById('licenseHolderForm').addEventListener('submit', async fu
   const method = id ? 'PUT' : 'POST'; // Determine if it's an update or add
   const url = id ? `/api/updateLicenseHolder/${id}` : '/api/addlicenseHolder'; // API endpoint
 
+  console.log('Form submission started');
+  console.log('Method:', method);
+  console.log('URL:', url);
+
   // Gather form data
-  const formData = {
-      MaGPLX: document.getElementById('gplx').value.trim(),
-      Name: document.getElementById('name').value.trim(),
-      DateOfBirth: document.getElementById('dob').value,
-      CCCD: document.getElementById('cccd').value.trim(),
-      Address: document.getElementById('address').value.trim(),
-      PhoneNumber: document.getElementById('phone').value.trim(),
-      Email: document.getElementById('email').value.trim(),
-      HangGPLX: document.getElementById('hangGPLX').value,
-      Ngaycap: document.getElementById('issueDate').value,
-      Ngayhethan: document.getElementById('expiryDate').value,
-      Ngaytrungtuyen: document.getElementById('ngaytrungtuyen').value,
-      Status: document.getElementById('status').value,
-      Giamdoc: document.getElementById('giamdoc').value.trim()
-  };
+  const formData = new FormData(); // Use FormData to send the image file
+
+  // Append form data
+  formData.append('MaGPLX', document.getElementById('gplx').value.trim());
+  formData.append('Name', document.getElementById('name').value.trim());
+  formData.append('DateOfBirth', document.getElementById('dob').value);
+  formData.append('CCCD', document.getElementById('cccd').value.trim());
+  formData.append('Address', document.getElementById('address').value.trim());
+  formData.append('PhoneNumber', document.getElementById('phone').value.trim());
+  formData.append('Email', document.getElementById('email').value.trim());
+  formData.append('HangGPLX', document.getElementById('hangGPLX').value);
+  formData.append('Ngaycap', document.getElementById('issueDate').value);
+  formData.append('Ngayhethan', document.getElementById('expiryDate').value);
+  formData.append('Ngaytrungtuyen', document.getElementById('ngaytrungtuyen').value);
+  formData.append('Status', document.getElementById('status').value);
+  formData.append('Giamdoc', document.getElementById('giamdoc').value.trim());
+
+  // Append image if available
+  const image = document.getElementById('image').files[0];
+  if (image) {
+    formData.append('image', image); // Add the image file to formData
+    console.log('Image selected:', image);
+  } else {
+    console.log('No image selected');
+  }
 
   // Send data to the server
   try {
+      console.log('Sending request to server...');
       const response = await fetch(url, {
           method: method,
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData)
+          body: formData // Send formData (including the image)
       });
 
+      console.log('Server response received');
       const result = await response.json();
+      console.log('Response data:', result);
+
       if (response.ok) {
           alert(result.message || 'Thao tác thành công!');
-          resetForm();
+          resetForm(); // Reset form after success
           location.reload(); // Reload the page after success
       } else {
           alert(result.message || 'Đã có lỗi xảy ra.');
       }
   } catch (error) {
+      console.error('Error occurred during fetch:', error);
       alert('Lỗi khi gửi dữ liệu. Vui lòng kiểm tra kết nối mạng.');
-      console.error('Error:', error);
   }
 });
+
 
 const licenseHolderModal = document.getElementById('licenseHolderModal'); // Make sure this is the correct modal ID
 licenseHolderModal.addEventListener('hidden.bs.modal', resetForm);
@@ -190,21 +191,7 @@ function resetForm() {
   // Add more fields here if needed
 }
 
-//Day du lieu vao blockchain
-// function getCAKeyInfo() {
-//   const certificate = localStorage.getItem('certificate');
-//   const mspId = localStorage.getItem('mspId');
-//   const type = localStorage.getItem('type');
-
-//   if (!certificate || !mspId || !type) {
-//       alert("Thông tin chứng chỉ không hợp lệ.");
-//       return null;
-//   }
-
-//   return { certificate, mspId, type };
-// }
-
-// Fetch CA key information for the user
+// Get Certificate Authority (CA) Key Info
 async function getCAKeyInfo() {
   const accountId = localStorage.getItem('accountId');
   if (!accountId) {
@@ -219,13 +206,13 @@ async function getCAKeyInfo() {
       const data = await response.json();
       const { publicKey, mspId, type, accountId } = data;
 
-      // Validate publicKey, mspId, and type
+      // Validate the essential fields
       if (!publicKey || !mspId || !type || !accountId) {
         alert("Thông tin chứng chỉ không hợp lệ.");
         return null;
       }
 
-      // Log and return CA key data along with accountId
+      // Return CA key data with accountId
       return { publicKey, mspId, type, accountId };
     } else {
       const errorData = await response.json();
@@ -242,7 +229,8 @@ async function getCAKeyInfo() {
 // Setup button click event to push data to blockchain
 function setupPushDataButton() {
   const pushDataButton = document.getElementById('pushDataButton');
-
+  
+  // Check if the button exists
   if (pushDataButton) {
     pushDataButton.addEventListener('click', pushAllDataToBlockchain);
   } else {
@@ -273,7 +261,10 @@ async function pushAllDataToBlockchain() {
 
     // Fetch CA key info asynchronously and wait for the result
     const caKeyInfo = await getCAKeyInfo();
-    if (!caKeyInfo) return; // Abort if CA key info is invalid
+    if (!caKeyInfo) {
+      alert("Thông tin khóa CA không hợp lệ.");
+      return; // Abort if CA key info is invalid
+    }
 
     // Retrieve accountId from localStorage
     const idSignature = localStorage.getItem('accountId');
@@ -282,11 +273,17 @@ async function pushAllDataToBlockchain() {
       return;
     }
 
-    // Loop through license holders and push activated ones to blockchain
-    const promises = licenseHolders.map(holder => {
-      if (holder.Status === 'Đã kích hoạt') {
-        return pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey);
-      }
+    // Filter activated license holders
+    const activatedHolders = licenseHolders.filter(holder => holder.Status === 'Đã kích hoạt');
+
+    if (activatedHolders.length === 0) {
+      alert("Không có người dùng đã kích hoạt.");
+      return;
+    }
+
+    // Push data to blockchain for each activated holder
+    const promises = activatedHolders.map(holder => {
+      return pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey);
     });
 
     // Wait for all data push operations to complete
@@ -303,32 +300,37 @@ async function pushAllDataToBlockchain() {
 async function pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey) {
   const dataToPush = {
     idSignature: caKeyInfo.accountId,
-    Name: holder.Name,
-    DateOfBirth: holder.DateOfBirth,
+    MaGPLX: holder.MaGPLX,
+    Tenchusohuu: holder.Name, // Assuming 'Name' refers to 'Tenchusohuu'
+    image: holder.image,
+    Ngaysinh: holder.DateOfBirth, // Assuming 'DateOfBirth' refers to 'Ngaysinh'
     CCCD: holder.CCCD,
+    Ngaytrungtuyen: holder.Ngaytrungtuyen,
+    Ngaycap: holder.Ngaycap,
+    Ngayhethan: holder.Ngayhethan,
+    
+    // Additional fields as needed
     Address: holder.Address,
     PhoneNumber: holder.PhoneNumber,
     Email: holder.Email,
-    Ngaycap: holder.Ngaycap,
-    Ngayhethan: holder.Ngayhethan,
     Status: holder.Status,
     Giamdoc: holder.Giamdoc,
     Loivipham: holder.Loivipham,
-    MaGPLX: holder.MaGPLX,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     HangGPLX: holder.HangGPLX,
-    Ngaytrungtuyen: holder.Ngaytrungtuyen,
+    
     signature: {
-      credentials: {
-        certificate: caKeyInfo.publicKey,
-        privateKey: privateKey
-      },
-      mspId: caKeyInfo.mspId,
-      type: caKeyInfo.type,
-      version: 1
+        credentials: {
+            certificate: caKeyInfo.publicKey,
+            privateKey: privateKey
+        },
+        mspId: caKeyInfo.mspId,
+        type: caKeyInfo.type,
+        version: 1
     }
   };
+
   // Send data to the blockchain
   try {
     const blockchainResponse = await fetch("/api/createData", {
@@ -344,6 +346,7 @@ async function pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey) 
     }
 
     const responseData = await blockchainResponse.json();
+    console.log(`Data pushed successfully for MaGPLX: ${holder.MaGPLX}`);
   } catch (error) {
     console.error(`Error pushing data for MaGPLX: ${holder.MaGPLX}`, error);
     alert(`Có lỗi khi đẩy dữ liệu cho MaGPLX: ${holder.MaGPLX}`);
@@ -352,3 +355,18 @@ async function pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey) 
 
 // Add event listener for DOMContentLoaded
 document.addEventListener('DOMContentLoaded', setupPushDataButton);
+
+function toggleFormInputs(disabled) {
+  const form = document.getElementById('licenseHolderForm');
+  const inputs = form.querySelectorAll('input, select, button');
+  inputs.forEach(input => {
+    input.disabled = disabled;
+  });
+}
+
+// Example usage
+document.addEventListener('DOMContentLoaded', () => {
+  // Call this function with 'true' to disable, 'false' to enable inputs
+  toggleFormInputs(true); // Disables all form inputs
+  // toggleFormInputs(false); // Enables all form inputs
+});

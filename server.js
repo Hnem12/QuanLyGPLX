@@ -14,7 +14,7 @@ const GiahanGPLXRouter = require('./app/routes/GiahanGPLX');
 const imageRoutes = require('./app/routes/imageRoute');
 const { DangKyAdmin } = require('./app/blockchain/enrollAdmin'); // Điều chỉnh đường dẫn
 const { queryGPLXData } = require('./app/blockchain/Truyvandulieu');
-
+const KiemdinhGPLXRoute = require('./app/routes/KiemdinhGPLXRoute') 
 
 
 const app = express();
@@ -40,7 +40,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Sử dụng router upload ảnh
 app.use('/api/images', imageRoutes);
-require('./auto-upload');
 
 // Use routes
 app.use('/api/account/', accountRouter);
@@ -54,11 +53,11 @@ app.use('/api/deleteLicenseHolder', licenseHolderRoutes);
 app.use('/api/', licenseHolderRoutes);
 app.use('/api/', accountRouter);
 app.use('/api/search/', licenseHolderRoutes);
-app.use('/api', GiahanGPLXRouter);
-app.use('/api', CaplaiGPLXRouter);
+app.use('/api/renewal', GiahanGPLXRouter);
+app.use('/api/Caplai', CaplaiGPLXRouter);
+app.use('/api/kiemdinh/', KiemdinhGPLXRoute);
 
 DangKyAdmin();
-
 
 app.get('/', (req, res) => {
     res.render('Account/Login'); // Render the login page
@@ -93,20 +92,22 @@ app.get('/licenseHolder',checkAuthentication, (req, res) => {
 
 });
 app.get('/ApprovelicenselHoder',checkAuthentication, (req, res) => {
-    res.render('LicenseHolder/ApprovelicenselHoder'); // Render the register page
+    res.render('LicenseHolder/ApprovelicenselHoder', { role: req.user.role }); // Render the register page
 });
 
 app.get('/renewals',checkAuthentication, (req, res) => {
-    res.render('LicenseHolder/LicenseRenewal'); // Render the register page
+    res.render('LicenseHolderRenewal/LicenseRenewal'); // Render the register page
 });
 app.get('/renew',checkAuthentication, (req, res) => {
-    res.render('LicenseHolder/LicenseRenew'); // Render the register page
-});
+    res.render('LicenseHolderRenew/LicenseRenew'); // Render the register page
+})
 
 app.get('/trangchu',checkAuthentication, (req, res) => {
     res.render('Home/index'); // Render the index page
 });
-
+app.get('/kiemdinhGPLX',checkAuthentication, (req, res) => {
+    res.render('Kiemdinh/KiemdinhGPLX'); // Render the index page
+});
 app.get('/api/account/', async (req, res) => {
     try {
       const accounts = await AccountModel.find(); // Lấy tất cả dữ liệu từ collection 'account'
@@ -138,8 +139,6 @@ app.get('/api/licenseHolder/search/:MaGPLX', async (req, res) => {
         return res.status(500).json({ message: 'Server error' });
     }
 });
-
-
 app.listen(3000, () => {
     console.log(`Server started on port 3000`);
 });

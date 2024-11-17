@@ -20,91 +20,99 @@ body {
   padding: 2rem;
   overflow-y: auto; /* Đảm bảo nội dung chính cuộn được nếu vượt quá chiều cao màn hình */
 }
+/* Table container */
+.table-container {
+  overflow-x: auto;
+  margin: 0 auto;
+  padding: 0;
+  width: 100%;
+}
 
 /* Table styling */
-table {
-  width: 100%; /* Make the table take full width */
-  margin: 0 auto; /* Center the table horizontally */
-  border-collapse: collapse; /* Remove gaps between table cells */
-  table-layout: fixed; /* Fix the layout to distribute columns evenly */
+table.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-th, td {
-  text-align: center; /* Center the text inside the headers and cells */
-  padding: 10px; /* Add some padding for better spacing */
-  border: 1px solid #ddd; /* Optional: Add borders for visibility */
-  vertical-align: middle; /* Center content vertically */
+/* Table header */
+table.table thead th {
+  text-align: center;
+  padding: 5px;
+  background-color: #f0f0f0;
+  font-weight: bold;
+  border-bottom: 1px solid #aaa;
 }
 
-tr:nth-child(even) {
-  background-color: #f2f2f2; /* Optional: Add a background color to alternate rows */
+/* Table body */
+table.table tbody td {
+  text-align: center;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
 }
 
-tr:hover {
-  background-color: #ddd; /* Optional: Add hover effect */
+/* Alternate row styling */
+table.table tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+table.table tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+/* Hover effect */
+table.table tbody tr:hover {
+  background-color: #e6f7ff;
+  transition: background-color 0.3s ease;
 }
 
 
 
 /* Status styling */
 .status {
-  background-color: #e6faf1; /* Màu nền nhạt */
-  color: #1a7431; /* Màu chữ xanh */
-  padding: 10px; /* Khoảng cách bên trong */
-  border-radius: 5px; /* Bo góc nhẹ */
-  text-align: center; /* Căn giữa */
-  border: 1px solid #1a7431; /* Đường viền xanh quanh chữ */
-  display: inline-block; /* Hiển thị dưới dạng khối nội tuyến để chỉ bao quanh chữ */
-  font-size: 14px; /* Kích thước chữ */
-  font-weight: bold; /* Chữ đậm */
+  background-color: #d0f0d4;
+  color: #2a7f3f;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
 }
 
-
-span {
-  color: rgb(0, 0, 0);
-}
-
-
-i {
-  color: black;
-}
-
-
-
-
-/* Assuming the email column is the 6th column */
+/* Email column styling */
 .email {
-  display: inline-block; /* Make it inline-block to apply width */
-  max-width: 90px; /* Set a max width for the email */
-  white-space: nowrap; /* Prevent text from wrapping */
-  overflow: hidden; /* Hide overflow text */
-  text-overflow: ellipsis; /* Add ellipsis for overflow */
+  display: inline-block;
+  max-width: 90px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* Sidebar */
 .Canngang {
-  margin-left: 205px; /* Margin for expanded sidebar */
-  transition: margin-left 0.3s ease; /* Smooth transition */
+  margin-left: 205px;
+  transition: margin-left 0.3s ease;
 }
 
 
 
 
-/* Optional: Ensure icons are properly aligned */
-.dropdown-item i {
-  margin-right: 8px; /* Spacing between icon and text */
-}
 
-#paginationControls {
+/* Pagination styling */
+.pagination {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 5px; /* Space between items */
+  gap: 5px;
   margin-top: 20px;
   flex-wrap: wrap; /* Make it responsive */
 }
 
 #paginationControls button {
-  padding: 4px 8px; /* Increase button size for better clickability */
+  padding: 4px 8px;
   border: 1px solid #020202;
   background-color: #e2366f;
   cursor: pointer;
@@ -113,8 +121,8 @@ i {
 }
 
 #paginationControls button:hover {
-  background-color: #e2366f;
-  transform: scale(1.05); /* Subtle zoom effect */
+  background-color: #c92a57; /* Hover effect */
+  transform: scale(1.05);
 }
 
 #paginationControls button:disabled {
@@ -122,6 +130,53 @@ i {
   cursor: not-allowed;
   opacity: 0.6;
 }
+
+/* Breadcrumb styling */
+.breadcrumb-item a {
+  color: #495057;
+}
+
+.breadcrumb-item.active {
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.table th, .table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.btn-primary {
+  background-color: #e2366f;
+  border-color: #e2366f;
+}
+
+.btn-primary:hover {
+  background-color: #c92a57;
+  border-color: #c92a57;
+}
+
+/* Modal Dialog */
 .modal-dialog {
-  max-width: 80%; /* Adjust this to your preferred size */
+  max-width: 80%;
+  margin: 0 auto; /* Căn giữa modal */
+}
+
+/* Responsive Design - Các thay đổi cho các màn hình nhỏ */
+@media (max-width: 768px) {
+  .main-content-wrapper {
+    flex-direction: column; /* Đảm bảo phần nội dung chính cuộn trên màn hình nhỏ */
+  }
+
+
+
+  #paginationControls {
+    flex-direction: column; /* Đặt các nút phân trang thành dọc trên màn hình nhỏ */
+    align-items: center;
+  }
 }

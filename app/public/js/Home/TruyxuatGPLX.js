@@ -20,15 +20,11 @@ async function fetchLicenseHolder() {
 
   try {
       let url = '';
-      
+
       // Construct URL based on selected search field
-      if (searchField === 'ID') {
-          url = `/api/licenseHolder/${encodeURIComponent(input)}`; // ID lookup
-      } else if (searchField === 'MaGPLX') {
-          url = `/api/licenseHolder/search/${encodeURIComponent(input)}`; // MaGPLX lookup
-      } else if (searchField === 'CCCD') {
-          url = `/api/licenseHolder/search/${encodeURIComponent(input)}`; // CCCD lookup
-      }
+      // In this case, just use input as part of the URL regardless of the searchField value
+      // because we're assuming that the API will work for all fields (ID, MaGPLX, CCCD)
+      url = `/api/truyvanGPLX/${encodeURIComponent(input)}`; // MaGPLX lookup directly in the URL
 
       // Fetch the data
       const response = await fetch(url);
@@ -39,7 +35,7 @@ async function fetchLicenseHolder() {
       }
 
       const data = await response.json();
-      const holder = data.holder || data; // Handle holder object
+      const holder = data.data || data; // Handle holder object
 
       // Check if holder data is returned
       if (holder && Object.keys(holder).length > 0) {
@@ -54,7 +50,6 @@ async function fetchLicenseHolder() {
 }
 
 
-
 function displayLicenseHolder(holder) {
   const detailDiv = document.getElementById('details');
 
@@ -66,12 +61,13 @@ function displayLicenseHolder(holder) {
 
   // Display the form only if there is valid data in the holder object
   detailDiv.innerHTML = `
+  <div style="display: flex; align-items: flex-start; gap: 20px;">
     <div class="holder-details">
       <h4 class="holder-title">Thông tin GPLX</h4>
       <div class="holder-info-container">
         <div class="holder-info-left">
-          <p><strong>Tên:</strong> ${holder.Name || ''}</p>
-          <p><strong>Ngày sinh:</strong> ${holder.DateOfBirth ? new Date(holder.DateOfBirth).toLocaleDateString() : ''}</p>
+          <p><strong>Tên:</strong> ${holder.Tenchusohuu || ''}</p>
+          <p><strong>Ngày sinh:</strong> ${holder.Ngaysinh ? new Date(holder.Ngaysinh).toLocaleDateString() : ''}</p>
           <p><strong>CCCD:</strong> ${holder.CCCD || ''}</p>
           <p><strong>Số điện thoại:</strong> ${holder.PhoneNumber || ''}</p>
           <p><strong>Email:</strong> ${holder.Email || ''}</p>
@@ -85,5 +81,10 @@ function displayLicenseHolder(holder) {
         </div>
       </div>
     </div>
-  `;
+    <div style="width:350px; margin-left:10px;">
+    <img src="${holder.image}" alt="Account Image" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" />
+</div>
+
+  </div>
+`;
 }
