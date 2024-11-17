@@ -57,7 +57,6 @@ app.use('/api/renewal', GiahanGPLXRouter);
 app.use('/api/Caplai', CaplaiGPLXRouter);
 app.use('/api/kiemdinh/', KiemdinhGPLXRoute);
 
-DangKyAdmin();
 
 app.get('/', (req, res) => {
     res.render('Account/Login'); // Render the login page
