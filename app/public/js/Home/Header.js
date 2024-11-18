@@ -433,3 +433,45 @@ async function checkPublicKey() {
 // Event listener for checking the public key when creating a key
 document.getElementById('generateKeyBtn').addEventListener('click', checkPublicKey);
 
+// Hàm để hiển thị thông báo với nội dung động
+function showNotification(message) {
+    const notificationContent = document.getElementById('notificationContent');
+    const notificationText = document.getElementById('notificationText');
+    
+    // Thay đổi nội dung thông báo
+    notificationText.innerHTML = message;
+    
+    // Hiển thị thông báo
+    notificationContent.style.display = 'block';
+    
+    // Thêm class để hiển thị chấm thông báo
+    const notificationBell = document.getElementById('notificationBell');
+    notificationBell.classList.add('new-notification');
+}
+
+// Khi người dùng nhấn vào chuông, ẩn hoặc hiện thông báo
+document.getElementById('notificationBell').addEventListener('click', () => {
+    const notificationContent = document.getElementById('notificationContent');
+    
+    // Kiểm tra trạng thái của thông báo
+    if (notificationContent.style.display === 'none' || notificationContent.style.display === '') {
+        notificationContent.style.display = 'block';
+    } else {
+        notificationContent.style.display = 'none';
+    }
+    
+    // Thêm hoặc loại bỏ chấm thông báo
+    const notificationBell = document.getElementById('notificationBell');
+    notificationBell.classList.toggle('new-notification');
+});
+
+// Ví dụ về việc gọi hàm showNotification khi có sự kiện
+setTimeout(() => {
+    showNotification('Thông báo mới từ hệ thống!');
+}, 3000); // Thông báo mới xuất hiện sau 3 giây
+
+// Giả sử khi người dùng làm một hành động nào đó, bạn có thể gọi:
+document.getElementById('someButton').addEventListener('click', () => {
+    showNotification('Bạn vừa nhấn nút!');
+});
+

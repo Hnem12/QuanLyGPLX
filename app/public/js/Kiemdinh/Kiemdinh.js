@@ -2,6 +2,8 @@ let currentPage = 1;
 const pageSize = 5; // Set the number of items per page
 
 async function fetchKiemDinhGPLX() {
+  const spinner = document.getElementById('loadingSpinner');
+  spinner.classList.remove('d-none');
   try {
     // Lấy dữ liệu từ API kiểm định GPLX
     const response = await fetch(`/api/kiemdinh/getall?page=${currentPage}&pageSize=${pageSize}`);
@@ -47,6 +49,9 @@ async function fetchKiemDinhGPLX() {
     document.getElementById('nextPage').disabled = currentPage === totalPages;
   } catch (error) {
     console.error('Failed to fetch license holders:', error);
+  }finally {
+    // Hide the loading spinner
+    spinner.classList.add('d-none');
   }
 }
 

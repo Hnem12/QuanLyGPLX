@@ -11,21 +11,34 @@
         </div>
     </div>
     <div class="user-info">
-        <span class="notification me-3 fs-5"> 🔔</span>
+        <span id="notificationBell" class="notification me-3 fs-5"> 🔔</span>
         <div class="username" id="usernameDisplay">  </div>
         <div class="avatar-container">
             <img id="avatarImage" src="./uploads/h6.jpg" alt="Avatar" style="cursor: pointer;">
             <div class="dropdown-menu">
                 <ul>
-                    <li id="personalInfoButton">Thông tin cá nhân</li>
-                    <li id="openPasswordModal" >Đổi Mật Khẩu</li>
-                    <li id="openKeyModal"> Tạo khóa</li>
-                    <li id="logoutButton"> Đăng xuất</li>
-                </ul>
+                    <li id="personalInfoButton">
+                      <i class="fas fa-user"></i> Thông tin cá nhân
+                    </li>
+                    <li id="openPasswordModal">
+                      <i class="fas fa-key"></i> Đổi Mật Khẩu
+                    </li>
+                    <li id="openKeyModal">
+                      <i class="fas fa-lock"></i> Tạo khóa
+                    </li>
+                    <li id="logoutButton">
+                      <i class="fas fa-sign-out-alt"></i> Đăng xuất
+                    </li>
+                  </ul>
+                  
             </div>
         </div>
     </div>
 </div>
+
+<div id="notificationContent" class="notification-content">
+    <p>Thông báo mới yêu cầu...</p>
+  </div>
 
 <div id="keyModal" class="modal2">
     <div class="modal-content2">

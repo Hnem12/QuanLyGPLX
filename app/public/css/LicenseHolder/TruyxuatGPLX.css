@@ -1,12 +1,4 @@
-  body {
-    height: 100vh;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    overflow-y: hidden; /* Ẩn cuộn dọc cho body */
-    font-family: 'Times New Roman', Times, serif, sans-serif;
-  }
-  
+
   h1 {
     color: #4CAF50;
   }
@@ -36,13 +28,11 @@
   .main-content-wrapper {
     display: flex;
     flex-grow: 1; 
-    overflow-y: auto; /* Cho phép cuộn dọc cho nội dung chính */
   }
   
   .main-content {
     flex-grow: 1;
     padding: 2rem;
-    overflow-y: auto; /* Đảm bảo nội dung chính cuộn được nếu vượt quá chiều cao màn hình */
   }
   
   #details {
@@ -171,14 +161,7 @@
     color: black;
   }
 /* CSS cho phần body và sidebar */
-body {
-height: 100vh;
-margin: 0;
-display: flex;
-flex-direction: column;
-overflow-y: hidden; /* Ẩn cuộn dọc cho body */
-font-family: 'Times New Roman', Times, serif, sans-serif;
-}
+
 
 /* CSS cho phần nội dung chính */
 .main-content-wrapper {
@@ -261,9 +244,36 @@ position: absolute; /* Use absolute positioning */
 top: 0;
 left: 220px;
 right: 0;
-height: 100vh;
-background-color: #f9f9f9;
+height: 85vh;
+background-color: #ffffff;
 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 z-index: 10; /* Lower than modal */
 font-size: 20px;
+}
+
+/* Style cho breadcrumb item */
+.breadcrumb-item {
+  display: inline-block; /* Hiển thị các phần tử theo dòng */
+  margin-right: 10px; /* Khoảng cách giữa các mục breadcrumb */
+  font-size: 20px; /* Kích thước chữ */
+  color: #555; /* Màu chữ */
+}
+
+/* Khi mục breadcrumb là active */
+.breadcrumb-item.active {
+  color: #4CAF50; /* Màu chữ cho mục active */
+  font-weight: bold; /* Đậm chữ cho mục active */
+}
+
+/* Thêm hiệu ứng hover cho các mục không phải active */
+.breadcrumb-item:hover {
+  color: #007bff; /* Màu khi hover qua các mục không phải active */
+  text-decoration: underline; /* Gạch dưới khi hover */
+}
+
+/* Thêm dấu phân cách giữa các mục breadcrumb */
+.breadcrumb-item + .breadcrumb-item::before {
+  content: " / "; /* Dấu phân cách giữa các mục */
+  margin: 0 5px; /* Khoảng cách giữa các dấu phân cách */
+  color: #888; /* Màu sắc cho dấu phân cách */
 }

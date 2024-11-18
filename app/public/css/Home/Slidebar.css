@@ -45,12 +45,12 @@ body {
 }
 
 .sidebar.collapsed .nav-link .icon {
-  font-size: 21px; /* Smaller icon size in collapsed state */
+  font-size: 20px; /* Smaller icon size in collapsed state */
 }
 
 /* On hover, increase text size */
 .sidebar .nav-link:hover span {
-  font-size: 21px; /* Increase text size on hover */
+  font-size: 20px; /* Increase text size on hover */
 }
 
 /* Hide text when collapsed */
@@ -112,11 +112,6 @@ span {
   color: rgb(0, 0, 0);
 }
 
-#toggleButton {
-  margin-left: 20px;
-  font-size: 13px;
-  cursor: pointer;
-}
 
 i {
   color: black;

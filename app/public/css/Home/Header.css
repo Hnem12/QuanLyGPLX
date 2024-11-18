@@ -62,9 +62,6 @@
 }
 
 
-
-
-
 .user-info {
   display: flex;
   align-items: center;
@@ -77,7 +74,6 @@
   margin-left: 10px;
 }
 
-.notification,
 .system-name {
   margin-right: 10px;
 }
@@ -133,33 +129,39 @@
 }
 .notification{
     margin-right: -10px;
-}
+}/* Style cho dropdown menu */
 .dropdown-menu {
-        display: none; /* Initially hidden */
-        position: absolute;
-        top: 100%; /* Position below the avatar */
-        right: 0;
-        background-color: white;
-        border: 1px solid #ccc;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        width: 150px;
-        z-index: 1000;
+  display: none; /* Initially hidden */
+  position: absolute;
+  top: 100%; /* Position below the avatar */
+  right: 0;
+  background-color: white;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: auto; /* Tự động điều chỉnh chiều rộng theo nội dung */
+  min-width: 120px; /* Thiết lập chiều rộng tối thiểu */
+  z-index: 1000;
 }
-    
+
+/* Danh sách các mục trong menu */
 .dropdown-menu ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
+  list-style: none;
+  padding: 0;
+  margin: 0;
 }
-    
+
+/* Cải thiện mục dropdown li */
 .dropdown-menu ul li {
-        padding: 10px;
-        cursor: pointer;
+  padding: 8px 12px; /* Điều chỉnh padding để làm menu nhỏ gọn hơn */
+  cursor: pointer;
+  font-size: 16px; /* Giảm kích thước font */
 }
-    
+
+/* Hiệu ứng hover khi di chuột qua các mục */
 .dropdown-menu ul li:hover {
-        background-color: #f0f0f0;
-    }
+  background-color: #f0f0f0;
+}
+
 .logout-button {
         display: inline-block; /* Make it behave like a button */ 
         background-color: #e2366f; /* Set the background color to red */
@@ -474,4 +476,39 @@ button:hover {
   justify-content: center; /* Căn giữa theo chiều ngang */
   align-items: center; /* Căn giữa theo chiều dọc (nếu cần) */
   margin-top: 20px; /* Khoảng cách phía trên nếu cần */
+}
+/* Style cho phần nội dung thông báo */
+.notification-content {
+  display: none; /* Ban đầu ẩn thông báo */
+  position: fixed; /* Cố định vị trí thông báo */
+  top: 50px; /* Khoảng cách từ trên cùng của màn hình */
+  right: 360px; /* Khoảng cách từ cạnh phải của màn hình */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  max-width: 300px;
+  border-radius: 8px;
+  z-index: 1000;
+}
+
+/* Khi chuông có thông báo mới, chấm đỏ sẽ hiển thị */
+.notification.new-notification::after {
+  content: '•';
+  color: red;
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 18px;
+}
+
+/* Khi nhấn vào chuông, phần thông báo sẽ hiển thị */
+#notificationBell:hover + .notification-content {
+  display: block; /* Hiển thị thông báo khi hover chuông */
+}
+
+ul li i {
+  margin-right: 8px; /* Khoảng cách giữa biểu tượng và văn bản */
+  color: #e2366f;    /* Màu sắc của biểu tượng */
+  font-size: 18px;   /* Kích thước của biểu tượng */
 }

@@ -71,12 +71,28 @@ table {
 }
 table.table thead th {
   text-align: center;
-  padding: 8px;
-  background-color: #f0f0f0;
+  padding: 5px;
+  background-color: #ececec;
   font-weight: bold;
   border-bottom: 1px solid #aaa;
 }
 
+/* Table body cell styling */
+table.table td {
+  text-align: center; /* Center text horizontally */
+  padding: 5px; /* Space inside each cell */
+  background-color: #f0f0f0; /* Light gray background */
+  border-bottom: 1px solid #aaa; /* Border below each cell */
+}
+
+/* Zebra striping: Alternate row background colors */
+table.table tbody tr:nth-child(odd) td {
+  background-color: #ffffff; /* Light gray for odd rows */
+}
+
+table.table tbody tr:nth-child(even) td {
+  background-color: #ececec; /* White for even rows */
+}
 
 
 /* Status styling */

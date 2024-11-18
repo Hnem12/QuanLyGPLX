@@ -41,34 +41,33 @@ table.table {
 table.table thead th {
   text-align: center;
   padding: 5px;
-  background-color: #f0f0f0;
+  background-color: #ececec;
   font-weight: bold;
   border-bottom: 1px solid #aaa;
 }
 
-/* Table body */
-table.table tbody td {
-  text-align: center;
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
+/* Table body cell styling */
+table.table td {
+  text-align: center; /* Center text horizontally */
+  padding: 5px; /* Space inside each cell */
+  background-color: #f0f0f0; /* Light gray background */
+  border-bottom: 1px solid #aaa; /* Border below each cell */
 }
 
-/* Alternate row styling */
-table.table tbody tr:nth-child(odd) {
-  background-color: #f9f9f9;
+/* Zebra striping: Alternate row background colors */
+table.table tbody tr:nth-child(odd) td {
+  background-color: #ffffff; /* Light gray for odd rows */
 }
 
-table.table tbody tr:nth-child(even) {
-  background-color: #ffffff;
+table.table tbody tr:nth-child(even) td {
+  background-color: #ececec; /* White for even rows */
 }
 
-/* Hover effect */
+/* Hover effect on table rows */
 table.table tbody tr:hover {
-  background-color: #e6f7ff;
-  transition: background-color 0.3s ease;
+  background-color: #e6f7ff; /* Light blue background on hover */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
 }
-
-
 
 /* Status styling */
 .status {
@@ -96,10 +95,6 @@ table.table tbody tr:hover {
   margin-left: 205px;
   transition: margin-left 0.3s ease;
 }
-
-
-
-
 
 /* Pagination styling */
 .pagination {
