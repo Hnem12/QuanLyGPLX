@@ -316,3 +316,131 @@ h3 {
     background-color: #c92a57;
     border-color: #c92a57;
 }
+
+.modal-key {
+  display: none; /* Hidden by default */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  z-index: 1050; /* Adjust layering for modal */
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto; /* Allow scrolling if modal content exceeds viewport height */
+  transition: all 0.3s ease; /* Smooth transition for visibility changes */
+}
+
+/* Modal content styling */
+.modal-content-key {
+  background-color: white;
+  border-radius: 10px;
+  padding: 25px;
+  width: 90%; /* Flexible width for responsiveness */
+  max-width: 480px; /* Set maximum width */
+  box-sizing: border-box; /* Ensure consistent sizing */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow */
+  animation: fadeIn 0.4s ease; /* Subtle fade-in animation */
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Modal header styling */
+.modal-content-key h2 {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+/* Input field styling */
+#privateKeyInput {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box; /* Ensure consistent width */
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth focus transition */
+}
+
+#privateKeyInput:focus {
+  border-color: #e2366f; /* Highlight color */
+  box-shadow: 0 0 8px rgba(226, 54, 111, 0.5); /* Soft glow */
+}
+
+/* Modal button container */
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 15px; /* Add space between buttons */
+}
+
+/* Button styling */
+.modal-buttons button {
+  flex: 1; /* Equal button widths */
+  padding: 12px 15px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Submit button styling */
+#submitKey {
+  background-color: #e2366f;
+  color: white;
+}
+
+#submitKey:hover {
+  background-color: #c92a57;
+}
+
+/* Cancel button styling */
+#cancelKey {
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+#cancelKey:hover {
+  background-color: #e1e1e1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .modal-content-key {
+    width: 95%; /* Increase width for smaller screens */
+    padding: 20px; /* Reduce padding for compact design */
+  }
+
+  .modal-buttons {
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 10px; /* Space between stacked buttons */
+  }
+}
+
+/* Bootstrap Modal Styling Fixes */
+.modal.fade {
+  z-index: 1051; /* Ensure Bootstrap modal's z-index is higher */
+}
+
+.modal-dialog {
+  z-index: 1052; /* Modal dialog appears above overlay */
+}

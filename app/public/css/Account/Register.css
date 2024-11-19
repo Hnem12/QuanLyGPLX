@@ -1,81 +1,115 @@
+/* General Styles */
 body {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: 'Times New Roman', Times, serif;  /* Switch to a more modern font */
     background-color: #f4f4f4;
     margin: 0;
     padding: 0;
-}
-
-.container {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 140vh;
+    height: 100vh;
+    box-sizing: border-box;
 }
 
+/* Container for centering content */
+.container {
+    margin-top: 180px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+/* Main Account Box */
 .account-box {
     display: flex;
-    width:800px;
+    max-width: 700px;  /* Adjusted width for a better layout */
+    width: 100%;
     background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;  /* More rounded corners for modern design */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    overflow: hidden;  /* Prevent content from overflowing */
+    transition: all 0.3s ease;
 }
 
+/* Left Section Styling */
 .left {
     flex: 1;
-    padding: 20px;
-    border-right: 1px solid #ccc;
+    padding: 30px;
+    background-color: #f9f9f9;  /* Slightly lighter background for the left side */
+    border-right: 1px solid #e0e0e0;
 }
 
 .left h1 {
-    font-size: 24px;
-    margin-bottom: 10px;
+    font-size: 28px;
+    color: #333;
+    margin-bottom: 20px;
 }
 
 .left p {
     font-size: 16px;
+    color: #555;
     line-height: 1.6;
 }
 
+/* Right Section Styling (Form) */
 .right {
     flex: 1;
-    padding: 20px;
+    padding: 30px;
 }
 
 .account-container {
-    max-width: 400px;
+    max-width: 450px;
     margin: auto;
 }
 
 .account-container h1 {
-    font-size: 20px;
+    font-size: 26px;
     margin-bottom: 20px;
     text-align: center;
+    color: #333;
 }
 
+/* Input Field Styles */
 .input-field {
     width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+    padding: 12px;
+    margin: 12px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;  /* Rounded corners for inputs */
     box-sizing: border-box;
+    font-size: 16px;
+    background-color: #fafafa;
+    transition: all 0.3s ease;
 }
 
+.input-field:focus {
+    border-color: #e2366f;  /* Change border color on focus */
+    background-color: #fff;
+    outline: none;
+}
+
+/* Button Styles */
 .btn-create {
     width: 100%;
-    padding: 10px;
-    background-color: #9b1cce;
+    padding: 12px;
+    background-color: #e2366f;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .btn-create:hover {
-    background-color: #7a0f9c;
+    background-color: #e2366f;
 }
 
+/* Account Options (links) */
 .account-options {
     text-align: center;
     margin-top: 20px;
@@ -85,9 +119,44 @@ body {
     display: inline-block;
     margin: 5px 0;
     color: #007bff;
+    font-size: 14px;
     text-decoration: none;
+    transition: all 0.3s ease;
 }
 
 .account-options a:hover {
     text-decoration: underline;
+    color: #0056b3;  /* Change link color on hover */
+}
+
+/* Media Query for Mobile View */
+@media (max-width: 768px) {
+    .account-box {
+        flex-direction: column;  /* Stack left and right sections vertically */
+        max-width: 100%;
+    }
+
+    .left, .right {
+        padding: 20px;  /* Less padding on mobile */
+    }
+
+    .account-container h1 {
+        font-size: 24px;  /* Slightly smaller font size for mobile */
+    }
+
+    .input-field {
+        padding: 10px;  /* Adjust padding for smaller screens */
+    }
+
+    .btn-create {
+        padding: 14px;
+        font-size: 14px;  /* Slightly smaller font size */
+    }
+
+    .account-options a {
+        font-size: 12px;  /* Adjust link size for mobile */
+    }
+}
+label{
+    font-size: 19px;
 }

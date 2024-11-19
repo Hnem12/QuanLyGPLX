@@ -81,6 +81,17 @@ function openModal(holder) {
     return;
   }
 
+  // Close any previously open modals (if any)
+  const existingLicenseHolderModal = bootstrap.Modal.getInstance(document.getElementById('licenseHolderModal'));
+  if (existingLicenseHolderModal) {
+    existingLicenseHolderModal.hide();
+  }
+
+  const existingSecretKeyModal = document.getElementById('secretKeyModal');
+  if (existingSecretKeyModal && existingSecretKeyModal.style.display === 'flex') {
+    existingSecretKeyModal.style.display = 'none';
+  }
+
   // Populate the modal fields with holder data
   document.getElementById('holderId').value = holder._id; // Set the ID for updating
   document.getElementById('gplx').value = holder.MaGPLX || '';
@@ -103,7 +114,6 @@ function openModal(holder) {
   // Log holder._id to see the data
   console.log("Holder ID being passed:", holder._id);
 
-  // Call the API directly with the holder._id (id)
   // Show the modal using Bootstrap's Modal API
   const licenseHolderModal = new bootstrap.Modal(document.getElementById('licenseHolderModal'));
   licenseHolderModal.show();
@@ -111,6 +121,76 @@ function openModal(holder) {
   // Setup the push data button with the holder's ID
   setupPushDataButton(holder._id);
 }
+
+// Function to show the secret key modal (with existing modal close logic)
+function showModal() {
+  const existingLicenseHolderModal = bootstrap.Modal.getInstance(document.getElementById('licenseHolderModal'));
+  if (existingLicenseHolderModal) {
+    existingLicenseHolderModal.hide();
+  }
+
+  const modal = document.getElementById('secretKeyModal');
+  // Show the private key modal
+  if (modal) {
+    modal.style.display = 'flex';
+  }
+}
+
+function hideModal() {
+  const modal = document.getElementById('secretKeyModal');
+
+  // Hide the private key modal
+  if (modal) {
+    modal.style.display = 'none';
+  }
+  resetModalForm();
+}
+
+function resetModalForm() {
+  // Reset all input fields inside the modal
+  const modalInputs = document.querySelectorAll('#secretKeyModal input');
+  modalInputs.forEach(input => {
+    input.value = ''; // Reset each input field
+  });
+
+  // If you have other elements like textareas or select elements, reset them similarly:
+  const modalSelects = document.querySelectorAll('#secretKeyModal select');
+  modalSelects.forEach(select => {
+    select.selectedIndex = 0; // Reset select to the first option
+  });
+}
+
+// Cập nhật hàm setupPushDataButton
+function setupPushDataButton() {
+  const pushDataButton = document.getElementById('pushDataButton1');
+  if (pushDataButton) {
+    console.log('Button exists, adding event listener.');
+
+    // Lắng nghe sự kiện click và hiển thị modal
+    pushDataButton.addEventListener('click', showModal); // Chỉ hiển thị modal
+  } else {
+    console.warn("Button with ID 'pushDataButton1' not found.");
+  }
+}
+
+// Xử lý khi nhấn nút xác nhận trong modal
+document.getElementById('submitKey').addEventListener('click', async function () {
+  const holderId = document.getElementById('holderId').value.trim(); // Lấy giá trị holderId
+  const privateKey = document.getElementById('privateKeyInput').value.trim(); // Lấy giá trị khóa bí mật
+
+  // Kiểm tra các trường nhập
+  if (!holderId || !privateKey) {
+    alert('ID người dùng hoặc khóa bí mật không hợp lệ.');
+    return;
+  }
+
+  hideModal(); // Ẩn modal sau khi xác nhận
+  await pushAllDataToBlockchain(holderId, privateKey); // Truyền holderId và privateKey vào hàm
+});
+
+// Xử lý khi nhấn nút hủy trong modal
+document.getElementById('cancelKey').addEventListener('click', hideModal);
+
 
 
 // Get Certificate Authority (CA) Key Info
@@ -148,23 +228,9 @@ async function getCAKeyInfo() {
     return null;
   }
 }
-function setupPushDataButton() {
-  const pushDataButton = document.getElementById('pushDataButton1');
-  if (pushDataButton) {
-    console.log('Button exists, adding event listener.');
 
-    // Lấy ID từ modal và truyền vào hàm pushAllDataToBlockchain
-    pushDataButton.addEventListener('click', () => {
-      const holderId = document.getElementById('holderId').value;  // Lấy ID từ modal
-      console.log('holderId:', holderId);  // Kiểm tra giá trị holderId
-      pushAllDataToBlockchain(holderId);  // Truyền ID vào đây
-    });
-  } else {
-    console.warn("Button with ID 'pushDataButton1' not found.");
-  }
-}
 // Fetch license holders from the API using the passed 'holderId'
-async function pushAllDataToBlockchain(holderId) {
+async function pushAllDataToBlockchain(holderId, privateKey) {
   try {
     // Fetch license holders from the API using the passed 'holderId'
     const response = await fetch(`/api/kiemdinh/getdata/${holderId}`);
@@ -197,12 +263,7 @@ async function pushAllDataToBlockchain(holderId) {
 
     console.log('Activated Holders:', activatedHolders);
 
-    // Nhập khóa bí mật của người dùng
-    const privateKey = prompt("Nhập khóa bí mật:");
-    if (!privateKey) {
-      alert("Khóa bí mật không hợp lệ.");
-      return;
-    }
+
 
     // Lấy thông tin khóa CA
     const caKeyInfo = await getCAKeyInfo();
@@ -222,9 +283,8 @@ async function pushAllDataToBlockchain(holderId) {
     const promises = activatedHolders.map(holder => {
       return pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey);
     });
-
     await Promise.all(promises);
-    alert("Tất cả dữ liệu đã được đẩy vào BlockChain thành công!");
+    alert("Dữ liệu đã được đẩy vào BlockChain thành công!");
   } catch (error) {
     console.error("Error:", error);
     alert("Có lỗi xảy ra khi đẩy dữ liệu vào BlockChain.");

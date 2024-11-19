@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quản lý chủ sở hữu GPLX</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/LicenseHolder/index.css">
+  <link rel="stylesheet" href="css/Kiemdinh/Kiemdinh.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="icon" href="/uploads/h8.png" type="image/x-icon">
@@ -75,6 +75,20 @@
     </div>
   </div>
   
+  <div id="secretKeyModal" class="modal-key">
+    <div class="modal-content-key">
+      <h2>Nhập khóa bí mật</h2>
+      <input 
+        type="password" 
+        id="privateKeyInput" 
+        placeholder="Nhập khóa bí mật tại đây" 
+        style="width: 100%; padding: 10px; margin-top: 10px;" />
+      <div class="modal-buttons">
+        <button id="submitKey">Xác nhận</button>
+        <button id="cancelKey">Hủy</button>
+      </div>
+    </div>
+  </div>
   
 
 <!-- Modal for adding and editing user -->

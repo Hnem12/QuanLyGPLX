@@ -189,10 +189,7 @@ function resetForm() {
   // If you want to clear specific fields or reset to specific values, you can do so here
   document.getElementById('holderId').value = ''; // Clear holderId
   // Add more fields here if needed
-}
-
-// Get Certificate Authority (CA) Key Info
-async function getCAKeyInfo() {
+}async function getCAKeyInfo() {
   const accountId = localStorage.getItem('accountId');
   if (!accountId) {
     alert("Account ID không tồn tại. Vui lòng đăng nhập lại.");
@@ -201,92 +198,134 @@ async function getCAKeyInfo() {
 
   try {
     const response = await fetch(`/api/LayCA/${accountId}`);
-    
     if (response.ok) {
-      const data = await response.json();
-      const { publicKey, mspId, type, accountId } = data;
+      try {
+        const data = await response.json();
+        const { publicKey, mspId, type, accountId: fetchedAccountId } = data;
 
-      // Validate the essential fields
-      if (!publicKey || !mspId || !type || !accountId) {
-        alert("Thông tin chứng chỉ không hợp lệ.");
+        if (!publicKey || !mspId || !type || !fetchedAccountId) {
+          alert("Thông tin chứng chỉ không hợp lệ.");
+          return null;
+        }
+
+        return { publicKey, mspId, type, accountId: fetchedAccountId };
+      } catch (parseError) {
+        console.error("Error parsing JSON response:", parseError);
+        alert("Định dạng phản hồi từ máy chủ không hợp lệ.");
         return null;
       }
-
-      // Return CA key data with accountId
-      return { publicKey, mspId, type, accountId };
     } else {
       const errorData = await response.json();
-      alert(errorData.message || 'Có lỗi xảy ra khi lấy thông tin chứng chỉ.');
+      alert(errorData.message || "Có lỗi xảy ra khi lấy thông tin chứng chỉ.");
       return null;
     }
   } catch (error) {
-    console.error('Error retrieving CA key info:', error);
-    alert('Có lỗi xảy ra khi lấy thông tin chứng chỉ. Vui lòng thử lại.');
+    console.error("Error retrieving CA key info:", error);
+    alert("Có lỗi xảy ra khi lấy thông tin chứng chỉ. Vui lòng thử lại.");
     return null;
   }
 }
 
-// Setup button click event to push data to blockchain
-function setupPushDataButton() {
-  const pushDataButton = document.getElementById('pushDataButton');
+function showSecretKeyModal() {
+  const modal = document.getElementById("secretKeyModal");
+  modal.style.display = "flex";
+}
+
+function hideSecretKeyModal() {
+  const modal = document.getElementById("secretKeyModal");
   
-  // Check if the button exists
+  // Reset the form inside the modal
+  const privateKeyInput = document.getElementById("privateKeyInput");
+  if (privateKeyInput) {
+    privateKeyInput.value = ""; // Clear the input value
+  }
+
+  modal.style.display = "none";
+}
+
+function setupPushDataButton() {
+  const pushDataButton = document.getElementById("pushDataButton");
+
   if (pushDataButton) {
-    pushDataButton.addEventListener('click', pushAllDataToBlockchain);
+    pushDataButton.addEventListener("click", async () => {
+      console.log("Push Data Button clicked");
+      await pushAllDataToBlockchain();
+    });
   } else {
     console.warn("Button with ID 'pushDataButton' not found.");
   }
 }
 
-// Push all data to blockchain
+async function waitForPrivateKeyInput() {
+  return new Promise((resolve, reject) => {
+    const submitButton = document.getElementById("submitKey");
+    const cancelButton = document.getElementById("cancelKey");
+    const privateKeyInput = document.getElementById("privateKeyInput");
+
+    submitButton.replaceWith(submitButton.cloneNode(true));
+    cancelButton.replaceWith(cancelButton.cloneNode(true));
+
+    const newSubmitButton = document.getElementById("submitKey");
+    const newCancelButton = document.getElementById("cancelKey");
+
+    newSubmitButton.addEventListener("click", () => {
+      const privateKey = privateKeyInput.value;
+      if (!privateKey) {
+        alert("Khóa bí mật không hợp lệ.");
+        reject("Private key is invalid");
+        return;
+      }
+      hideSecretKeyModal();
+      resolve(privateKey);
+    });
+
+    newCancelButton.addEventListener("click", () => {
+      console.log("Private key input canceled.");
+      hideSecretKeyModal();
+      reject("Private key input was canceled");
+    });
+  });
+}
+
 async function pushAllDataToBlockchain() {
   try {
-    // Fetch license holders from the API
-    const response = await fetch('/api/licenseHolder');
+    const response = await fetch(`/api/licenseHolder?page=${currentPage}&pageSize=${pageSize}`);
     if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
 
     const { licenseHolders } = await response.json();
-
     if (!licenseHolders?.length) {
       alert("Không có dữ liệu người dùng để đẩy vào blockchain.");
       return;
     }
 
-    // Prompt user for their private key
-    const privateKey = prompt("Nhập khóa bí mật:");
-    if (!privateKey) {
-      alert("Khóa bí mật không hợp lệ.");
-      return;
-    }
-
-    // Fetch CA key info asynchronously and wait for the result
     const caKeyInfo = await getCAKeyInfo();
     if (!caKeyInfo) {
       alert("Thông tin khóa CA không hợp lệ.");
-      return; // Abort if CA key info is invalid
+      return;
     }
 
-    // Retrieve accountId from localStorage
-    const idSignature = localStorage.getItem('accountId');
+    const idSignature = localStorage.getItem("accountId");
     if (!idSignature) {
       alert("ID người dùng không tồn tại.");
       return;
     }
 
-    // Filter activated license holders
-    const activatedHolders = licenseHolders.filter(holder => holder.Status === 'Đã kích hoạt');
+    const activatedHolders = licenseHolders.filter(
+      (holder) => holder.Status === "Đã kích hoạt"
+    );
 
     if (activatedHolders.length === 0) {
       alert("Không có người dùng đã kích hoạt.");
       return;
     }
 
-    // Push data to blockchain for each activated holder
-    const promises = activatedHolders.map(holder => {
-      return pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey);
-    });
+    showSecretKeyModal();
+    const privateKey = await waitForPrivateKeyInput();
 
-    // Wait for all data push operations to complete
+    const promises = activatedHolders.map((holder) =>
+      pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey)
+    );
+
     await Promise.all(promises);
 
     alert("Tất cả dữ liệu đã được đẩy vào BlockChain thành công!");
@@ -296,20 +335,17 @@ async function pushAllDataToBlockchain() {
   }
 }
 
-// Push individual license holder data to blockchain
 async function pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey) {
   const dataToPush = {
     idSignature: caKeyInfo.accountId,
     MaGPLX: holder.MaGPLX,
-    Tenchusohuu: holder.Name, // Assuming 'Name' refers to 'Tenchusohuu'
+    Tenchusohuu: holder.Name,
     image: holder.image,
-    Ngaysinh: holder.DateOfBirth, // Assuming 'DateOfBirth' refers to 'Ngaysinh'
+    Ngaysinh: holder.DateOfBirth,
     CCCD: holder.CCCD,
     Ngaytrungtuyen: holder.Ngaytrungtuyen,
     Ngaycap: holder.Ngaycap,
     Ngayhethan: holder.Ngayhethan,
-    
-    // Additional fields as needed
     Address: holder.Address,
     PhoneNumber: holder.PhoneNumber,
     Email: holder.Email,
@@ -319,54 +355,40 @@ async function pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey) 
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     HangGPLX: holder.HangGPLX,
-    
     signature: {
-        credentials: {
-            certificate: caKeyInfo.publicKey,
-            privateKey: privateKey
-        },
-        mspId: caKeyInfo.mspId,
-        type: caKeyInfo.type,
-        version: 1
-    }
+      credentials: {
+        certificate: caKeyInfo.publicKey,
+        privateKey: privateKey,
+      },
+      mspId: caKeyInfo.mspId,
+      type: caKeyInfo.type,
+      version: 1,
+    },
   };
 
-  // Send data to the blockchain
   try {
     const blockchainResponse = await fetch("/api/createData", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(dataToPush)
+      body: JSON.stringify(dataToPush),
     });
 
     if (!blockchainResponse.ok) {
-      throw new Error(`Failed to push data to blockchain for MaGPLX: ${holder.MaGPLX}`);
+      const errorResponse = await blockchainResponse.text();
+      console.error(
+        `Failed to push data to blockchain for MaGPLX: ${holder.MaGPLX}`,
+        errorResponse
+      );
+      alert(`Có lỗi khi đẩy dữ liệu cho MaGPLX: ${holder.MaGPLX}`);
+    } else {
+      console.log(`Data pushed successfully for MaGPLX: ${holder.MaGPLX}`);
     }
-
-    const responseData = await blockchainResponse.json();
-    console.log(`Data pushed successfully for MaGPLX: ${holder.MaGPLX}`);
   } catch (error) {
     console.error(`Error pushing data for MaGPLX: ${holder.MaGPLX}`, error);
     alert(`Có lỗi khi đẩy dữ liệu cho MaGPLX: ${holder.MaGPLX}`);
   }
 }
 
-// Add event listener for DOMContentLoaded
-document.addEventListener('DOMContentLoaded', setupPushDataButton);
-
-function toggleFormInputs(disabled) {
-  const form = document.getElementById('licenseHolderForm');
-  const inputs = form.querySelectorAll('input, select, button');
-  inputs.forEach(input => {
-    input.disabled = disabled;
-  });
-}
-
-// Example usage
-document.addEventListener('DOMContentLoaded', () => {
-  // Call this function with 'true' to disable, 'false' to enable inputs
-  toggleFormInputs(true); // Disables all form inputs
-  // toggleFormInputs(false); // Enables all form inputs
-});
+document.addEventListener("DOMContentLoaded", setupPushDataButton);

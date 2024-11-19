@@ -1,112 +1,445 @@
 /* CSS cho phần body và sidebar */
 body {
-    height: 100vh;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    overflow-y: hidden; /* Ẩn cuộn dọc cho body */
-    font-family: 'Times New Roman', Times, serif, sans-serif;
-  }
-  
-  /* CSS cho phần nội dung chính */
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden; /* Ẩn cuộn dọc cho body */
+  font-family: 'Times New Roman', Times, serif, sans-serif;
+  background: #fff;
+}
+
+/* CSS cho phần nội dung chính */
+.main-content-wrapper {
+  display: flex;
+  flex-grow: 1; 
+  overflow-y: auto; /* Cho phép cuộn dọc cho nội dung chính */
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 2rem;
+  overflow-y: auto; /* Đảm bảo nội dung chính cuộn được nếu vượt quá chiều cao màn hình */
+}
+
+/* Table styling */
+table {
+  width: 100%;
+  margin: 0 auto;
+  border-collapse: collapse;
+  table-layout: fixed; /* Cố định độ rộng cột */
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ nhẹ cho bảng */
+  border: none; /* Loại bỏ viền bảng */
+
+}
+
+/* Table container */
+.table-container {
+  overflow-x: auto; /* Cuộn ngang nếu cần */
+  margin: 0; /* Loại bỏ khoảng cách thừa */
+  width: 100%; /* Đảm bảo container chiếm toàn bộ chiều rộng */
+  box-sizing: border-box; /* Đảm bảo padding không làm thay đổi kích thước */
+  border: none; /* Bỏ viền container */
+  padding: 0; /* Loại bỏ khoảng cách giữa container và bảng */
+}
+
+
+
+.table th, .table td {
+  text-align: center; /* Canh giữa nội dung */
+  vertical-align: middle; /* Canh giữa theo chiều dọc */
+  border: none; /* Loại bỏ viền ô */
+  padding: 10px; /* Khoảng cách giữa nội dung và viền */
+}
+
+.table th {
+  background-color: #f0f0f0; /* Màu nền tiêu đề bảng */
+  font-weight: bold;
+}
+
+.table tr:nth-child(odd) {
+  background-color: #fff; /* Màu nền hàng lẻ */
+}
+
+.table tr:nth-child(even) {
+  background-color: #f9f9f9; /* Màu nền hàng chẵn */
+}
+
+.table tr:hover {
+  background-color: #f1f1f1; /* Hiệu ứng hover */
+}
+table.table thead th {
+  text-align: center;
+  padding: 5px;
+  background-color: #ececec;
+  font-weight: bold;
+  border-bottom: 1px solid #aaa;
+}
+
+/* Table body cell styling */
+table.table td {
+  text-align: center; /* Center text horizontally */
+  padding: 5px; /* Space inside each cell */
+  background-color: #f0f0f0; /* Light gray background */
+  border-bottom: 1px solid #aaa; /* Border below each cell */
+}
+
+/* Zebra striping: Alternate row background colors */
+table.table tbody tr:nth-child(odd) td {
+  background-color: #ffffff; /* Light gray for odd rows */
+}
+
+table.table tbody tr:nth-child(even) td {
+  background-color: #ececec; /* White for even rows */
+}
+
+
+/* Status styling */
+.status {
+  background-color: #d0f0d4; /* Lighter green background */
+  color: #2a7f3f; /* Darker green text color */
+  padding: 10px; /* Padding inside */
+  border-radius: 5px; /* Rounded corners */
+  text-align: center; /* Center text */
+  display: inline-block; /* Inline block display to wrap around text */
+  font-size: 14px; /* Font size */
+  font-weight: bold; /* Bold text */
+}
+
+/* Status styling */
+.status1 {
+  background-color: #f8cdcd; /* Lighter green background */
+  color: #e60000;
+  padding: 10px; /* Padding inside */
+  border-radius: 5px; /* Rounded corners */
+  text-align: center; /* Center text */
+  display: inline-block; /* Inline block display to wrap around text */
+  font-size: 14px; /* Font size */
+  font-weight: bold; /* Bold text */
+}
+
+
+
+span {
+  color: rgb(0, 0, 0);
+}
+
+i {
+  color: black;
+}
+
+/* Email column styling */
+.email {
+  display: inline-block;
+  max-width: 90px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: middle;
+  text-align: left;
+  padding-right: 10px; /* Added padding */
+}
+
+/* Sidebar adjustments */
+.Canngang {
+  margin-left: 205px; /* Margin for expanded sidebar */
+  transition: margin-left 0.3s ease;
+}
+/* Pagination Controls Styling */
+#paginationControls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+#paginationControls button {
+  padding: 6px 12px;
+  border: 1px solid #020202;
+  background-color: #e2366f;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  border-radius: 5px;
+}
+
+#paginationControls button:hover {
+  background-color: #ff4500;
+  transform: scale(1.1);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#paginationControls button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+#paginationControls #pageInfo {
+  font-size: 16px;
+  color: #333;
+  font-weight: bold;
+}
+/* Checkbox adjustments */
+.row-checkbox, #select-all {
+  accent-color: steelblue;
+}
+
+.button-cell {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  padding: 0;
+}
+
+/* Button styling */
+.button-tacvu {
+  background: steelblue;
+  width: 35px;
+  height: 35px;
+  border: none;
+  border-radius: 3px; /* Tăng độ tròn */
+  color: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+  transition: all 0.3s ease-in-out;
+  min-width: 35px;
+  min-height: 35px; /* Ensure buttons maintain a minimum size */
+}
+
+.button-tacvu:hover {
+  background: darkorange;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Tăng bóng */
+  transform: scale(1.05); /* Phóng lớn hơn chút */
+}
+
+.column-width-tacvu { width: 65px; }
+.column-width-anh { width: 140px; }
+.column-width-thongtin { width: 170px; }
+.column-width-status1 { width: 130px; }
+
+.column-width-status { width: 120px; }
+.column-width-select { width: 94px; }
+.column-width-ngaysinh { width: 112px; }
+
+
+.hidden { display: none; }
+
+
+/* View button styling */
+.btn-view {
+  background-color: #007bff;
+  color: #fff;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
   .main-content-wrapper {
-    display: flex;
-    flex-grow: 1; 
-    overflow-y: auto; /* Cho phép cuộn dọc cho nội dung chính */
+    flex-direction: column;
+    margin-left: 0;
   }
-  
-  .main-content {
-    flex-grow: 1;
-    padding: 2rem;
-    overflow-y: auto; /* Đảm bảo nội dung chính cuộn được nếu vượt quá chiều cao màn hình */
-  }
-  
-  /* Table styling */
-  table {
-    width: 100%; /* Make the table take full width */
-    margin: 0 auto; /* Center the table horizontally */
-    border-collapse: collapse; /* Remove gaps between table cells */
-    table-layout: fixed; /* Fix the layout to distribute columns evenly */
-  }
-  
-  th, td {
-    text-align: center; /* Center the text inside the headers and cells */
-    padding: 10px; /* Add some padding for better spacing */
-    border: 1px solid #ddd; /* Optional: Add borders for visibility */
-    vertical-align: middle; /* Center content vertically */
-  }
-  
-  tr:nth-child(even) {
-    background-color: #f2f2f2; /* Optional: Add a background color to alternate rows */
-  }
-  
-  tr:hover {
-    background-color: #ddd; /* Optional: Add hover effect */
-  }
-  
-  
-  span {
-    color: rgb(0, 0, 0);
-  }
-  
-  
-  i {
-    color: black;
-  }
-  
-  
-  
-  
-  /* Assuming the email column is the 6th column */
-  .email {
-    display: inline-block; /* Make it inline-block to apply width */
-    max-width: 90px; /* Set a max width for the email */
-    white-space: nowrap; /* Prevent text from wrapping */
-    overflow: hidden; /* Hide overflow text */
-    text-overflow: ellipsis; /* Add ellipsis for overflow */
-  }
-  
-  .Canngang {
-    margin-left: 205px; /* Margin for expanded sidebar */
-    transition: margin-left 0.3s ease; /* Smooth transition */
-  }
-  
-  
-  
-  
-  /* Optional: Ensure icons are properly aligned */
-  .dropdown-item i {
-    margin-right: 8px; /* Spacing between icon and text */
-  }
-  
-  #paginationControls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 5px; /* Space between items */
-    margin-top: 20px;
-    flex-wrap: wrap; /* Make it responsive */
-  }
-  
+
   #paginationControls button {
-    padding: 4px 8px; /* Increase button size for better clickability */
-    border: 1px solid #020202;
+    padding: 6px 10px; /* Adjust button size */
+  }
+
+  .table-container {
+    padding: 10px; /* Reduced padding */
+  }
+
+  .email {
+    max-width: 100px; /* Shorten email max width for mobile */
+  }
+
+  /* Optional: Reduce font sizes for smaller screens */
+  .table-container, .main-content-wrapper {
+    font-size: 0.9rem;
+  }
+}
+
+/* Aspect ratio handling */
+.aspect-ratio-16-9, .aspect-ratio-4-3 {
+  position: relative;
+  width: 100%;
+}
+
+.aspect-ratio-16-9 {
+  padding-top: 56.25%; /* 16:9 aspect ratio */
+}
+
+.aspect-ratio-4-3 {
+  padding-top: 75%; /* 4:3 aspect ratio */
+}
+
+.aspect-ratio-16-9 img, .aspect-ratio-4-3 img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.breadcrumb-item a {
+    color: #495057;
+}
+.breadcrumb-item.active {
+    font-weight: bold;
+}
+h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #333;
+}
+.table {
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+.table th, .table td {
+    text-align: center;
+    vertical-align: middle;
+}
+.btn-primary {
     background-color: #e2366f;
-    cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
-    border-radius: 5px;
+    border-color: #e2366f;
+}
+.btn-primary:hover {
+    background-color: #c92a57;
+    border-color: #c92a57;
+}/* Modal container for the secret key */
+.modal-key {
+  display: none; /* Hidden by default */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  z-index: 1050; /* Adjust layering for modal */
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto; /* Allow scrolling if modal content exceeds viewport height */
+  transition: all 0.3s ease; /* Smooth transition for visibility changes */
+}
+
+/* Modal content styling */
+.modal-content-key {
+  background-color: white;
+  border-radius: 10px;
+  padding: 25px;
+  width: 90%; /* Flexible width for responsiveness */
+  max-width: 480px; /* Set maximum width */
+  box-sizing: border-box; /* Ensure consistent sizing */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* Slightly stronger shadow */
+  animation: fadeIn 0.4s ease; /* Subtle fade-in animation */
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
   }
-  
-  #paginationControls button:hover {
-    background-color: #e2366f;
-    transform: scale(1.05); /* Subtle zoom effect */
+  to {
+    opacity: 1;
+    transform: scale(1);
   }
-  
-  #paginationControls button:disabled {
-    background-color: #e2366f;
-    cursor: not-allowed;
-    opacity: 0.6;
+}
+
+/* Modal header styling */
+.modal-content-key h2 {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #333;
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+/* Input field styling */
+#privateKeyInput {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  font-size: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box; /* Ensure consistent width */
+  outline: none;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Smooth focus transition */
+}
+
+#privateKeyInput:focus {
+  border-color: #e2366f; /* Highlight color */
+  box-shadow: 0 0 8px rgba(226, 54, 111, 0.5); /* Soft glow */
+}
+
+/* Modal button container */
+.modal-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 15px; /* Add space between buttons */
+}
+
+/* Button styling */
+.modal-buttons button {
+  flex: 1; /* Equal button widths */
+  padding: 12px 15px;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Submit button styling */
+#submitKey {
+  background-color: #e2366f;
+  color: white;
+}
+
+#submitKey:hover {
+  background-color: #c92a57;
+}
+
+/* Cancel button styling */
+#cancelKey {
+  background-color: #f1f1f1;
+  color: #333;
+}
+
+#cancelKey:hover {
+  background-color: #e1e1e1;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .modal-content-key {
+    width: 95%; /* Increase width for smaller screens */
+    padding: 20px; /* Reduce padding for compact design */
   }
-  .modal-dialog {
-    max-width: 80%; /* Adjust this to your preferred size */
+
+  .modal-buttons {
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 10px; /* Space between stacked buttons */
   }
+}
+
+/* Bootstrap Modal Styling Fixes */
+.modal.fade {
+  z-index: 1051; /* Ensure Bootstrap modal's z-index is higher */
+}
+
+.modal-dialog {
+  z-index: 1052; /* Modal dialog appears above overlay */
+}

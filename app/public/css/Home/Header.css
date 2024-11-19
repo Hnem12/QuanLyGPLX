@@ -512,3 +512,49 @@ ul li i {
   color: #e2366f;    /* Màu sắc của biểu tượng */
   font-size: 18px;   /* Kích thước của biểu tượng */
 }
+
+/* Modal button styles */
+.modal-button {
+  background-color: #e2333f; /* Green background */
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.modal-button:hover {
+  background-color: #e2366f; /* Darker green on hover */
+  transform: translateY(-2px); /* Lift effect */
+}
+
+.modal-button:active {
+  background-color: #e2366f; /* Even darker green on click */
+  transform: translateY(2px); /* Pressed effect */
+}
+
+/* Cancel button */
+.cancel-btn {
+  background-color: #afafaf; /* Red background for cancel */
+  margin-left: 10px;
+}
+
+.cancel-btn:hover {
+  background-color: #afafaf; /* Darker red on hover */
+}
+
+/* Style for the Xepngang (container) for better alignment */
+.Xepngang {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Modal button container (for the actions like "download" and "copy") */
+#keyActions {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
