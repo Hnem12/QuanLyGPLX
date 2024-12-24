@@ -9,7 +9,7 @@ const Gioithieu = () => {
         <nav aria-label="breadcrumb">
             <ol className="breadcrumb">
                 <li className="breadcrumb-item">
-                    <a style={{ color: 'black', textDecoration: 'none' }} href="http://localhost:5000">
+                    <a style={{ color: 'black', textDecoration: 'none', fontSize:'20px'}} href="http://localhost:5000">
                         <img src="https://quanligplx-hdu-edu-vn.onrender.com/uploads/home.png" style={{ width: '15px', marginTop: '-4px' , marginRight:'10px' }} alt="home icon" />
                         Trang chủ
                     </a>

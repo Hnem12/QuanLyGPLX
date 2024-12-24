@@ -18,7 +18,20 @@
   box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2); /* Increased shadow for depth */
   position: relative; /* Enables pseudo-element for additional decoration */
 }
+.mb-21{
+  font-weight: bold;
+  font-size: 16px;
+}
 
+.Canle{
+  margin-left: 18px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 17px;
+}
+.Font{
+  font-size: 18px;
+  font-family: 'Times New Roman', Times, serif;
+}
 /* Optional: Add decorative lines to increase difficulty */
 .capcha:before,
 .capcha:after {
@@ -53,6 +66,7 @@
   border-radius: 4px;
   transition: border-color 0.3s ease; /* Thêm hiệu ứng chuyển đổi */
 }
+
 
 /* Khi trường nhập liệu còn trống */
 .form-container input:placeholder-shown {

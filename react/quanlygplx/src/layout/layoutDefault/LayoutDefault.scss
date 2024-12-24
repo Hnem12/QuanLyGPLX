@@ -30,10 +30,8 @@
         margin-top: 10px;
         align-items: center;
         width: 100%;
-
+        justify-content: center;
         .logo {
-            margin-right: 20px;
-            margin-left: 400px;
             img {
                 height: 70px; // Adjust based on logo size
             }
@@ -46,6 +44,9 @@
         }
     }
 }
+.layout-default{
+    font-family: 'Times New Roman', Times, serif;
+}
 .navbar-header {
     background-color: #001d58; // Màu nền cho header
     justify-content: left; // Căn giữa toàn bộ header
@@ -56,7 +57,8 @@
 .navbar {
     font-weight: bold;
     display: flex;
-    font-size: 15px;
+    font-size: 18px;
+    font-family: 'Times New Roman', Times, serif;
     margin-top: -28px;
     justify-content: center; // Căn giữa nội dung trong navbar
     background-color: #001d58; // Đảm bảo màu nền đen

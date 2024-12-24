@@ -169,7 +169,7 @@ function GplxRenewForm() {
     const fetchApi = async (signal) => {
         try {
             setLoading(true);
-            const response = await fetch('https://quanligplx-hdu-edu-vn.onrender.com/api/renewals/getall', { signal });
+            const response = await fetch('http://localhost:3000/api/renewals/getall', { signal });
 
             if (!response.ok) throw new Error('Network response was not ok');        
             const result = await response.json();

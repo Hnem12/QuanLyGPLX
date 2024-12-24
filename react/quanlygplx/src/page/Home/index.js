@@ -29,7 +29,6 @@ const LicenseSearch = () => {
                 if (!response.ok) throw new Error("Network response was not ok");
 
                 const result = await response.json();
-                console.log('Fetched data:', result);
                 setData(Array.isArray(result.licenseHolders) ? result.licenseHolders : []);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -85,18 +84,18 @@ const LicenseSearch = () => {
                 <h2 className="text-2xl font-bold mb-4">TRA CỨU THÔNG TIN GIẤY PHÉP LÁI XE</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
-                        <label className="block font-bold mb-2" htmlFor="so-gplx">Số GPLX:</label>
+                        <label className="block font-bold mb-21" htmlFor="so-gplx">Số GPLX:</label>
                         <input
                             id="so-gplx"
                             placeholder="Nhập số GPLX đã cấp"
                             type="text"
                             value={searchValue}
                             onChange={(e) => setSearchValue(e.target.value)}
-                            className="border border-gray-300 p-2 w-full"
+                            className="border border-gray-300 p-2 w-full "
                         />
                     </div>
                     <div className="mb-3">
-                        <label className="block font-bold mb-2" htmlFor="birth-date">Ngày sinh:</label>
+                        <label className="block font-bold mb-21" htmlFor="birth-date">Ngày sinh:</label>
                         <input
                             id="birth-date"
                             type="date"
@@ -106,7 +105,7 @@ const LicenseSearch = () => {
                         />
                     </div>
                     <div className="mb-3">
-                        <label className="block font-bold mb-2">CAPTCHA:</label>
+                        <label className="block font-bold mb-21">CAPTCHA:</label>
                         <div className="captcha-container flex items-center">
                             <span 
                                 className="captcha-box bg-blue-200 p-4 rounded-md text-2xl font-bold text-center tracking-widest shadow-lg capcha" 
@@ -117,7 +116,7 @@ const LicenseSearch = () => {
                             <button 
                                 type="button"
                                 onClick={generateCaptcha}
-                                className="bg-blue-500 text-white p-2 rounded-md ml-4 hover:bg-blue-600 transition duration-200"
+                                className="bg-blue-500 text-white p-2 rounded-md ml-4 hover:bg-blue-600 transition duration-200 Canle"
                             >
                                 Tải lại
                             </button>
@@ -130,7 +129,7 @@ const LicenseSearch = () => {
                             onChange={(e) => setCaptchaInput(e.target.value)}
                         />
                     </div>
-                    <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+                    <button type="submit" className="bg-blue-500 text-white p-2 rounded Font">
                         TRA CỨU GIẤY PHÉP LÁI XE
                     </button>
                 </form>
