@@ -1,6 +1,6 @@
 import { Link, NavLink, Outlet } from "react-router-dom";
 import React from 'react';
-import { Layout, Menu, Input } from 'antd';
+import { Layout, Menu, Input, Button, ConfigProvider , Space } from 'antd';
 import './LayoutDefault.scss';
 
 const { Header, Footer, Content } = Layout;
@@ -39,7 +39,7 @@ function LayoutDefault() {
                         </NavLink>
                     </Menu.Item>
                     <Menu.Item key="login">
-                        <NavLink to="http://localhost:3000" className={({ isActive }) => (isActive ? 'active' : '')}>
+                        <NavLink to="http://localhost:3000/" className={({ isActive }) => (isActive ? 'active' : '')}>
                             Đăng Xuất
                         </NavLink>
                     </Menu.Item>

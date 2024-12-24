@@ -606,15 +606,15 @@ const clearFormData = () => {
             <div className="form-actions1" >
                 <div>
                 <Checkbox onChange={handleCheckboxChange}>
-                <span style={{ color: 'red', fontWeight: 'bold' }}>
+                <span style={{ color: 'red', fontWeight: 'bold', fontFamily:'Times New Roman', fontSize:'18px' }}>
                     Tôi xin đảm bảo các thông tin khai báo là chính xác và xin chịu trách nhiệm về thông tin đã khai báo.
                 </span>
             </Checkbox>
                 </div>
            
             {isChecked && ( // Hiển thị nút Submit chỉ khi checkbox được chọn
-                <Button type="primary" htmlType="submit" style={{ marginTop:'10px', fontWeight:'bold' }}>
-                    Submit
+                <Button type="primary" htmlType="submit" style={{ marginTop:'10px', fontWeight:'bold', fontSize:'18px' }}>
+                    Gửi yêu cầu 
                 </Button>
             )}
         </div>

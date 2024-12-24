@@ -3,7 +3,7 @@ import Home from "../page/Home/index"
 import Gioithieu from "../page/Gioithieu/index"
 import CaplaiGPLX from "../page/CaplaiGPLX/index"
 import GiahanGPLX from "../page/GiahanGPLX/index"
-import Test from "../page/CaplaiGPLX/Test"
+import Test from "../page/CaplaiGPLX/Test.tsx"
 
 export const routes = [
     {

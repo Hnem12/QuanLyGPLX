@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import './CaplaiGPLX.scss'
 
 function GplxReissueForm() {
   // Define state to hold form data
@@ -48,7 +49,7 @@ function GplxReissueForm() {
 
         {/* License Holder's Name Field */}
         <label htmlFor="name" style={styles.label}>
-          Tên người sử dụng GPLX:
+          Tên chủ sở hữu GPLX:
         </label>
         <input
           type="text"
@@ -57,7 +58,7 @@ function GplxReissueForm() {
           onChange={(e) => setName(e.target.value)} // Allow manual edit if needed
           required
           style={styles.input}
-          placeholder="Tên người dùng sẽ hiển thị tự động"
+          placeholder="Nhập tên chủ sở hữu GPLX"
           readOnly
         />
 
