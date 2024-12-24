@@ -14,7 +14,7 @@ const path = require('path');
 async function DangKyAdmin() {
     try {
         // load the network configuration
-        const ccpPath = "/home/hnem1/Desktop/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.json";
+        const ccpPath = "/home/hnem/Documents/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.json";
         const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
         // Create a new CA client for interacting with the CA.

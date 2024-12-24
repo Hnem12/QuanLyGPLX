@@ -74,53 +74,7 @@ function nextPage() {
 }
 
 // Function to open modal for editing
-function openModal(holder) {
-  // Check if holder is provided
-  if (!holder) {
-    console.error('Holder data is not provided.');
-    return;
-  }
 
-  // Close any previously open modals (if any)
-  const existingLicenseHolderModal = bootstrap.Modal.getInstance(document.getElementById('licenseHolderModal'));
-  if (existingLicenseHolderModal) {
-    existingLicenseHolderModal.hide();
-  }
-
-  const existingSecretKeyModal = document.getElementById('secretKeyModal');
-  if (existingSecretKeyModal && existingSecretKeyModal.style.display === 'flex') {
-    existingSecretKeyModal.style.display = 'none';
-  }
-
-  // Populate the modal fields with holder data
-  document.getElementById('holderId').value = holder._id; // Set the ID for updating
-  document.getElementById('gplx').value = holder.MaGPLX || '';
-  document.getElementById('name').value = holder.Name || '';
-  document.getElementById('dob').value = holder.DateOfBirth ? holder.DateOfBirth.split('T')[0] : '';
-  document.getElementById('cccd').value = holder.CCCD || '';
-  document.getElementById('phone').value = holder.PhoneNumber || '';
-  document.getElementById('email').value = holder.Email || '';
-  document.getElementById('address').value = holder.Address || '';
-  document.getElementById('issueDate').value = holder.Ngaycap ? holder.Ngaycap.split('T')[0] : '';
-  document.getElementById('expiryDate').value = holder.Ngayhethan ? holder.Ngayhethan.split('T')[0] : '';
-  document.getElementById('ngaytrungtuyen').value = holder.Ngaytrungtuyen ? holder.Ngaytrungtuyen.split('T')[0] : '';
-  document.getElementById('hangGPLX').value = holder.HangGPLX || '';
-  document.getElementById('status').value = holder.Status || 'Đang kiểm định';
-  document.getElementById('giamdoc').value = holder.Giamdoc || ''; 
-
-  // Change modal title
-  document.getElementById('licenseHolderModalLabel').innerText = 'Thông tin Chủ Sở Hữu';
-
-  // Log holder._id to see the data
-  console.log("Holder ID being passed:", holder._id);
-
-  // Show the modal using Bootstrap's Modal API
-  const licenseHolderModal = new bootstrap.Modal(document.getElementById('licenseHolderModal'));
-  licenseHolderModal.show();
-
-  // Setup the push data button with the holder's ID
-  setupPushDataButton(holder._id);
-}
 
 // Function to show the secret key modal (with existing modal close logic)
 function showModal() {
@@ -228,8 +182,157 @@ async function getCAKeyInfo() {
     return null;
   }
 }
+// Function to open modal for editing
+function openModal(holder) {
+  // Check if holder is provided
+  if (!holder) {
+    console.error('Holder data is not provided.');
+    return;
+  }
 
-// Fetch license holders from the API using the passed 'holderId'
+  // Close any previously open modals (if any)
+  const existingLicenseHolderModal = bootstrap.Modal.getInstance(document.getElementById('licenseHolderModal'));
+  if (existingLicenseHolderModal) {
+    existingLicenseHolderModal.hide();
+  }
+
+  const existingSecretKeyModal = document.getElementById('secretKeyModal');
+  if (existingSecretKeyModal && existingSecretKeyModal.style.display === 'flex') {
+    existingSecretKeyModal.style.display = 'none';
+  }
+
+  // Populate the modal fields with holder data
+  document.getElementById('holderId').value = holder._id; // Set the ID for updating
+  document.getElementById('gplx').value = holder.MaGPLX || '';
+  document.getElementById('name').value = holder.Name || '';
+  document.getElementById('dob').value = holder.DateOfBirth ? holder.DateOfBirth.split('T')[0] : '';
+  document.getElementById('cccd').value = holder.CCCD || '';
+  document.getElementById('phone').value = holder.PhoneNumber || '';
+  document.getElementById('email').value = holder.Email || '';
+  document.getElementById('address').value = holder.Address || '';
+  document.getElementById('issueDate').value = holder.Ngaycap ? holder.Ngaycap.split('T')[0] : '';
+  document.getElementById('expiryDate').value = holder.Ngayhethan ? holder.Ngayhethan.split('T')[0] : '';
+  document.getElementById('ngaytrungtuyen').value = holder.Ngaytrungtuyen ? holder.Ngaytrungtuyen.split('T')[0] : '';
+  document.getElementById('hangGPLX').value = holder.HangGPLX || '';
+  document.getElementById('status').value = holder.Status || 'Đang kiểm định';
+  document.getElementById('giamdoc').value = holder.Giamdoc || ''; 
+
+  // Change modal title
+  document.getElementById('licenseHolderModalLabel').innerText = 'Thông tin Chủ Sở Hữu';
+
+  // Log holder._id to see the data
+  console.log("Holder ID being passed:", holder._id);
+
+  // Show the modal using Bootstrap's Modal API
+  const licenseHolderModal = new bootstrap.Modal(document.getElementById('licenseHolderModal'));
+  licenseHolderModal.show();
+
+  // Setup the push data button with the holder's ID
+  setupPushDataButton(holder._id);
+}
+
+// Function to show the secret key modal (with existing modal close logic)
+function showModal() {
+  const existingLicenseHolderModal = bootstrap.Modal.getInstance(document.getElementById('licenseHolderModal'));
+  if (existingLicenseHolderModal) {
+    existingLicenseHolderModal.hide();
+  }
+
+  const modal = document.getElementById('secretKeyModal');
+  // Show the private key modal
+  if (modal) {
+    modal.style.display = 'flex';
+  }
+}
+
+function hideModal() {
+  const modal = document.getElementById('secretKeyModal');
+
+  // Hide the private key modal
+  if (modal) {
+    modal.style.display = 'none';
+  }
+  resetModalForm();
+}
+
+function resetModalForm() {
+  // Reset all input fields inside the modal
+  const modalInputs = document.querySelectorAll('#secretKeyModal input');
+  modalInputs.forEach(input => {
+    input.value = ''; // Reset each input field
+  });
+
+  // If you have other elements like textareas or select elements, reset them similarly:
+  const modalSelects = document.querySelectorAll('#secretKeyModal select');
+  modalSelects.forEach(select => {
+    select.selectedIndex = 0; // Reset select to the first option
+  });
+}
+
+// Setup push data button to show secret key modal
+function setupPushDataButton(holderId) {
+  const pushDataButton = document.getElementById('pushDataButton1');
+  if (pushDataButton) {
+    console.log('Button exists, adding event listener.');
+
+    // Listen for click event and show modal
+    pushDataButton.addEventListener('click', showModal); // Just show modal
+  } else {
+    console.warn("Button with ID 'pushDataButton1' not found.");
+  }
+}
+
+// Handle submit key button
+document.getElementById('submitKey').addEventListener('click', async function () {
+  const holderId = document.getElementById('holderId').value.trim(); // Get holder ID
+  const privateKey = document.getElementById('privateKeyInput').value.trim(); // Get private key
+
+  // Validate input fields
+
+  hideModal(); // Hide modal after confirmation
+  await pushAllDataToBlockchain(holderId, privateKey); // Push data to blockchain
+});
+
+// Handle cancel button in modal
+document.getElementById('cancelKey').addEventListener('click', hideModal);
+
+// Get Certificate Authority (CA) Key Info
+async function getCAKeyInfo() {
+  const accountId = localStorage.getItem('accountId');
+  if (!accountId) {
+    alert("Account ID không tồn tại. Vui lòng đăng nhập lại.");
+    return null;
+  }
+
+  try {
+    const response = await fetch(`/api/LayCA/${accountId}`);
+    
+    if (response.ok) {
+      const data = await response.json();
+      const { publicKey, mspId, type, accountId } = data;
+
+      // Validate the essential fields
+      if (!publicKey || !mspId || !type || !accountId) {
+        alert("Thông tin chứng chỉ không hợp lệ.");
+        return null;
+      }
+
+      console.log('CA Key Info:', data);  // Log CA key info for debugging
+      // Return CA key data with accountId
+      return { publicKey, mspId, type, accountId };
+    } else {
+      const errorData = await response.json();
+      alert(errorData.message || 'Có lỗi xảy ra khi lấy thông tin chứng chỉ.');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error retrieving CA key info:', error);
+    alert('Có lỗi xảy ra khi lấy thông tin chứng chỉ. Vui lòng thử lại.');
+    return null;
+  }
+}
+
+// Push all data to the blockchain
 async function pushAllDataToBlockchain(holderId, privateKey) {
   try {
     // Fetch license holders from the API using the passed 'holderId'
@@ -263,8 +366,6 @@ async function pushAllDataToBlockchain(holderId, privateKey) {
 
     console.log('Activated Holders:', activatedHolders);
 
-
-
     // Lấy thông tin khóa CA
     const caKeyInfo = await getCAKeyInfo();
     if (!caKeyInfo) {
@@ -291,7 +392,6 @@ async function pushAllDataToBlockchain(holderId, privateKey) {
   }
 }
 
-
 // Push individual license holder data to blockchain
 async function pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey) {
   const dataToPush = {
@@ -299,51 +399,19 @@ async function pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey) 
     MaGPLX: holder.MaGPLX,
     Tenchusohuu: holder.Name, // Assuming 'Name' refers to 'Tenchusohuu'
     image: holder.image, // Directly pass the image path (this could be URL or file path)
-    Ngaysinh: holder.DateOfBirth, // Assuming 'DateOfBirth' refers to 'Ngaysinh'
-    CCCD: holder.CCCD,
-    Ngaytrungtuyen: holder.Ngaytrungtuyen,
-    Ngaycap: holder.Ngaycap,
-    Ngayhethan: holder.Ngayhethan,
-    Address: holder.Address,
-    PhoneNumber: holder.PhoneNumber,
-    Email: holder.Email,
-    Status: holder.Status,
-    Giamdoc: holder.Giamdoc,
-    Loivipham: holder.Loivipham,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    HangGPLX: holder.HangGPLX,
-    
-    // Include the signature information
-    signature: {
-        credentials: {
-            certificate: caKeyInfo.publicKey,
-            privateKey: privateKey
-        },
-        mspId: caKeyInfo.mspId,
-        type: caKeyInfo.type,
-        version: 1
-    }
+    Ngaysinh: holder.DateOfBirth, // Assuming 'DateOfBirth' is the actual date
+    CCCD: holder.CCCD, // Assuming 'CCCD' is the actual ID number
+    address: holder.Address, // Assuming 'Address' holds the actual address
+    status: holder.Status, // Assuming 'Status' holds the current status of the license
+    publicKey: caKeyInfo.publicKey, // Assuming we use the retrieved public key
+    mspId: caKeyInfo.mspId, // Assuming we use the mspId from CA key info
+    privateKey: privateKey, // Using the provided private key
   };
 
-  // Send data to the blockchain
-  try {
-    const blockchainResponse = await fetch("/api/createData", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(dataToPush)
-    });
+  // Logic for pushing this data to your blockchain
+  // Code for interacting with Hyperledger Fabric or another blockchain system would go here
+  console.log("Data to push:", dataToPush);
 
-    if (!blockchainResponse.ok) {
-      throw new Error(`Failed to push data to blockchain for MaGPLX: ${holder.MaGPLX}`);
-    }
-
-    const responseData = await blockchainResponse.json();
-    console.log(`Data pushed successfully for MaGPLX: ${holder.MaGPLX}`, responseData);  // Log blockchain response
-  } catch (error) {
-    console.error(`Error pushing data for MaGPLX: ${holder.MaGPLX}`, error);
-    alert(`Có lỗi khi đẩy dữ liệu cho MaGPLX: ${holder.MaGPLX}`);
-  }
+  // For this example, we assume that this will just log the data and resolve the promise
+  return Promise.resolve();
 }

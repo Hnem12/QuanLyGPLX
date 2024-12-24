@@ -3,7 +3,7 @@ const fs = require('fs');
 
 async function updateDataBlockchain(idSignature, signature, Name, DateOfBirth, CCCD, Address, HangGPLX, PhoneNumber, Email, Ngaycap, Ngayhethan, Ngaytrungtuyen, Status, Giamdoc, Loivipham, MaGPLX) {
     try {
-        const ccpPath = "/home/hnem1/Desktop/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.json";
+        const ccpPath = "/home/hnem/Documents/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.json";
         const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
         // Initialize in-memory wallet

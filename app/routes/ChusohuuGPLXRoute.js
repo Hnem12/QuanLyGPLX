@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const LicenseHolder = require('../models/ChusohuuGPLXModel');
 const mongoose = require('mongoose');
-const { addNewGPLXtoBlockchain, updateGPLXData, TruyvanData, addLicenseHolder, getLicenseHolders ,Getall} = require('../controllers/ChusohuuGPLXController'); // Multer middleware
+const { addNewGPLXtoBlockchain,addLicenseHoldertoKiemdinh, updateGPLXData, TruyvanData, addLicenseHolder, getLicenseHolders, addGPLXKDtoBlockchain ,Getall} = require('../controllers/ChusohuuGPLXController'); // Multer middleware
 const { queryGPLXData } = require('../blockchain/Truyvandulieu'); 
 const { imageUpload } = require('../middleware/upload');
 
@@ -96,6 +96,8 @@ router.delete('/:id', async (req, res) => {
 
 
 router.post('/addlicenseHolder', imageUpload.single('image'), addLicenseHolder);
+router.post('/addLicenseHoldertoKiemdinh', imageUpload.single('image'), addLicenseHoldertoKiemdinh);
+
 
 router.get('/search/:idOrGPLX', async (req, res) => {
     const { idOrGPLX } = req.params; // The parameter can be either ID or MaGPLX
@@ -143,6 +145,8 @@ router.get('/search/:idOrGPLX', async (req, res) => {
     }
 });
 router.post('/createData', addNewGPLXtoBlockchain);
+router.post('/createDataformKiemdinh', addGPLXKDtoBlockchain);
+
 
 router.put('/updateData', updateGPLXData);
 

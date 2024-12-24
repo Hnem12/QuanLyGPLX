@@ -92,7 +92,57 @@ const addNewGPLXtoBlockchain = async (req, res) => {
         });
     }
 };
+const addGPLXKDtoBlockchain = async (req, res) => {
+    const {
+        idSignature, 
+        signature, 
+        MaGPLX, 
+        Tenchusohuu,
+        image, 
+        Ngaysinh, 
+        CCCD, 
+        Ngaytrungtuyen, 
+        Ngaycap, 
+        Ngayhethan, 
+        Email, 
+        PhoneNumber, 
+        Giamdoc, 
+        Status, // Don't set default value here
+    } = req.body;
+    const status = 'Hoàn thành kiểm định'; // Default 'Đã kích hoạt' if Status is not provided
 
+    try {
+        
+        await pushDataBlockchain(
+            idSignature, 
+            signature, 
+            MaGPLX, 
+            Tenchusohuu, 
+            image, 
+            Ngaysinh, 
+            CCCD, 
+            Ngaytrungtuyen, 
+            Ngaycap, 
+            Ngayhethan, 
+            Email, 
+            PhoneNumber, 
+            Giamdoc, 
+            status // Use the status variable here
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: "Transaction submitted successfully."
+        });
+    } catch (error) {
+        console.error("Error in addNewGPLXtoBlockchain:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Failed to submit transaction.",
+            error: error.message
+        });
+    }
+};
 
 const updateGPLXData = async (req, res) => {
     try {
@@ -296,6 +346,99 @@ const addLicenseHolder = async (req, res) => {
     }
 };
 
+const addLicenseHoldertoKiemdinh = async (req, res) => {
+    try {
+        // Validate input data
+        const { 
+            MaGPLX, Name, DateOfBirth, CCCD, Address, PhoneNumber, Email, Ngaycap, Ngayhethan, Status, Giamdoc, Ngaytrungtuyen, HangGPLX 
+        } = req.body;
+
+        // Handle image path (null if no file is uploaded)
+        const image = req.file ? req.file.path : null;
+
+        // Required fields validation
+        if (!MaGPLX || !Name || !DateOfBirth || !CCCD || !Address || !PhoneNumber || !Email || !Ngaycap || !Ngayhethan || !Giamdoc || !Ngaytrungtuyen || !HangGPLX) {
+            return res.status(400).json({
+                success: false,
+                message: 'Mã GPLX, tên, ngày sinh, CCCD, địa chỉ, số điện thoại, email, ngày cấp, ngày hết hạn, giám đốc, ngày trúng tuyển, và hạng GPLX là bắt buộc.'
+            });
+        }
+                
+        // Check for existing license holder
+        const existingHolder = await ChusohuuGPLXModel.findOne({ MaGPLX });
+        if (existingHolder) {
+            return res.status(400).json({
+                success: false,
+                message: 'Mã GPLX đã tồn tại.'
+            });
+        }
+
+        // Validate Email
+        const emailPattern = /.+\@.+\..+/;
+        if (!emailPattern.test(Email)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Email không hợp lệ.'
+            });
+        }
+
+        // Validate Dates using moment.js
+        if (!moment(DateOfBirth, 'YYYY-MM-DD', true).isValid()) {
+            return res.status(400).json({
+                success: false,
+                message: 'Ngày sinh không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).'
+            });
+        }
+
+        const dateFields = [Ngaycap, Ngayhethan, Ngaytrungtuyen];
+        for (let field of dateFields) {
+            if (!moment(field, 'YYYY-MM-DD', true).isValid()) {
+                return res.status(400).json({
+                    success: false,
+                    message: `Ngày ${field} không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).`
+                });
+            }
+        }
+
+        // Create new LicenseHolder
+        const licenseHolder = new ChusohuuGPLXModel({
+            MaGPLX,
+            Name,
+            DateOfBirth,
+            CCCD,
+            Address,
+            PhoneNumber,
+            Email,
+            Ngaycap,
+            Ngayhethan,
+            Status: 'Đã kích hoạt',
+            Giamdoc,
+            Ngaytrungtuyen,
+            HangGPLX,
+            image
+        });
+
+        // Save to DB
+        const savedHolder = await licenseHolder.save();
+
+        // Respond with success
+        res.status(201).json({
+            success: true,
+            message: 'Thêm chủ sở hữu GPLX thành công!',
+            data: savedHolder
+        });
+
+    } catch (err) {
+        // Handle errors
+        console.error('Error:', err);
+        res.status(500).json({
+            success: false,
+            message: 'Lỗi khi tạo chủ sở hữu GPLX',
+            error: err.message
+        });
+    }
+};
+
 const getLicenseHolders = async (req, res, targetStatus = 'Đã kích hoạt') => {
     try {
       // Retrieve pagination and status parameters from query
@@ -345,7 +488,9 @@ module.exports = {
     updateGPLXData,
     updateLicenseWithCAKey,
     addLicenseHolder,
+    addLicenseHoldertoKiemdinh,
     getLicenseHolders,
+    addGPLXKDtoBlockchain,
     Getall,
     TruyvanData
 }
