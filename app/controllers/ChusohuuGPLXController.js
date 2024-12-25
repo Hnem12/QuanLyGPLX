@@ -443,7 +443,7 @@ const getLicenseHolders = async (req, res, targetStatus = 'Đã kích hoạt') =
     try {
       // Retrieve pagination and status parameters from query
       const page = parseInt(req.query.page) || 1; // Default to page 1
-      const pageSize = parseInt(req.query.pageSize) || 6; // Default to 6 items per page
+      const pageSize = parseInt(req.query.pageSize) || 999; // Default to 6 items per page
   
       // Sanitize inputs to avoid negative or invalid pageSize
       if (page < 1 || pageSize < 1) {

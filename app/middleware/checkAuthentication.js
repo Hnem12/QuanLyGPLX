@@ -16,7 +16,7 @@ const checkAuthentication = (req, res, next) => {
         const { role } = req.user;
 
         if (role === 'User') {
-            return res.redirect('https://quanlygplx.onrender.com/');
+            return res.redirect('http://localhost:5000/');
         }
 
         // Check the requested path and restrict access based on roles
