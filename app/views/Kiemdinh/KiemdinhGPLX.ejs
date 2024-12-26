@@ -75,7 +75,7 @@
     </div>
   </div>
   
-  <div id="secretKeyModal" class="modal-key">
+  <div id="secretKeyModal" class="modal-key" style="display: none;">
     <div class="modal-content-key">
       <h2>Nhập khóa bí mật</h2>
       <input 
@@ -89,6 +89,8 @@
       </div>
     </div>
   </div>
+  
+  
   
 
 <!-- Modal for adding and editing user -->
@@ -168,11 +170,14 @@
                           <label for="giamdoc" class="form-label">Giám đốc</label>
                           <input type="text" class="form-control" id="giamdoc">
                       </div>
-                   
+                      <div class="mb-3">
+                        <label for="image" class="form-label">Hình ảnh (Tùy chọn)</label>
+                        <input type="file" class="form-control" id="image" accept="image/*">
+                    </div>   
                       <div style="display: flex; justify-content: center;">
                         <button id="pushDataButton1" class="btn mb-3" 
                                 style="background-color: #e2366f; color: white; font-size: 20px; padding: 10px 20px;" 
-                                type="button" >
+                                type="submit" >
                                     Đẩy dữ liệu vào BlockChain
                         </button>
                     </div>               

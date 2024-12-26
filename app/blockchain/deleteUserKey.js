@@ -7,7 +7,7 @@ const fs = require("fs");
 async function revokeUserKey(accountId, signature) {
     try {
         // Load the connection profile
-        const ccpPath = "/home/hnem/Documents/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.json";
+        const ccpPath = "/home/hnem/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.json";
         const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
         // Initialize in-memory wallet and add the provided identity

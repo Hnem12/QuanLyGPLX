@@ -1,9 +1,9 @@
 const { Wallets, Gateway } = require("fabric-network");
 const fs = require('fs');
 
-async function updateDataBlockchain(idSignature, signature, Name, DateOfBirth, CCCD, Address, HangGPLX, PhoneNumber, Email, Ngaycap, Ngayhethan, Ngaytrungtuyen, Status, Giamdoc, Loivipham, MaGPLX) {
+async function updateDataBlockchain(idSignature, signature, MaGPLX, newNgayhethan) {
     try {
-        const ccpPath = "/home/hnem/Documents/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.json";
+        const ccpPath = "/home/hnem/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.json";
         const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
         // Initialize in-memory wallet
@@ -20,7 +20,7 @@ async function updateDataBlockchain(idSignature, signature, Name, DateOfBirth, C
 
         // Submit transaction to chaincode for updating data
         // await contract.submitTransaction('SuaGPLX', MaGPLX, Name, DateOfBirth, CCCD, Address, HangGPLX, PhoneNumber, Email, Ngaycap, Ngayhethan, Ngaytrungtuyen, Status, Giamdoc, Loivipham);
-        await contract.submitTransaction('SuaGPLX', MaGPLX, Name, DateOfBirth, CCCD, Ngaytrungtuyen, Ngaycap, Ngayhethan);
+        await contract.submitTransaction('SuaGPLX',MaGPLX, newNgayhethan);
 
         console.log('Data has been updated on the blockchain');
 

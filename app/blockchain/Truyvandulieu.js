@@ -5,7 +5,7 @@ const { FabricCAServices } = require('fabric-ca-client');
 
 async function queryGPLXData(MaGPLX, userId) {
     try {
-        const ccpPath = "/home/hnem/Documents/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.json";
+        const ccpPath = "/home/hnem/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.json";
         const ccp = JSON.parse(fs.readFileSync(ccpPath, 'utf8'));
 
         // Use a file-based wallet instead of an in-memory wallet

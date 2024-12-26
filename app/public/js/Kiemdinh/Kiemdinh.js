@@ -73,46 +73,6 @@ function nextPage() {
   fetchKiemDinhGPLX();
 }
 
-// Function to open modal for editing
-
-
-// Function to show the secret key modal (with existing modal close logic)
-function showModal() {
-  const existingLicenseHolderModal = bootstrap.Modal.getInstance(document.getElementById('licenseHolderModal'));
-  if (existingLicenseHolderModal) {
-    existingLicenseHolderModal.hide();
-  }
-
-  const modal = document.getElementById('secretKeyModal');
-  // Show the private key modal
-  if (modal) {
-    modal.style.display = 'flex';
-  }
-}
-
-function hideModal() {
-  const modal = document.getElementById('secretKeyModal');
-
-  // Hide the private key modal
-  if (modal) {
-    modal.style.display = 'none';
-  }
-  resetModalForm();
-}
-
-function resetModalForm() {
-  // Reset all input fields inside the modal
-  const modalInputs = document.querySelectorAll('#secretKeyModal input');
-  modalInputs.forEach(input => {
-    input.value = ''; // Reset each input field
-  });
-
-  // If you have other elements like textareas or select elements, reset them similarly:
-  const modalSelects = document.querySelectorAll('#secretKeyModal select');
-  modalSelects.forEach(select => {
-    select.selectedIndex = 0; // Reset select to the first option
-  });
-}
 
 // Cập nhật hàm setupPushDataButton
 function setupPushDataButton() {
@@ -126,27 +86,6 @@ function setupPushDataButton() {
     console.warn("Button with ID 'pushDataButton1' not found.");
   }
 }
-
-// Xử lý khi nhấn nút xác nhận trong modal
-document.getElementById('submitKey').addEventListener('click', async function () {
-  const holderId = document.getElementById('holderId').value.trim(); // Lấy giá trị holderId
-  const privateKey = document.getElementById('privateKeyInput').value.trim(); // Lấy giá trị khóa bí mật
-
-  // Kiểm tra các trường nhập
-  if (!holderId || !privateKey) {
-    alert('ID người dùng hoặc khóa bí mật không hợp lệ.');
-    return;
-  }
-
-  hideModal(); // Ẩn modal sau khi xác nhận
-  await pushAllDataToBlockchain(holderId, privateKey); // Truyền holderId và privateKey vào hàm
-});
-
-// Xử lý khi nhấn nút hủy trong modal
-document.getElementById('cancelKey').addEventListener('click', hideModal);
-
-
-
 // Get Certificate Authority (CA) Key Info
 async function getCAKeyInfo() {
   const accountId = localStorage.getItem('accountId');
@@ -190,17 +129,6 @@ function openModal(holder) {
     return;
   }
 
-  // Close any previously open modals (if any)
-  const existingLicenseHolderModal = bootstrap.Modal.getInstance(document.getElementById('licenseHolderModal'));
-  if (existingLicenseHolderModal) {
-    existingLicenseHolderModal.hide();
-  }
-
-  const existingSecretKeyModal = document.getElementById('secretKeyModal');
-  if (existingSecretKeyModal && existingSecretKeyModal.style.display === 'flex') {
-    existingSecretKeyModal.style.display = 'none';
-  }
-
   // Populate the modal fields with holder data
   document.getElementById('holderId').value = holder._id; // Set the ID for updating
   document.getElementById('gplx').value = holder.MaGPLX || '';
@@ -231,7 +159,7 @@ function openModal(holder) {
   setupPushDataButton(holder._id);
 }
 
-// Function to show the secret key modal (with existing modal close logic)
+// Function to show the secret key modal
 function showModal() {
   const existingLicenseHolderModal = bootstrap.Modal.getInstance(document.getElementById('licenseHolderModal'));
   if (existingLicenseHolderModal) {
@@ -247,7 +175,6 @@ function showModal() {
 
 function hideModal() {
   const modal = document.getElementById('secretKeyModal');
-
   // Hide the private key modal
   if (modal) {
     modal.style.display = 'none';
@@ -276,61 +203,84 @@ function setupPushDataButton(holderId) {
     console.log('Button exists, adding event listener.');
 
     // Listen for click event and show modal
-    pushDataButton.addEventListener('click', showModal); // Just show modal
+    pushDataButton.addEventListener('click', function() {
+      showModal(); // Show modal when button is clicked
+    });
   } else {
     console.warn("Button with ID 'pushDataButton1' not found.");
   }
 }
 
-// Handle submit key button
+// Handle the Submit Key button inside the modal
 document.getElementById('submitKey').addEventListener('click', async function () {
   const holderId = document.getElementById('holderId').value.trim(); // Get holder ID
   const privateKey = document.getElementById('privateKeyInput').value.trim(); // Get private key
 
-  // Validate input fields
+  if (!holderId || !privateKey) {
+    alert('Both holder ID and private key are required!');
+    return; // Exit if either is missing
+  }
 
-  hideModal(); // Hide modal after confirmation
-  await pushAllDataToBlockchain(holderId, privateKey); // Push data to blockchain
+  hideModal(); // Hide the modal after confirmation
+
+  // Push all data to the blockchain
+  await pushAllDataToBlockchain(holderId, privateKey);
+
+  // Send form data to the server after blockchain push
+  const formData = new FormData();
+  formData.append('MaGPLX', document.getElementById('gplx').value.trim());
+  formData.append('Name', document.getElementById('name').value.trim());
+  formData.append('DateOfBirth', document.getElementById('dob').value);
+  formData.append('CCCD', document.getElementById('cccd').value.trim());
+  formData.append('Address', document.getElementById('address').value.trim());
+  formData.append('PhoneNumber', document.getElementById('phone').value.trim());
+  formData.append('Email', document.getElementById('email').value.trim());
+  formData.append('HangGPLX', document.getElementById('hangGPLX').value);
+  formData.append('Ngaycap', document.getElementById('issueDate').value);
+  formData.append('Ngayhethan', document.getElementById('expiryDate').value);
+  formData.append('Ngaytrungtuyen', document.getElementById('ngaytrungtuyen').value);
+  formData.append('Status', 'Đã kích hoạt');
+  formData.append('Giamdoc', document.getElementById('giamdoc').value.trim());
+  formData.append('NgayKiemDinh', new Date().toISOString());
+  formData.append('NguoiKiemDinh', 'Adminkd');
+  formData.append('BuocKiemDinh', 'Hoàn tất kiểm định');
+  
+  // Append image if available
+  const image = document.getElementById('image').files[0];
+  if (image) {
+    formData.append('image', image);
+  }
+
+  // Send data to the server
+  const url = '/api/addLicenseHoldertoKiemdinh';  // Adjust URL if necessary
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      alert(result.message || 'Thao tác thành công!');
+      
+      // Automatically delete the holder after success
+      const newHolderId = document.getElementById('holderId').value || result.data._id;
+      await deleteAccount(newHolderId);
+      
+      resetForm(); // Reset form after success
+      location.reload(); // Reload the page after success
+    } else {
+      alert(result.message || 'Đã có lỗi xảy ra.');
+    }
+  } catch (error) {
+    console.error('Error occurred during fetch:', error);
+    alert('Lỗi khi gửi dữ liệu. Vui lòng kiểm tra kết nối mạng.');
+  }
 });
 
 // Handle cancel button in modal
 document.getElementById('cancelKey').addEventListener('click', hideModal);
-
-// Get Certificate Authority (CA) Key Info
-async function getCAKeyInfo() {
-  const accountId = localStorage.getItem('accountId');
-  if (!accountId) {
-    alert("Account ID không tồn tại. Vui lòng đăng nhập lại.");
-    return null;
-  }
-
-  try {
-    const response = await fetch(`/api/LayCA/${accountId}`);
-    
-    if (response.ok) {
-      const data = await response.json();
-      const { publicKey, mspId, type, accountId } = data;
-
-      // Validate the essential fields
-      if (!publicKey || !mspId || !type || !accountId) {
-        alert("Thông tin chứng chỉ không hợp lệ.");
-        return null;
-      }
-
-      console.log('CA Key Info:', data);  // Log CA key info for debugging
-      // Return CA key data with accountId
-      return { publicKey, mspId, type, accountId };
-    } else {
-      const errorData = await response.json();
-      alert(errorData.message || 'Có lỗi xảy ra khi lấy thông tin chứng chỉ.');
-      return null;
-    }
-  } catch (error) {
-    console.error('Error retrieving CA key info:', error);
-    alert('Có lỗi xảy ra khi lấy thông tin chứng chỉ. Vui lòng thử lại.');
-    return null;
-  }
-}
 
 // Push all data to the blockchain
 async function pushAllDataToBlockchain(holderId, privateKey) {
@@ -392,26 +342,147 @@ async function pushAllDataToBlockchain(holderId, privateKey) {
   }
 }
 
-// Push individual license holder data to blockchain
 async function pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey) {
   const dataToPush = {
     idSignature: caKeyInfo.accountId,
     MaGPLX: holder.MaGPLX,
-    Tenchusohuu: holder.Name, // Assuming 'Name' refers to 'Tenchusohuu'
-    image: holder.image, // Directly pass the image path (this could be URL or file path)
-    Ngaysinh: holder.DateOfBirth, // Assuming 'DateOfBirth' is the actual date
-    CCCD: holder.CCCD, // Assuming 'CCCD' is the actual ID number
-    address: holder.Address, // Assuming 'Address' holds the actual address
-    status: holder.Status, // Assuming 'Status' holds the current status of the license
-    publicKey: caKeyInfo.publicKey, // Assuming we use the retrieved public key
-    mspId: caKeyInfo.mspId, // Assuming we use the mspId from CA key info
-    privateKey: privateKey, // Using the provided private key
+    Tenchusohuu: holder.Name,
+    image: holder.image,
+    Ngaysinh: holder.DateOfBirth,
+    CCCD: holder.CCCD,
+    Ngaytrungtuyen: holder.Ngaytrungtuyen,
+    Ngaycap: holder.Ngaycap,
+    Ngayhethan: holder.Ngayhethan,
+    Address: holder.Address,
+    PhoneNumber: holder.PhoneNumber,
+    Email: holder.Email,
+    Status: holder.Status,
+    Giamdoc: holder.Giamdoc,
+    Loivipham: holder.Loivipham,
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    HangGPLX: holder.HangGPLX,
+    signature: {
+      credentials: {
+        certificate: caKeyInfo.publicKey,
+        privateKey: privateKey,
+      },
+      mspId: caKeyInfo.mspId,
+      type: caKeyInfo.type,
+      version: 1,
+    },
   };
 
-  // Logic for pushing this data to your blockchain
-  // Code for interacting with Hyperledger Fabric or another blockchain system would go here
-  console.log("Data to push:", dataToPush);
+  try {
+    const blockchainResponse = await fetch("/api/createDataformKiemdinh", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataToPush),
+    });
 
-  // For this example, we assume that this will just log the data and resolve the promise
-  return Promise.resolve();
+    if (!blockchainResponse.ok) {
+      const errorResponse = await blockchainResponse.text();
+      console.error(
+        `Failed to push data to blockchain for MaGPLX: ${holder.MaGPLX}`,
+        errorResponse
+      );
+      alert(`Có lỗi khi đẩy dữ liệu cho MaGPLX: ${holder.MaGPLX}`);
+    } else {
+      console.log(`Data pushed successfully for MaGPLX: ${holder.MaGPLX}`);
+    }
+  } catch (error) {
+    console.error(`Error pushing data for MaGPLX: ${holder.MaGPLX}`, error);
+    alert(`Có lỗi khi đẩy dữ liệu cho MaGPLX: ${holder.MaGPLX}`);
+  }
 }
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.getElementById('licenseHolderForm');
+  const secretKeyModal = document.getElementById('secretKeyModal');
+  const submitButton = document.getElementById('submitKey');
+  const cancelButton = document.getElementById('cancelKey');
+
+  // Add event listener to the form for submission
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault(); // Prevent default form submission behavior
+
+    // Show the modal to input the private key
+    secretKeyModal.style.display = 'flex'; // Show the modal
+
+    // Add event listener to submit button (only once)
+    const handleSubmit = async function () {
+      // Collect the form data
+      const formData = new FormData();
+      formData.append('MaGPLX', document.getElementById('gplx').value.trim());
+      formData.append('Name', document.getElementById('name').value.trim());
+      formData.append('DateOfBirth', document.getElementById('dob').value);
+      formData.append('CCCD', document.getElementById('cccd').value.trim());
+      formData.append('Address', document.getElementById('address').value.trim());
+      formData.append('PhoneNumber', document.getElementById('phone').value.trim());
+      formData.append('Email', document.getElementById('email').value.trim());
+      formData.append('HangGPLX', document.getElementById('hangGPLX').value);
+      formData.append('Ngaycap', document.getElementById('issueDate').value);
+      formData.append('Ngayhethan', document.getElementById('expiryDate').value);
+      formData.append('Ngaytrungtuyen', document.getElementById('ngaytrungtuyen').value);
+      formData.append('Status', 'Đã kích hoạt');
+      formData.append('Giamdoc', document.getElementById('giamdoc').value.trim());
+      formData.append('NgayKiemDinh', new Date().toISOString());
+      formData.append('NguoiKiemDinh', 'Adminkd');
+      formData.append('BuocKiemDinh', 'Hoàn tất kiểm định');
+
+      // Append image if available
+      const image = document.getElementById('image').files[0];
+      if (image) {
+        formData.append('image', image);
+      }
+// Push data to blockchain using the formData
+        const blockchainSuccess = await pushDataToBlockchain(formData, holderId, caKeyInfo, privateKey);
+
+        if (blockchainSuccess) {
+      // Send data to the server after form validation
+      const url = '/api/addLicenseHoldertoKiemdinh';  // Adjust URL if necessary
+
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          body: formData
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          alert(result.message || 'Thao tác thành công!');
+
+          // Automatically delete the holder after success
+          const newHolderId = document.getElementById('holderId').value || result.data._id;
+          await deleteAccount(newHolderId);
+
+          resetForm(); // Reset form after success
+          location.reload(); // Reload the page after success
+        } else {
+          alert(result.message || 'Đã có lỗi xảy ra.');
+        }
+      } catch (error) {
+        console.error('Error occurred during fetch:', error);
+        alert('Lỗi khi gửi dữ liệu. Vui lòng kiểm tra kết nối mạng.');
+      }
+    } else {
+      console.error('Blockchain operation failed, data not pushed to MongoDB.');
+    }
+
+      // Close the modal after the form submission is processed
+      secretKeyModal.style.display = 'none'; // Close the modal
+    };
+
+    // Add event listener to the submit button (only once)
+    submitButton.removeEventListener('click', handleSubmit); // Ensure previous listener is removed
+    submitButton.addEventListener('click', handleSubmit);
+
+    // Handle modal cancellation
+    cancelButton.addEventListener('click', function () {
+      secretKeyModal.style.display = 'none'; // Close the modal if the user cancels
+    });
+  });
+});
