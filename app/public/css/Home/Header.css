@@ -52,8 +52,9 @@
   text-decoration: none; /* Bỏ gạch chân */
   font-weight: 500; /* Độ đậm vừa phải */
   font-size: 1.8rem; /* Kích thước chữ lớn hơn một chút */
-  font-family: 'Playfair Display', serif; /* Font serif thanh lịch */
+  font-family:'Times New Roman', Times, serif ; /* Font serif thanh lịch */
   letter-spacing: 1px; /* Khoảng cách giữa các ký tự */
+  font-weight: bold;
   transition: color 0.3s ease; /* Hiệu ứng chuyển màu mượt */
 }
 
@@ -112,6 +113,7 @@
     align-items: center;
     gap: 10px;
   }
+ 
   
   .username {
     font-size: 18px; 

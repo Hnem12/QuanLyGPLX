@@ -94,7 +94,9 @@ table.table tbody tr:hover {
 .Canngang {
   margin-left: 205px;
   transition: margin-left 0.3s ease;
-}
+
+;}
+
 
 /* Pagination styling */
 .pagination {
