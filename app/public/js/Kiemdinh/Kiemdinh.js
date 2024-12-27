@@ -226,57 +226,6 @@ document.getElementById('submitKey').addEventListener('click', async function ()
   // Push all data to the blockchain
   await pushAllDataToBlockchain(holderId, privateKey);
 
-  // Send form data to the server after blockchain push
-  const formData = new FormData();
-  formData.append('MaGPLX', document.getElementById('gplx').value.trim());
-  formData.append('Name', document.getElementById('name').value.trim());
-  formData.append('DateOfBirth', document.getElementById('dob').value);
-  formData.append('CCCD', document.getElementById('cccd').value.trim());
-  formData.append('Address', document.getElementById('address').value.trim());
-  formData.append('PhoneNumber', document.getElementById('phone').value.trim());
-  formData.append('Email', document.getElementById('email').value.trim());
-  formData.append('HangGPLX', document.getElementById('hangGPLX').value);
-  formData.append('Ngaycap', document.getElementById('issueDate').value);
-  formData.append('Ngayhethan', document.getElementById('expiryDate').value);
-  formData.append('Ngaytrungtuyen', document.getElementById('ngaytrungtuyen').value);
-  formData.append('Status', 'Đã kích hoạt');
-  formData.append('Giamdoc', document.getElementById('giamdoc').value.trim());
-  formData.append('NgayKiemDinh', new Date().toISOString());
-  formData.append('NguoiKiemDinh', 'Adminkd');
-  formData.append('BuocKiemDinh', 'Hoàn tất kiểm định');
-  
-  // Append image if available
-  const image = document.getElementById('image').files[0];
-  if (image) {
-    formData.append('image', image);
-  }
-
-  // Send data to the server
-  const url = '/api/addLicenseHoldertoKiemdinh';  // Adjust URL if necessary
-
-  try {
-    const response = await fetch(url, {
-      method: 'POST',
-      body: formData
-    });
-
-    const result = await response.json();
-    if (response.ok) {
-      alert(result.message || 'Thao tác thành công!');
-      
-      // Automatically delete the holder after success
-      const newHolderId = document.getElementById('holderId').value || result.data._id;
-      await deleteAccount(newHolderId);
-      
-      resetForm(); // Reset form after success
-      location.reload(); // Reload the page after success
-    } else {
-      alert(result.message || 'Đã có lỗi xảy ra.');
-    }
-  } catch (error) {
-    console.error('Error occurred during fetch:', error);
-    alert('Lỗi khi gửi dữ liệu. Vui lòng kiểm tra kết nối mạng.');
-  }
 });
 
 // Handle cancel button in modal
@@ -388,101 +337,116 @@ async function pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey) 
         `Failed to push data to blockchain for MaGPLX: ${holder.MaGPLX}`,
         errorResponse
       );
-      alert(`Có lỗi khi đẩy dữ liệu cho MaGPLX: ${holder.MaGPLX}`);
+      return `Có lỗi khi đẩy dữ liệu cho MaGPLX: ${holder.MaGPLX}`;
     } else {
       console.log(`Data pushed successfully for MaGPLX: ${holder.MaGPLX}`);
+      return `Dữ liệu đã được đẩy lên blockchain thành công cho MaGPLX: ${holder.MaGPLX}`;
     }
   } catch (error) {
     console.error(`Error pushing data for MaGPLX: ${holder.MaGPLX}`, error);
-    alert(`Có lỗi khi đẩy dữ liệu cho MaGPLX: ${holder.MaGPLX}`);
+    return `Có lỗi khi đẩy dữ liệu cho MaGPLX: ${holder.MaGPLX}`;
   }
 }
-
 
 document.addEventListener('DOMContentLoaded', function () {
   const form = document.getElementById('licenseHolderForm');
   const secretKeyModal = document.getElementById('secretKeyModal');
   const submitButton = document.getElementById('submitKey');
   const cancelButton = document.getElementById('cancelKey');
+  const messages = []; // Array to collect messages
 
-  // Add event listener to the form for submission
   form.addEventListener('submit', async function (e) {
     e.preventDefault(); // Prevent default form submission behavior
 
-    // Show the modal to input the private key
     secretKeyModal.style.display = 'flex'; // Show the modal
 
-    // Add event listener to submit button (only once)
     const handleSubmit = async function () {
-      // Collect the form data
-      const formData = new FormData();
-      formData.append('MaGPLX', document.getElementById('gplx').value.trim());
-      formData.append('Name', document.getElementById('name').value.trim());
-      formData.append('DateOfBirth', document.getElementById('dob').value);
-      formData.append('CCCD', document.getElementById('cccd').value.trim());
-      formData.append('Address', document.getElementById('address').value.trim());
-      formData.append('PhoneNumber', document.getElementById('phone').value.trim());
-      formData.append('Email', document.getElementById('email').value.trim());
-      formData.append('HangGPLX', document.getElementById('hangGPLX').value);
-      formData.append('Ngaycap', document.getElementById('issueDate').value);
-      formData.append('Ngayhethan', document.getElementById('expiryDate').value);
-      formData.append('Ngaytrungtuyen', document.getElementById('ngaytrungtuyen').value);
-      formData.append('Status', 'Đã kích hoạt');
-      formData.append('Giamdoc', document.getElementById('giamdoc').value.trim());
-      formData.append('NgayKiemDinh', new Date().toISOString());
-      formData.append('NguoiKiemDinh', 'Adminkd');
-      formData.append('BuocKiemDinh', 'Hoàn tất kiểm định');
-
-      // Append image if available
-      const image = document.getElementById('image').files[0];
-      if (image) {
-        formData.append('image', image);
-      }
-// Push data to blockchain using the formData
-        const blockchainSuccess = await pushDataToBlockchain(formData, holderId, caKeyInfo, privateKey);
-
-        if (blockchainSuccess) {
-      // Send data to the server after form validation
-      const url = '/api/addLicenseHoldertoKiemdinh';  // Adjust URL if necessary
-
       try {
+        const formData = new FormData();
+        formData.append('MaGPLX', document.getElementById('gplx').value.trim());
+        formData.append('Name', document.getElementById('name').value.trim());
+        formData.append('DateOfBirth', document.getElementById('dob').value);
+        formData.append('CCCD', document.getElementById('cccd').value.trim());
+        formData.append('Address', document.getElementById('address').value.trim());
+        formData.append('PhoneNumber', document.getElementById('phone').value.trim());
+        formData.append('Email', document.getElementById('email').value.trim());
+        formData.append('HangGPLX', document.getElementById('hangGPLX').value);
+        formData.append('Ngaycap', document.getElementById('issueDate').value);
+        formData.append('Ngayhethan', document.getElementById('expiryDate').value);
+        formData.append('Ngaytrungtuyen', document.getElementById('ngaytrungtuyen').value);
+        formData.append('Status', 'Đã kích hoạt');
+        formData.append('Giamdoc', document.getElementById('giamdoc').value.trim());
+        formData.append('NgayKiemDinh', new Date().toISOString());
+        formData.append('NguoiKiemDinh', 'Adminkd');
+        formData.append('BuocKiemDinh', 'Hoàn tất kiểm định');
+
+        const image = document.getElementById('image').files[0];
+        if (image) {
+          formData.append('image', image);
+        }
+
+        const url = '/api/addLicenseHoldertoKiemdinh';
         const response = await fetch(url, {
           method: 'POST',
-          body: formData
+          body: formData,
         });
 
         const result = await response.json();
-        if (response.ok) {
-          alert(result.message || 'Thao tác thành công!');
 
-          // Automatically delete the holder after success
+        if (response.ok) {
+          
+          messages.push(result.message || 'Thêm GPLX thành công!');
           const newHolderId = document.getElementById('holderId').value || result.data._id;
           await deleteAccount(newHolderId);
+          if (newHolderId) {
+            const blockchainMessage = await pushDataToBlockchain(formData, holderId, caKeyInfo, privateKey);
+            messages.push(blockchainMessage);
+          }
 
-          resetForm(); // Reset form after success
-          location.reload(); // Reload the page after success
+          resetForm();
+          location.reload();
         } else {
-          alert(result.message || 'Đã có lỗi xảy ra.');
+          messages.push(result.message || 'Đã có lỗi xảy ra khi thêm GPLX.');
         }
-      } catch (error) {
-        console.error('Error occurred during fetch:', error);
-        alert('Lỗi khi gửi dữ liệu. Vui lòng kiểm tra kết nối mạng.');
-      }
-    } else {
-      console.error('Blockchain operation failed, data not pushed to MongoDB.');
-    }
 
-      // Close the modal after the form submission is processed
-      secretKeyModal.style.display = 'none'; // Close the modal
+        // Close modal
+        secretKeyModal.style.display = 'none';
+      } catch (error) {
+        console.error('Unexpected error during form submission:', error);
+      }
+
+      // Display all messages in a single alert
+      alert(messages.join('\n'));
     };
 
-    // Add event listener to the submit button (only once)
-    submitButton.removeEventListener('click', handleSubmit); // Ensure previous listener is removed
+    submitButton.removeEventListener('click', handleSubmit);
     submitButton.addEventListener('click', handleSubmit);
 
-    // Handle modal cancellation
     cancelButton.addEventListener('click', function () {
-      secretKeyModal.style.display = 'none'; // Close the modal if the user cancels
+      secretKeyModal.style.display = 'none';
     });
   });
 });
+
+async function deleteAccount(holderId) {
+  if (!holderId) {
+    console.error('Invalid holder ID');
+    return;
+  }
+
+  try {
+    const response = await fetch(`/api/kiemdinh/${holderId}`, {
+      method: 'DELETE'
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      location.reload(); // Tải lại trang sau khi xóa
+    } else {
+      alert(result.message || 'Lỗi khi xóa, vui lòng thử lại.');
+    }
+  } catch (error) {
+    console.error('Lỗi:', error);
+    alert('Lỗi khi gửi yêu cầu xóa. Vui lòng kiểm tra kết nối mạng.');
+  }
+}
