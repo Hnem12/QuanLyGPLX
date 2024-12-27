@@ -115,7 +115,7 @@ table.table tbody tr:nth-child(even) td {
   border-radius: 5px; /* Rounded corners */
   text-align: center; /* Center text */
   display: inline-block; /* Inline block display to wrap around text */
-  font-size: 14px; /* Font size */
+  font-size: 15px; /* Font size */
   font-weight: bold; /* Bold text */
 }
 
@@ -132,7 +132,7 @@ i {
 /* Email column styling */
 .email {
   display: inline-block;
-  max-width: 90px;
+  max-width: 110px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -256,7 +256,7 @@ i {
   }
 
   .email {
-    max-width: 100px; /* Shorten email max width for mobile */
+    max-width: 110px; /* Shorten email max width for mobile */
   }
 
   /* Optional: Reduce font sizes for smaller screens */

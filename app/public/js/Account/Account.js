@@ -41,14 +41,17 @@ function displayAccounts(page) {
                 <td>${account.Gender}</td>
                 <td>${account.role}</td>
                 <td>
-                    <img src="${account.image}" alt="Account Image" style="width: 100px; height: 100px;" />
+                    <img src="${account.image}" alt="Account Image" style="width: 110px; height: 100px;" />
                 </td>
                 <td>
                     <span class="status">${account.status}</span>
                 </td>
                 <td>
-                    <button class="btn btn-warning btn-sm" onclick='openModal(${JSON.stringify(account)})'>Sửa</button>
-                    <button class="btn btn-danger btn-sm" onclick="deleteAccount('${account._id}')">Xóa</button>
+                <button class="btn btn-warning btn-sm" 
+                        style="transform: scale(1.15); margin-right: 10px;
+; font-weight:bold;" 
+                        onclick='openModal(${JSON.stringify(account)})'>Sửa</button>
+                <button class="btn btn-danger btn-sm" style="transform: scale(1.15);font-weight:bold;" onclick="deleteAccount('${account._id}')">Xóa</button>
                 </td>
             </tr>
         `;
@@ -261,7 +264,7 @@ function openModal(accountData) {
         addressField.value = '';
         genderField.value = '';
         roleField.value = 'User'; // Default role
-        status.value = 'Chưa kích hoạt';
+        status.value = 'Inactive';
     }
 
     // Show the modal

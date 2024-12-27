@@ -189,12 +189,26 @@ function resetModalForm() {
     input.value = ''; // Reset each input field
   });
 
+  // Reset image input field
+  const imageInput = document.querySelector('#secretKeyModal input[type="file"]');
+  if (imageInput) {
+    imageInput.value = ''; // Clear the file input (image)
+  }
+
+  // Reset date input fields
+  const dateInputs = document.querySelectorAll('#secretKeyModal input[type="date"]');
+  dateInputs.forEach(input => {
+    input.value = ''; // Clear date input
+  });
+
   // If you have other elements like textareas or select elements, reset them similarly:
   const modalSelects = document.querySelectorAll('#secretKeyModal select');
   modalSelects.forEach(select => {
     select.selectedIndex = 0; // Reset select to the first option
   });
 }
+
+
 
 // Setup push data button to show secret key modal
 function setupPushDataButton(holderId) {
@@ -347,6 +361,19 @@ async function pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey) 
     return `Có lỗi khi đẩy dữ liệu cho MaGPLX: ${holder.MaGPLX}`;
   }
 }
+
+const imageInput = document.getElementById('image');
+const pushDataButton = document.getElementById('pushDataButton1');
+
+// Kiểm tra xem người dùng đã chọn ảnh chưa
+imageInput.addEventListener('change', function() {
+    // Nếu có ảnh được chọn, kích hoạt nút
+    if (imageInput.files.length > 0) {
+        pushDataButton.disabled = false;
+    } else {
+        pushDataButton.disabled = true;
+    }
+});
 
 document.addEventListener('DOMContentLoaded', function () {
   const form = document.getElementById('licenseHolderForm');

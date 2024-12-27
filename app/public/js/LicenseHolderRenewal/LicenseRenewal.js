@@ -37,8 +37,7 @@ async function fetchKiemDinhGPLX() {
             <td>${holder.Giamdoc}</td>
             <td><span class="status1">${holder.Status}</span></td>
             <td>
-              <button class="btn btn-danger btn-sm" onclick='openModal(${JSON.stringify(holder)})'>Kiểm định</button>
-            </td>
+ <button class="btn btn-danger btn-sm" style="transform: scale(1.15);  font-weight: bold; font-size:14px" onclick='openModal(${JSON.stringify(holder)})'>Kiểm định</button>            </td>
           </tr>
         `;
         tableBody.insertAdjacentHTML('beforeend', row);
@@ -274,3 +273,30 @@ function resetForm() {
   document.getElementById('holderId').value = ''; // Clear holderId field
   document.getElementById('image').value = ''; // Clear image file input
 }
+
+const imageInput = document.getElementById('image');
+const pushDataButton = document.getElementById('saveInspectionButton');
+
+// Kiểm tra xem người dùng đã chọn ảnh chưa
+imageInput.addEventListener('change', function() {
+    // Nếu có ảnh được chọn, kích hoạt nút
+    if (imageInput.files.length > 0) {
+        pushDataButton.disabled = false;
+    } else {
+        pushDataButton.disabled = true;
+    }
+});
+
+
+const imageInput1 = document.getElementById('image1');
+const pushDataButton1 = document.getElementById('saveInspectionButton1');
+
+// Kiểm tra xem người dùng đã chọn ảnh chưa
+imageInput1.addEventListener('change', function() {
+    // Nếu có ảnh được chọn, kích hoạt nút
+    if (imageInput1.files.length > 0) {
+      pushDataButton1.disabled = false;
+    } else {
+      pushDataButton1.disabled = true;
+    }
+});
