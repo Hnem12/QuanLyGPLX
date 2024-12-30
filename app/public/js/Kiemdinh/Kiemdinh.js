@@ -24,7 +24,7 @@ async function fetchKiemDinhGPLX() {
             <td>${(currentPage - 1) * pageSize + index + 1}</td>
             <td>${holder.MaGPLX}</td>
             <td>${holder.Name}</td>
-            <td> <img src="${holder.image}" alt="Account Image" style="width: 120px; height: 100px;" /> </td>
+            <td> <img src="${holder.image}" alt="Account Image" style="width: 135px; height: 110px;" /> </td>
             <td>${new Date(holder.DateOfBirth).toLocaleDateString()}</td>
             <td>${holder.CCCD}</td>
             <td>${holder.BuocKiemDinh}</td>

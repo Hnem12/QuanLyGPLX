@@ -25,7 +25,7 @@ async function fetchLicenseHolders() {
             <td>${(currentPage - 1) * pageSize + index + 1}</td>
             <td>${holder.MaGPLX}</td>
             <td>${holder.Name}</td>
-            <td> <img src="${holder.image}" alt="Account Image" style="width: 125px; height: 100px;" /> </td>
+            <td> <img src="${holder.image}" alt="Account Image" style="width: 135px; height: 105px;" /> </td>
             <td>${new Date(holder.DateOfBirth).toLocaleDateString()}</td>
             <td>${holder.CCCD}</td>
             <td>${holder.Address}</td>
@@ -327,11 +327,9 @@ async function pushAllDataToBlockchain() {
     );
 
     await Promise.all(promises);
-
     alert("Tất cả dữ liệu đã được đẩy vào BlockChain thành công!");
   } catch (error) {
     console.error("Error:", error);
-    alert("Có lỗi xảy ra khi đẩy dữ liệu vào BlockChain.");
   }
 }
 
@@ -381,7 +379,6 @@ async function pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey) 
         `Failed to push data to blockchain for MaGPLX: ${holder.MaGPLX}`,
         errorResponse
       );
-      alert(`Có lỗi khi đẩy dữ liệu cho MaGPLX: ${holder.MaGPLX}`);
     } else {
       console.log(`Data pushed successfully for MaGPLX: ${holder.MaGPLX}`);
     }

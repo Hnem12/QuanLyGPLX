@@ -71,7 +71,7 @@ const ChusohuuGPLXSchema = new Schema({
         required: true,
         unique: true
     },
-    image: { type: String, required: true }     
+    image: { type: String, zrequired: true }     
 }, {
     collection: 'chusohuuGPLX',
     timestamps: true // Tự động tạo trường createdAt và updatedAt

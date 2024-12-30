@@ -20,15 +20,15 @@ const checkAuthentication = (req, res, next) => {
         }
 
         // Check the requested path and restrict access based on roles
-        if (req.path === '/licenseHolder' && (role === 'Admin' || role === 'Admin Giám Đốc')) {
+        if (req.path === '/licenseHolder' && (role === 'Admin' || role === 'Director Admin')) {
             return next();
-        } else if (req.path === '/ApprovelicenselHoder' && (role === 'Admin' || role === 'Admin Sát Hạch' || role === 'Admin Kiểm Định')) {
+        } else if (req.path === '/ApprovelicenselHoder' && (role === 'Admin' || role === 'Test Admin' || role === 'Verified Admin')) {
             return next();
-        } else if (req.path === '/renewals' && (role === 'Admin' || role === 'Admin Kiểm Định' || role === 'Admin Sát Hạch')) {
+        } else if (req.path === '/renewals' && (role === 'Admin' || role === 'Verified Admin' || role === 'Test Admin')) {
             return next();
-        } else if (req.path === '/renew' && (role === 'Admin' || role === 'Admin Sát Hạch' || role === 'Admin Kiểm Định')) {
+        } else if (req.path === '/renew' && (role === 'Admin' || role === 'Test Admin' || role === 'Verified Admin')) {
             return next();
-        }else if (req.path === '/kiemdinhGPLX' && (role === 'Admin' || role === 'Admin Kiểm Định')) {
+        }else if (req.path === '/kiemdinhGPLX' && (role === 'Admin' || role === 'Verified Admin')) {
             return next();
         } else if (req.path === '/account' && (role === 'Admin' )) {
             return next();

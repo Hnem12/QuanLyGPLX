@@ -443,3 +443,85 @@ h3 {
 .modal-dialog {
   z-index: 1052; /* Modal dialog appears above overlay */
 }
+
+
+/* General Modal Styling */
+.modal-dialog {
+  max-width: 800px; /* Adjust width */
+  margin: auto; /* Center the modal */
+}
+
+.modal-content {
+  border-radius: 10px; /* Rounded corners for modal */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+/* Header Styling */
+.modal-header {
+  background-color: #e2366f; /* Blue header background */
+  color: white; /* White text for contrast */
+  border-bottom: 2px solid #e2366f; /* Darker border for emphasis */
+  text-align: center;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 auto;
+}
+
+.btn-close {
+  color: white; /* Close button in white */
+  background: none;
+  border: none;
+}
+
+/* Body Styling */
+.modal-body {
+  padding: 20px;
+  background-color: #f9f9f9; /* Light grey background for contrast */
+}
+
+/* Form Styling */
+.form-label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-control {
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+}
+
+input[type="file"] {
+  padding: 5px;
+}
+
+/* Select Field Styling */
+select.form-control {
+  padding: 8px;
+  border-radius: 5px;
+}
+
+/* Buttons */
+#submitBtn {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#submitBtn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modal-dialog {
+    max-width: 90%; /* Make modal take most of the screen on small devices */
+  }
+}

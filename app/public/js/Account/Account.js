@@ -41,15 +41,14 @@ function displayAccounts(page) {
                 <td>${account.Gender}</td>
                 <td>${account.role}</td>
                 <td>
-                    <img src="${account.image}" alt="Account Image" style="width: 110px; height: 100px;" />
+                    <img src="${account.image}" alt="Account Image" style="width: 145px; height: 110px;" />
                 </td>
                 <td>
                     <span class="status">${account.status}</span>
                 </td>
                 <td>
                 <button class="btn btn-warning btn-sm" 
-                        style="transform: scale(1.15); margin-right: 10px;
-; font-weight:bold;" 
+                        style="transform: scale(1.15); margin-right: 10px; font-weight:bold;" 
                         onclick='openModal(${JSON.stringify(account)})'>Sửa</button>
                 <button class="btn btn-danger btn-sm" style="transform: scale(1.15);font-weight:bold;" onclick="deleteAccount('${account._id}')">Xóa</button>
                 </td>
