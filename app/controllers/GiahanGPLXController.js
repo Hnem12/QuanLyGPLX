@@ -139,9 +139,55 @@ const getAllGiahanGPLX = async (req, res) => {
         });
     }
 };
+const getallRenewal = async (req, res) => {
+    try {
+        // Get page and pageSize from query parameters, default to 1 and 5 if not provided
+        const page = parseInt(req.query.page) || 1;
+        const pageSize = parseInt(req.query.pageSize) || 999;
+
+        // Calculate the number of records to skip based on the page
+        const skip = (page - 1) * pageSize;
+
+        // Define the filter for status
+        const filter = { Status: "Đã hết hạn" };
+
+        // Count the total number of records with the filter
+        const totalRecords = await GiahanGPLXModel.countDocuments(filter);
+
+        // Calculate the total number of pages
+        const totalPages = Math.ceil(totalRecords / pageSize);
+
+        // Fetch the records with pagination and the status filter
+        const GiahanGPLXList = await GiahanGPLXModel.find(filter)
+            .skip(skip)      // Skip the records based on the page number
+            .limit(pageSize) // Limit the records to the pageSize
+            .exec();
+
+        // If no records found
+        if (!GiahanGPLXList.length) {
+            return res.status(404).json({ message: 'Không có dữ liệu' });
+        }
+
+        // Return the results with pagination details
+        return res.status(200).json({
+            GiahanGPLXList,
+            totalRecords,
+            totalPages,
+            currentPage: page,
+            pageSize
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            message: 'Có lỗi khi lấy dữ liệu kiểm định GPLX',
+            error: error.message
+        });
+    }
+};
 
 
 module.exports = {
     addLicenseHolderRewals,
-    getAllGiahanGPLX
+    getAllGiahanGPLX,
+    getallRenewal
 }

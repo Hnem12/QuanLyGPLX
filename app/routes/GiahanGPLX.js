@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const {addLicenseHolderRewals, getAllGiahanGPLX} = require('../controllers/GiahanGPLXController');
+const {addLicenseHolderRewals, getAllGiahanGPLX, getallRenewal} = require('../controllers/GiahanGPLXController');
 const { imageUpload } = require('../middleware/upload');
 const LicenseHolderGiahan = require('../models/GiahanGPLX');
 
@@ -8,6 +8,8 @@ const LicenseHolderGiahan = require('../models/GiahanGPLX');
 router.post('/addRenewals', imageUpload.single('image'), addLicenseHolderRewals);
 
 router.get('/getallRenewals', getAllGiahanGPLX);
+// Lấy một chủ sở hữu GPLX cụ thể theo ID
+router.get('/getall', getallRenewal);
 
 
 router.delete('/:id', async (req, res) => {
