@@ -40,7 +40,6 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Sử dụng router upload ảnh
 app.use('/api/images', imageRoutes);
-DangKyAdmin();
 // Use routes
 app.use('/api/account/', accountRouter);
 app.use('/api/licenseHolder/', licenseHolderRoutes);
