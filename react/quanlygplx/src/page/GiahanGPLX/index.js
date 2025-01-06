@@ -96,7 +96,6 @@ const provinces = [
     { value: 'Quảng Bình', label: 'Quảng Bình' },
     { value: 'Quảng Trị', label: 'Quảng Trị' },
     { value: 'Thừa Thiên Huế', label: 'Thừa Thiên Huế' },
-    { value: 'Đà Nẵng', label: 'Đà Nẵng' },
     { value: 'Khánh Hòa', label: 'Khánh Hòa' },
     { value: 'Bình Định', label: 'Bình Định' },
     { value: 'Phú Yên', label: 'Phú Yên' },
@@ -160,7 +159,7 @@ function GplxRenewForm() {
         signature: null,
     });
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState([]);   
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [isCameraModalVisible, setIsCameraModalVisible] = useState(false);
@@ -169,15 +168,22 @@ function GplxRenewForm() {
     const fetchApi = async (signal) => {
         try {
             setLoading(true);
-            const response = await fetch('http://localhost:3000/api/renewals/getall', { signal });
-
-            if (!response.ok) throw new Error('Network response was not ok');        
+            console.log('Fetching data from API...');
+            const response = await fetch('http://localhost:3000/api/renewal/getall', { signal });
+    
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Server responded with error:', errorText);
+                throw new Error('Server returned an error.');
+            }
+    
             const result = await response.json();
-            console.log('Fetched Data:', result); // Debugging
-
+            console.log('Fetched data:', result); // Debugging
             setData(Array.isArray(result.data) ? result.data : []);
         } catch (error) {
-            if (error.name !== 'AbortError') {  // Ignore abort errors
+            if (error.name === 'AbortError') {
+                console.log('Fetch aborted.');
+            } else {
                 console.error('Error fetching data:', error);
                 setError('Error fetching data. Please try again later.');
             }
@@ -185,6 +191,8 @@ function GplxRenewForm() {
             setLoading(false);
         }
     };
+    
+    
 
     useEffect(() => {
         const controller = new AbortController();  // Create an AbortController to handle unmount
@@ -194,61 +202,52 @@ function GplxRenewForm() {
         return () => controller.abort();
     }, []);
 
-    const handleSearch = async (e) => {
+    const handleSearch = (e) => {
         e.preventDefault();
-    
         setError('');
         setLoading(true);
     
         const licenseNumber = form.getFieldValue('gplxCode')?.trim();
         const issuingPlaces = form.getFieldValue('issuingPlaces');
     
-        // Kiểm tra thông tin đầu vào
+        console.log('licenseNumber:', licenseNumber, 'issuingPlaces:', issuingPlaces); // Debugging
+    
+        // Validate user input
         if (!licenseNumber || !issuingPlaces) {
             setLoading(false);
             return setError('Vui lòng điền đầy đủ thông tin giấy phép lái xe và nơi cấp.');
         }
     
-        const url = `https://quanligplx-hdu-edu-vn.onrender.com/api/renewals/${encodeURIComponent(licenseNumber)}/${encodeURIComponent(issuingPlaces)}`;
+        // Check if data is available before filtering
+        if (!data || data.length === 0) {
+            setLoading(false);
+            return setError('Dữ liệu không có sẵn.');
+        }
     
         try {
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-            });
+            // Filter the locally fetched data
+            const filteredData = data.filter(
+                (item) =>
+                    item.gplxCode === licenseNumber && item.issuingPlaces === issuingPlaces
+            );
     
-            if (response.status === 404) {
-                // Khi không tìm thấy thông tin
-                throw new Error('Không tìm thấy thông tin giấy phép lái xe.');
-            }
+            console.log('filteredData:', filteredData); // Debugging
     
-            if (!response.ok) {
-                // Xử lý lỗi khác từ server
-                throw new Error('Có lỗi xảy ra khi kết nối đến hệ thống.');
-            }
-    
-            const result = await response.json();
-    
-            // Kiểm tra dữ liệu trả về từ API
-            if (Array.isArray(result?.data) && result.data.length > 0) {
+            if (filteredData.length > 0) {
                 clearFormData();
-                updateFormData(result.data[0]);
-            } else if (result?.data) {
-                clearFormData();
-                updateFormData(result.data);
+                updateFormData(filteredData[0]);
             } else {
                 throw new Error('Không tìm thấy thông tin giấy phép lái xe.');
             }
         } catch (error) {
-            // Hiển thị lỗi phù hợp cho người dùng
-            console.error('Error fetching data from backend:', error);
-            setError(error.message);
+            console.error('Error during search:', error);
+            setError(error.message || 'Đã xảy ra lỗi không xác định.');
         } finally {
             setLoading(false);
         }
     };
     
-
+    
     
     const updateFormData = (data) => {
         console.log('Updating form data with:', data); // Debugging

@@ -32,6 +32,10 @@
   font-size: 18px;
   font-family: 'Times New Roman', Times, serif;
 }
+input[type="date"] {
+  font-style: italic;  // Làm chữ nghiêng cho giá trị nhập vào
+}
+
 /* Optional: Add decorative lines to increase difficulty */
 .capcha:before,
 .capcha:after {
@@ -129,6 +133,8 @@
 
 .modal-content {
   margin: 0 auto;
+  width: 90%;
+  font-size: 20px;
 }
 
 .modal-header {

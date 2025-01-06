@@ -91,7 +91,7 @@ const LicenseSearch = () => {
                             type="text"
                             value={searchValue}
                             onChange={(e) => setSearchValue(e.target.value)}
-                            className="border border-gray-300 p-2 w-full "
+                            className="border border-gray-300 p-2 w-full"
                         />
                     </div>
                     <div className="mb-3">
@@ -116,7 +116,7 @@ const LicenseSearch = () => {
                             <button 
                                 type="button"
                                 onClick={generateCaptcha}
-                                className="bg-blue-500 text-white p-2 rounded-md ml-4 hover:bg-blue-600 transition duration-200 Canle"
+                                className="bg-blue-500 text-white p-2 rounded-md ml-4 hover:bg-blue-600 transition duration-200 canle"
                             >
                                 Tải lại
                             </button>
@@ -129,7 +129,7 @@ const LicenseSearch = () => {
                             onChange={(e) => setCaptchaInput(e.target.value)}
                         />
                     </div>
-                    <button type="submit" className="bg-blue-500 text-white p-2 rounded Font">
+                    <button type="submit" className="bg-blue-500 text-white p-2 rounded canle">
                         TRA CỨU GIẤY PHÉP LÁI XE
                     </button>
                 </form>
@@ -140,7 +140,7 @@ const LicenseSearch = () => {
                 {showModal && (
                     <div className={`modal ${showModal ? 'show' : ''}`}>
                         <div className="modal-content">
-                            <h2 className="modal-header">Thông tin GPLX</h2>
+                            <h2 className="modal-header">THÔNG TIN GPLX</h2>
                             {holder && (
                             <div className="modal-body" style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <div className="modal-info-left" style={{ flex: 1, paddingRight: '10px' }}>

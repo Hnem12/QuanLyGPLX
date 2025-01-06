@@ -1,0 +1,69 @@
+.form-container1 {
+  max-width: 1150px;
+  padding: 20px;
+  margin: 20px auto;
+  border-radius: 15px; /* Bo góc */
+  background: linear-gradient(135deg, #ffffff, #f9f9f9); /* Màu nền gradient nhẹ */
+  border: 1px solid #e0e0e0; /* Viền nhạt */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Bóng đổ mượt */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng chuyển đổi */
+
+  /* Hiệu ứng khi hover */
+  &:hover {
+    transform: translateY(-5px); /* Khung nổi lên khi hover */
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.form-title1 {
+  font-family: 'Times New Roman', serif;
+  font-size: 25px;
+  font-weight: bold;
+  text-align: center;
+  color: white;
+  background: linear-gradient(90deg, #5c8f5e, #0d47a1);
+  background-clip: text; /* Thuộc tính chuẩn */
+  -webkit-background-clip: text; /* Thuộc tính với tiền tố -webkit */
+  -webkit-text-fill-color: transparent;
+}
+
+.form-submit-button {
+  width: 100%;
+}
+
+.upload-button {
+  display: inline-flex;
+  align-items: center;
+}
+
+.form-item-input {
+  font-family: 'Times New Roman', serif;
+  font-size: 10px;
+  font-weight: inherit;
+  font-style: italic; /* Thêm chữ nghiêng */
+}
+
+.form-actions1 {
+  display: flex;
+  flex-direction: column; /* Sắp xếp các phần tử theo cột */
+  align-items: start; /* Căn trái nội dung */
+  gap: 10px; /* Khoảng cách giữa các phần tử */
+}
+
+.form-submit-button {
+  background-color: #1890ff;
+  color: white;
+  font-family: 'Times New Roman', serif;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 5px;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #40a9ff;
+  }
+}
+.form-item-upload{
+  display: flex;
+}
