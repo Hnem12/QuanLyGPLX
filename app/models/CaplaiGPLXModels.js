@@ -74,6 +74,7 @@ const CaplaiGPLXSchema = new Schema(
       required: true,
       unique: true
   },
+  IssuingPlaces: { type: String, required: true, trim: true }, // New field added,
   image: { type: String, required: true } 
   },
   {
