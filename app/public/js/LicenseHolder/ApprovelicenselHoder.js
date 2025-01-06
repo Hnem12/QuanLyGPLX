@@ -115,7 +115,7 @@ document.getElementById('licenseHolderForm').addEventListener('submit', async fu
   const holderId = document.getElementById('holderId').value;
 
   // Set the appropriate API URL based on whether it's a new or existing holder
-  const url = holderId ? '/api/kiemdinh/them' : '/api/addlicenseHolder';
+  const url = '/api/kiemdinh/them';
   // Gather form data
   const formData = new FormData();
 

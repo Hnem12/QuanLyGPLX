@@ -41,23 +41,23 @@ const addLicenseHolderRenew = async (req, res) => {
             });
         }
 
-        // Validate Dates using moment.js
-        if (!moment(DateOfBirth, 'YYYY-MM-DD', true).isValid()) {
-            return res.status(400).json({
-                success: false,
-                message: 'Ngày sinh không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).'
-            });
-        }
+        // // Validate Dates using moment.js
+        // if (!moment(DateOfBirth, 'YYYY-MM-DD', true).isValid()) {
+        //     return res.status(400).json({
+        //         success: false,
+        //         message: 'Ngày sinh không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).'
+        //     });
+        // }
 
-        const dateFields = [Ngaycap, Ngayhethan, Ngaytrungtuyen];
-        for (let field of dateFields) {
-            if (!moment(field, 'YYYY-MM-DD', true).isValid()) {
-                return res.status(400).json({
-                    success: false,
-                    message: `Ngày ${field} không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).`
-                });
-            }
-        }
+        // const dateFields = [Ngaycap, Ngayhethan, Ngaytrungtuyen];
+        // for (let field of dateFields) {
+        //     if (!moment(field, 'YYYY-MM-DD', true).isValid()) {
+        //         return res.status(400).json({
+        //             success: false,
+        //             message: `Ngày ${field} không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).`
+        //         });
+        //     }
+        // }
 
         // Create new LicenseHolder
         const licenseHolderRenew = new CaplaiGPLXModels({
