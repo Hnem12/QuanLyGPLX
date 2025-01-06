@@ -2,11 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Input, Select, Button, DatePicker, Upload, Form, Checkbox, Modal , Collapse } from 'antd';
 import { UploadOutlined, CameraOutlined  } from '@ant-design/icons';
 import { PlusOutlined } from '@ant-design/icons';
-
 import moment from 'moment';
 import './RenewallForm.scss';
 const { Panel } = Collapse;
-
 const { Option } = Select;
 
 // List of issuing countries
@@ -165,10 +163,10 @@ function GplxRenewForm() {
     const [isCameraModalVisible, setIsCameraModalVisible] = useState(false);
     const [isChecked, setIsChecked] = useState(false);
 
+
     const fetchApi = async (signal) => {
         try {
             setLoading(true);
-            console.log('Fetching data from API...');
             const response = await fetch('http://localhost:3000/api/renewal/getall', { signal });
     
             if (!response.ok) {
@@ -176,95 +174,112 @@ function GplxRenewForm() {
                 console.error('Server responded with error:', errorText);
                 throw new Error('Server returned an error.');
             }
-    
+
             const result = await response.json();
-            console.log('Fetched data:', result); // Debugging
-            setData(Array.isArray(result.data) ? result.data : []);
+            
+            if (!result.GiahanGPLXList || !Array.isArray(result.GiahanGPLXList)) {
+                setData([]);
+                setError('API không trả về dữ liệu hợp lệ.');
+                return;
+            }
+    
+            setData(result.GiahanGPLXList);  // Cập nhật dữ liệu từ 'GiahanGPLXList'
         } catch (error) {
             if (error.name === 'AbortError') {
                 console.log('Fetch aborted.');
             } else {
                 console.error('Error fetching data:', error);
-                setError('Error fetching data. Please try again later.');
+                setError('Lỗi không thể lấy dữ liệu từ API. Vui lòng thử lại sau.');
             }
         } finally {
             setLoading(false);
         }
     };
     
-    
-
-    useEffect(() => {
-        const controller = new AbortController();  // Create an AbortController to handle unmount
-        fetchApi(controller.signal);
-
-        // Cleanup on unmount to abort fetch
-        return () => controller.abort();
-    }, []);
-
     const handleSearch = (e) => {
         e.preventDefault();
         setError('');
         setLoading(true);
     
         const licenseNumber = form.getFieldValue('gplxCode')?.trim();
-        const issuingPlaces = form.getFieldValue('issuingPlaces');
-    
-        console.log('licenseNumber:', licenseNumber, 'issuingPlaces:', issuingPlaces); // Debugging
-    
-        // Validate user input
+        const issuingPlaces = form.getFieldValue('issuingPlaces')?.trim();    
         if (!licenseNumber || !issuingPlaces) {
             setLoading(false);
             return setError('Vui lòng điền đầy đủ thông tin giấy phép lái xe và nơi cấp.');
         }
     
-        // Check if data is available before filtering
         if (!data || data.length === 0) {
             setLoading(false);
-            return setError('Dữ liệu không có sẵn.');
+            return setError('Không có dữ liệu giấy phép lái xe trong hệ thống.');
         }
     
         try {
-            // Filter the locally fetched data
-            const filteredData = data.filter(
-                (item) =>
-                    item.gplxCode === licenseNumber && item.issuingPlaces === issuingPlaces
-            );
-    
-            console.log('filteredData:', filteredData); // Debugging
+            const filteredData = data.filter((item) => {
+                const codeMatch = (item.MaGPLX || '').trim().toLowerCase() === licenseNumber.toLowerCase(); // Thay gplxCode bằng MaGPLX
+                const placeMatch = (item.issuingPlaces || '').trim().toLowerCase() === issuingPlaces.toLowerCase(); // Đảm bảo so sánh đúng nơi cấp
+                return codeMatch && placeMatch;
+            });
     
             if (filteredData.length > 0) {
-                clearFormData();
+                form.resetFields();    
+                // Update form with the filtered data
                 updateFormData(filteredData[0]);
-            } else {
-                throw new Error('Không tìm thấy thông tin giấy phép lái xe.');
+                } else {
+                setError(`Không tìm thấy giấy phép lái xe với mã '${licenseNumber}' và nơi cấp '${issuingPlaces}'.`);
             }
         } catch (error) {
-            console.error('Error during search:', error);
-            setError(error.message || 'Đã xảy ra lỗi không xác định.');
+            setError('Đã xảy ra lỗi không xác định.');
         } finally {
             setLoading(false);
         }
     };
     
-    
-    
+    // Update form data
     const updateFormData = (data) => {
-        console.log('Updating form data with:', data); // Debugging
         const updatedData = {
             fullName: data.Name || '',
             birthDate: data.DateOfBirth ? moment(data.DateOfBirth, 'YYYY-MM-DD') : null,
-            expirationDate: data.ExpirationDate ? moment(data.ExpirationDate, 'YYYY-MM-DD') : null,
-            issueDate: data.IssueDate ? moment(data.IssueDate, 'YYYY-MM-DD') : null,
+            issueDate: data.Ngaycap ? moment(data.Ngaycap, 'YYYY-MM-DD') : null,
+            expirationDate: data.Ngayhethan ? moment(data.Ngayhethan, 'YYYY-MM-DD') : null,
             gender: data.Gender || '',
             nationality: data.Nationality || '',
             idNumber: data.CCCD || '',
             residence: data.Address || '',
-            placeOfIssue: data.IssuingPlace || '',
+            placeOfIssue: data.issuingPlaces || '',
         };    
         setFormData(updatedData);
         form.setFieldsValue(updatedData);
     };
+    
+    
+
+    // Fetch data on component mount
+    useEffect(() => {
+        const controller = new AbortController();
+        fetchApi(controller.signal);
+
+        // Cleanup on unmount
+        return () => controller.abort();
+    }, []);
+    
+    
+        
+    // const updateFormData = (data) => {
+    //     console.log('Updating form data with:', data); // Debugging
+    //     const updatedData = {
+    //         fullName: data.Name || '',
+    //         birthDate: data.DateOfBirth ? moment(data.DateOfBirth, 'YYYY-MM-DD') : null,
+    //         expirationDate: data.ExpirationDate ? moment(data.ExpirationDate, 'YYYY-MM-DD') : null,
+    //         issueDate: data.IssueDate ? moment(data.IssueDate, 'YYYY-MM-DD') : null,
+    //         gender: data.Gender || '',
+    //         nationality: data.Nationality || '',
+    //         idNumber: data.CCCD || '',
+    //         residence: data.Address || '',
+    //         placeOfIssue: data.IssuingPlace || '',
+    //     };    
+    //     setFormData(updatedData);
+    //     form.setFieldsValue(updatedData);
+    // };
     
 
 
@@ -375,7 +390,7 @@ const clearFormData = () => {
                 <div className="gplx-form-container">
                     <Form form={form} layout="vertical" onFinish={handleSubmit} initialValues={formData}>
                         {/* Search Section */}
-                        <p style={{ color: 'red', fontSize: '15px', textAlign: 'center', marginTop:'-10px' }}>
+                        <p style={{ color: 'red', fontSize: '17px', textAlign: 'center', marginTop:'-10px',fontFamily: "Times New Roman, serif" }}>
                     <strong>Bạn hãy nhập Số GPLX Quốc gia (12 số) và nơi cấp, nhấn Tìm kiếm để lấy thông tin GPLX.
                     Lưu ý kiểm tra thông tin các hạng GPLX.</strong>
                     </p>
@@ -383,6 +398,7 @@ const clearFormData = () => {
                             <Form.Item
                                 label="Số GPLX Quốc gia"
                                 name="gplxCode"
+                                labelCol={{ style: { fontFamily: "Times New Roman, serif"  } }}
                                 rules={[{ required: true, message: 'Vui lòng nhập số GPLX!' }]}
                             >
                                 <Input
@@ -391,15 +407,14 @@ const clearFormData = () => {
                                 />
                             </Form.Item>
                             <Form.Item
-                                labelCol={{ style: { marginLeft: '10px' } }} // Shift label to the left
-                                label="Nơi cấp GPLX Quốc gia"
+                                label={<span style={{ marginLeft: '10px', fontFamily: "Times New Roman, serif" }}>Nơi cấp GPLX Quốc gia</span>}
                                 name="issuingPlaces"
                                 rules={[{ required: true, message: 'Vui lòng chọn nơi cấp!' }]}
                             >
                                 <Select
                                     style={{ marginLeft: '10px' }}
                                     placeholder="Chọn nơi cấp"
-                                    onChange={(value) => setFormData({ ...formData, issuingPlaces: value })}
+                                    onChange={(value) => setFormData((prev) => ({ ...prev, issuingPlaces: value }))}
                                 >
                                     {issuingPlaces.map((country) => (
                                         <Option key={country.value} value={country.value}>
@@ -408,10 +423,11 @@ const clearFormData = () => {
                                     ))}
                                 </Select>
                             </Form.Item>
-                            <Button className="Timkiem" type="primary" onClick={handleSearch}>
+
+                            <Button labelCol={{ style: { fontFamily: "Times New Roman, serif" } }} className="Timkiem" type="primary" onClick={handleSearch}>
                                 Tìm kiếm
                             </Button>
-                            <Button type="default" onClick={clearFormData} style={{ marginLeft: '10px', marginTop:'8px'}}>
+                            <Button labelCol={{ style: { fontFamily: "Times New Roman, serif" } }} type="default" onClick={clearFormData} style={{ marginLeft: '10px', marginTop:'8px'}}>
                                 Clear
                             </Button>
                         </div>
