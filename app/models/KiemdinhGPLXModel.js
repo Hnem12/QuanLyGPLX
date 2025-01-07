@@ -18,6 +18,9 @@ const KiemdinhGPLXSchema = new Schema({
         unique: true,
         trim: true
     },
+    Gender: { type: String,
+        enum: ['Male', 'Female'], 
+        required: true },
     Address: {
         type: String,
         required: true,

@@ -110,7 +110,6 @@ const addGPLXKDtoBlockchain = async (req, res) => {
         Email, 
         PhoneNumber, 
         Giamdoc, 
-       
         Status, // Don't set default value here
     } = req.body;
     const status = 'Hoàn thành kiểm định'; // Default 'Đã kích hoạt' if Status is not provided
@@ -124,15 +123,14 @@ const addGPLXKDtoBlockchain = async (req, res) => {
             Tenchusohuu, 
             image, 
             Ngaysinh, 
-            CCCD, 
-             Gender,
+            CCCD,
+            Gender, 
             Ngaytrungtuyen, 
             Ngaycap, 
             Ngayhethan, 
             Email, 
             PhoneNumber, 
             Giamdoc, 
-            Gender,
             status // Use the status variable here
         );
 
