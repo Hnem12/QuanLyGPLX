@@ -50,6 +50,7 @@ const addNewGPLXtoBlockchain = async (req, res) => {
         image, 
         Ngaysinh, 
         CCCD, 
+        Gender,
         Ngaytrungtuyen, 
         Ngaycap, 
         Ngayhethan, 
@@ -69,7 +70,8 @@ const addNewGPLXtoBlockchain = async (req, res) => {
             Tenchusohuu, 
             image, 
             Ngaysinh, 
-            CCCD, 
+            CCCD,
+            Gender, 
             Ngaytrungtuyen, 
             Ngaycap, 
             Ngayhethan, 
@@ -101,12 +103,14 @@ const addGPLXKDtoBlockchain = async (req, res) => {
         image, 
         Ngaysinh, 
         CCCD, 
+        Gender,
         Ngaytrungtuyen, 
         Ngaycap, 
         Ngayhethan, 
         Email, 
         PhoneNumber, 
         Giamdoc, 
+       
         Status, // Don't set default value here
     } = req.body;
     const status = 'Hoàn thành kiểm định'; // Default 'Đã kích hoạt' if Status is not provided
@@ -121,12 +125,14 @@ const addGPLXKDtoBlockchain = async (req, res) => {
             image, 
             Ngaysinh, 
             CCCD, 
+             Gender,
             Ngaytrungtuyen, 
             Ngaycap, 
             Ngayhethan, 
             Email, 
             PhoneNumber, 
             Giamdoc, 
+            Gender,
             status // Use the status variable here
         );
 
@@ -162,7 +168,8 @@ const updateGPLXData = async (req, res) => {
             Status, 
             Giamdoc, 
             Loivipham, 
-            MaGPLX
+            MaGPLX,
+            Gender
         } = req.body;
 
         // Call the blockchain update function
@@ -182,7 +189,8 @@ const updateGPLXData = async (req, res) => {
             Status, 
             Giamdoc, 
             Loivipham, 
-            MaGPLX
+            MaGPLX,
+            Gender
         );
 
         return res.status(200).json({
@@ -257,17 +265,17 @@ const addLicenseHolder = async (req, res) => {
     try {
         // Validate input data
         const { 
-            MaGPLX, Name, DateOfBirth, CCCD, Address, PhoneNumber, Email, Ngaycap, Ngayhethan, Status, Giamdoc, Ngaytrungtuyen, HangGPLX 
+            MaGPLX, Name, DateOfBirth, CCCD, Address, PhoneNumber, Email, Ngaycap, Ngayhethan, Status, Giamdoc, Ngaytrungtuyen, HangGPLX ,Gender
         } = req.body;
 
         // Handle image path (null if no file is uploaded)
         const image = req.file ? req.file.path : null;
 
         // Required fields validation
-        if (!MaGPLX || !Name || !DateOfBirth || !CCCD || !Address || !PhoneNumber || !Email || !Ngaycap || !Ngayhethan || !Giamdoc || !Ngaytrungtuyen || !HangGPLX) {
+        if (!MaGPLX || !Name || !DateOfBirth || !CCCD || !Address || !PhoneNumber || !Email || !Ngaycap || !Ngayhethan || !Giamdoc || !Ngaytrungtuyen || !HangGPLX || !Gender) {
             return res.status(400).json({
                 success: false,
-                message: 'Mã GPLX, tên, ngày sinh, CCCD, địa chỉ, số điện thoại, email, ngày cấp, ngày hết hạn, giám đốc, ngày trúng tuyển, và hạng GPLX là bắt buộc.'
+                message: 'Mã GPLX, tên, ngày sinh,giới tính, CCCD, địa chỉ, số điện thoại, email, ngày cấp, ngày hết hạn, giám đốc, ngày trúng tuyển, và hạng GPLX là bắt buộc.'
             });
         }
                 
@@ -289,23 +297,23 @@ const addLicenseHolder = async (req, res) => {
             });
         }
 
-        // Validate Dates using moment.js
-        if (!moment(DateOfBirth, 'YYYY-MM-DD', true).isValid()) {
-            return res.status(400).json({
-                success: false,
-                message: 'Ngày sinh không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).'
-            });
-        }
+        // // Validate Dates using moment.js
+        // if (!moment(DateOfBirth, 'YYYY-MM-DD', true).isValid()) {
+        //     return res.status(400).json({
+        //         success: false,
+        //         message: 'Ngày sinh không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).'
+        //     });
+        // }
 
-        const dateFields = [Ngaycap, Ngayhethan, Ngaytrungtuyen];
-        for (let field of dateFields) {
-            if (!moment(field, 'YYYY-MM-DD', true).isValid()) {
-                return res.status(400).json({
-                    success: false,
-                    message: `Ngày ${field} không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).`
-                });
-            }
-        }
+        // const dateFields = [Ngaycap, Ngayhethan, Ngaytrungtuyen];
+        // for (let field of dateFields) {
+        //     if (!moment(field, 'YYYY-MM-DD', true).isValid()) {
+        //         return res.status(400).json({
+        //             success: false,
+        //             message: `Ngày ${field} không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).`
+        //         });
+        //     }
+        // }
 
         // Create new LicenseHolder
         const licenseHolder = new ChusohuuGPLXModel({
@@ -322,6 +330,7 @@ const addLicenseHolder = async (req, res) => {
             Giamdoc,
             Ngaytrungtuyen,
             HangGPLX,
+            Gender,
             image
         });
 
@@ -350,17 +359,17 @@ const addLicenseHoldertoKiemdinh = async (req, res) => {
     try {
         // Validate input data
         const { 
-            MaGPLX, Name, DateOfBirth, CCCD, Address, PhoneNumber, Email, Ngaycap, Ngayhethan, Status, Giamdoc, Ngaytrungtuyen, HangGPLX 
+            MaGPLX, Name, DateOfBirth, CCCD, Address, PhoneNumber, Email, Ngaycap, Ngayhethan, Status, Giamdoc, Ngaytrungtuyen, HangGPLX , Gender
         } = req.body;
 
         // Handle image path (null if no file is uploaded)
         const image = req.file ? req.file.path : null;
 
         // Required fields validation
-        if (!MaGPLX || !Name || !DateOfBirth || !CCCD || !Address || !PhoneNumber || !Email || !Ngaycap || !Ngayhethan || !Giamdoc || !Ngaytrungtuyen || !HangGPLX) {
+        if (!MaGPLX || !Name || !DateOfBirth || !CCCD || !Address || !PhoneNumber || !Email || !Ngaycap || !Ngayhethan || !Giamdoc || !Ngaytrungtuyen || !HangGPLX || !Gender) {
             return res.status(400).json({
                 success: false,
-                message: 'Mã GPLX, tên, ngày sinh, CCCD, địa chỉ, số điện thoại, email, ngày cấp, ngày hết hạn, giám đốc, ngày trúng tuyển, và hạng GPLX là bắt buộc.'
+                message: 'Mã GPLX, tên, ngày sinh,giới tính, CCCD, địa chỉ, số điện thoại, email, ngày cấp, ngày hết hạn, giám đốc, ngày trúng tuyển, và hạng GPLX là bắt buộc.'
             });
         }
                 
@@ -382,23 +391,23 @@ const addLicenseHoldertoKiemdinh = async (req, res) => {
             });
         }
 
-        // Validate Dates using moment.js
-        if (!moment(DateOfBirth, 'YYYY-MM-DD', true).isValid()) {
-            return res.status(400).json({
-                success: false,
-                message: 'Ngày sinh không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).'
-            });
-        }
+        // // Validate Dates using moment.js
+        // if (!moment(DateOfBirth, 'YYYY-MM-DD', true).isValid()) {
+        //     return res.status(400).json({
+        //         success: false,
+        //         message: 'Ngày sinh không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).'
+        //     });
+        // }
 
-        const dateFields = [Ngaycap, Ngayhethan, Ngaytrungtuyen];
-        for (let field of dateFields) {
-            if (!moment(field, 'YYYY-MM-DD', true).isValid()) {
-                return res.status(400).json({
-                    success: false,
-                    message: `Ngày ${field} không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).`
-                });
-            }
-        }
+        // const dateFields = [Ngaycap, Ngayhethan, Ngaytrungtuyen];
+        // for (let field of dateFields) {
+        //     if (!moment(field, 'YYYY-MM-DD', true).isValid()) {
+        //         return res.status(400).json({
+        //             success: false,
+        //             message: `Ngày ${field} không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).`
+        //         });
+        //     }
+        // }
 
         // Create new LicenseHolder
         const licenseHolder = new ChusohuuGPLXModel({
@@ -415,7 +424,8 @@ const addLicenseHoldertoKiemdinh = async (req, res) => {
             Giamdoc,
             Ngaytrungtuyen,
             HangGPLX,
-            image
+            image,
+            Gender
         });
 
         // Save to DB

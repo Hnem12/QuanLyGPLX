@@ -53,6 +53,9 @@ const ChusohuuGPLXSchema = new Schema({
         type: Date,
         required: true
     },
+    Gender: { type: String,
+        enum: ['Male', 'Female'], 
+        required: true },
     Status: {
         type: String,
         enum: ['Đã kích hoạt', 'Chờ kiểm định'],

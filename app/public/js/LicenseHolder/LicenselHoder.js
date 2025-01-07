@@ -92,6 +92,7 @@ function openModal(holder) {
   document.getElementById('name').value = holder.Name || '';
   document.getElementById('dob').value = holder.DateOfBirth ? holder.DateOfBirth.split('T')[0] : '';
   document.getElementById('cccd').value = holder.CCCD || '';
+  document.getElementById('gender').value = holder.Gender || '';
   document.getElementById('phone').value = holder.PhoneNumber || '';
   document.getElementById('email').value = holder.Email || '';
   document.getElementById('address').value = holder.Address || '';
@@ -129,6 +130,7 @@ document.getElementById('licenseHolderForm').addEventListener('submit', async fu
   formData.append('MaGPLX', document.getElementById('gplx').value.trim());
   formData.append('Name', document.getElementById('name').value.trim());
   formData.append('DateOfBirth', document.getElementById('dob').value);
+  formData.append('Gender', document.getElementById('gender').value);
   formData.append('CCCD', document.getElementById('cccd').value.trim());
   formData.append('Address', document.getElementById('address').value.trim());
   formData.append('PhoneNumber', document.getElementById('phone').value.trim());
@@ -341,6 +343,7 @@ async function pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey) 
     image: holder.image,
     Ngaysinh: holder.DateOfBirth,
     CCCD: holder.CCCD,
+    Gender: holder.Gender,
     Ngaytrungtuyen: holder.Ngaytrungtuyen,
     Ngaycap: holder.Ngaycap,
     Ngayhethan: holder.Ngayhethan,

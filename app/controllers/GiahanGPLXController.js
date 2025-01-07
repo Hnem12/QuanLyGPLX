@@ -8,14 +8,14 @@ const addLicenseHolderRewals = async (req, res) => {
     try {
         // Validate input data
         const { 
-            MaGPLX, Name, DateOfBirth, CCCD, Address, PhoneNumber, Email, Ngaycap, Ngayhethan, Status, Giamdoc, Ngaytrungtuyen, HangGPLX 
+            MaGPLX, Name, DateOfBirth, CCCD, Gender, Address, PhoneNumber, Email, Ngaycap, Ngayhethan, Status, Giamdoc, Ngaytrungtuyen, HangGPLX 
         } = req.body;
 
         // Handle image path (null if no file is uploaded)
         const image = req.file ? req.file.path : null;
 
         // Required fields validation
-        if (!MaGPLX || !Name || !DateOfBirth || !CCCD || !Address || !PhoneNumber || !Email || !Ngaycap || !Ngayhethan || !Giamdoc || !Ngaytrungtuyen || !HangGPLX) {
+        if (!MaGPLX || !Name || !DateOfBirth || !Gender || !CCCD || !Address || !PhoneNumber || !Email || !Ngaycap || !Ngayhethan || !Giamdoc || !Ngaytrungtuyen || !HangGPLX) {
             return res.status(400).json({
                 success: false,
                 message: 'Mã GPLX, tên, ngày sinh, CCCD, địa chỉ, số điện thoại, email, ngày cấp, ngày hết hạn, giám đốc, ngày trúng tuyển, và hạng GPLX là bắt buộc.'
@@ -40,23 +40,23 @@ const addLicenseHolderRewals = async (req, res) => {
             });
         }
 
-        // Validate Dates using moment.js
-        if (!moment(DateOfBirth, 'YYYY-MM-DD', true).isValid()) {
-            return res.status(400).json({
-                success: false,
-                message: 'Ngày sinh không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).'
-            });
-        }
+        // // Validate Dates using moment.js
+        // if (!moment(DateOfBirth, 'YYYY-MM-DD', true).isValid()) {
+        //     return res.status(400).json({
+        //         success: false,
+        //         message: 'Ngày sinh không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).'
+        //     });
+        // }
 
-        const dateFields = [Ngaycap, Ngayhethan, Ngaytrungtuyen];
-        for (let field of dateFields) {
-            if (!moment(field, 'YYYY-MM-DD', true).isValid()) {
-                return res.status(400).json({
-                    success: false,
-                    message: `Ngày ${field} không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).`
-                });
-            }
-        }
+        // const dateFields = [Ngaycap, Ngayhethan, Ngaytrungtuyen];
+        // for (let field of dateFields) {
+        //     if (!moment(field, 'YYYY-MM-DD', true).isValid()) {
+        //         return res.status(400).json({
+        //             success: false,
+        //             message: `Ngày ${field} không hợp lệ. Vui lòng nhập định dạng ngày hợp lệ (YYYY-MM-DD).`
+        //         });
+        //     }
+        // }
 
         // Create new LicenseHolder
         const licenseHolderRewals = new GiahanGPLXModel({
@@ -64,6 +64,7 @@ const addLicenseHolderRewals = async (req, res) => {
             Name,
             DateOfBirth,
             CCCD,
+            Gender,
             Address,
             PhoneNumber,
             Email,

@@ -22,6 +22,9 @@ const CaplaiGPLXSchema = new Schema(
       unique: true,
       trim: true
   },
+  Gender: { type: String,
+    enum: ['Male', 'Female'], 
+    required: true },
   Address: {
       type: String,
       required: true,
@@ -74,7 +77,6 @@ const CaplaiGPLXSchema = new Schema(
       required: true,
       unique: true
   },
-  IssuingPlaces: { type: String, required: true, trim: true }, // New field added,
   image: { type: String, required: true } 
   },
   {

@@ -7,6 +7,7 @@ const themKiemDinhGPLX = async (req, res) => {
             Name,
             DateOfBirth,
             CCCD,
+            Gender,
             Address,
             HangGPLX,
             PhoneNumber,
@@ -24,7 +25,7 @@ const themKiemDinhGPLX = async (req, res) => {
         } = req.body;
 
         // Kiểm tra dữ liệu đầu vào
-        if (!MaGPLX || !Name || !DateOfBirth || !NgayKiemDinh || !NguoiKiemDinh) {
+        if (!MaGPLX || !Name || !DateOfBirth || !NgayKiemDinh || !NguoiKiemDinh || !Gender) {
             return res.status(400).json({
                 message: 'Các trường bắt buộc chưa được điền đầy đủ.'
             });
@@ -41,6 +42,7 @@ const themKiemDinhGPLX = async (req, res) => {
             Name,
             DateOfBirth,
             CCCD,
+            Gender,
             Address,
             HangGPLX,
             PhoneNumber,

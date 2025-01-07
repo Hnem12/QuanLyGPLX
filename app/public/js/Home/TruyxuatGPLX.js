@@ -49,6 +49,15 @@ async function fetchLicenseHolder() {
   }
 }
 
+// Hàm chuyển đổi giá trị giới tính
+function getGenderLabel(Gender) {
+  if (Gender === 'Female') return 'Nữ';
+  if (Gender === 'Male') return 'Nam';
+  return ''; // Trả về chuỗi rỗng nếu không xác định
+}
+
+// Gán vào đoạn mã HTML
+const holder = { Gender: 'Female' }; // Ví dụ về dữ liệu
 
 function displayLicenseHolder(holder) {
   const detailDiv = document.getElementById('details');
@@ -69,6 +78,7 @@ function displayLicenseHolder(holder) {
           <p><strong>Tên:</strong> ${holder.Tenchusohuu || ''}</p>
           <p><strong>Ngày sinh:</strong> ${holder.Ngaysinh ? new Date(holder.Ngaysinh).toLocaleDateString() : ''}</p>
           <p><strong>CCCD:</strong> ${holder.CCCD || ''}</p>
+           <p><strong>Giới tính:</strong> ${getGenderLabel(holder.Gender) || ''}</p>
           <p><strong>Số điện thoại:</strong> ${holder.PhoneNumber || ''}</p>
           <p><strong>Email:</strong> ${holder.Email || ''}</p>
         </div>

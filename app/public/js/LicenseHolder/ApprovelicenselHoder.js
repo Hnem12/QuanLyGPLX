@@ -89,6 +89,7 @@ function openModal(holder) {
   document.getElementById('gplx').value = holder.MaGPLX || '';
   document.getElementById('name').value = holder.Name || '';
   document.getElementById('dob').value = holder.DateOfBirth ? holder.DateOfBirth.split('T')[0] : '';
+  document.getElementById('gender').value = holder.Gender || '';
   document.getElementById('cccd').value = holder.CCCD || '';
   document.getElementById('phone').value = holder.PhoneNumber || '';
   document.getElementById('email').value = holder.Email || '';
@@ -123,6 +124,7 @@ document.getElementById('licenseHolderForm').addEventListener('submit', async fu
   formData.append('MaGPLX', document.getElementById('gplx').value.trim());
   formData.append('Name', document.getElementById('name').value.trim());
   formData.append('DateOfBirth', document.getElementById('dob').value);
+  formData.append('Gender', document.getElementById('gender').value);
   formData.append('CCCD', document.getElementById('cccd').value.trim());
   formData.append('Address', document.getElementById('address').value.trim());
   formData.append('PhoneNumber', document.getElementById('phone').value.trim());
@@ -222,6 +224,7 @@ document.getElementById('addInspectionForm').addEventListener('submit', async (e
   formData.append('MaGPLX', document.getElementById('gplx1').value.trim());
   formData.append('Name', document.getElementById('name1').value.trim());
   formData.append('DateOfBirth', document.getElementById('dob1').value);
+  formData.append('Gender', document.getElementById('gender1').value);
   formData.append('CCCD', document.getElementById('cccd1').value.trim());
   formData.append('Address', document.getElementById('address1').value.trim());
   formData.append('PhoneNumber', document.getElementById('phone1').value.trim());
