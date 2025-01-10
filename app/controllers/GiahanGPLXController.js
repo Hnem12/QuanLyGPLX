@@ -8,7 +8,8 @@ const addLicenseHolderRewals = async (req, res) => {
     try {
         // Validate input data
         const { 
-            MaGPLX, Name, DateOfBirth, CCCD, Gender, Address, PhoneNumber, Email, Ngaycap, Ngayhethan, Status, Giamdoc, Ngaytrungtuyen, HangGPLX 
+            MaGPLX, Name, DateOfBirth, CCCD, Gender, Address, PhoneNumber, Email, Ngaycap, Ngayhethan, Status, Giamdoc, Ngaytrungtuyen, HangGPLX, 
+            Country 
         } = req.body;
 
         // Handle image path (null if no file is uploaded)
@@ -73,7 +74,8 @@ const addLicenseHolderRewals = async (req, res) => {
             Status: 'Chờ kiểm định',
             Giamdoc,
             Ngaytrungtuyen,
-            HangGPLX,
+            HangGPLX, 
+            Country,
             image
         });
 
@@ -100,31 +102,42 @@ const addLicenseHolderRewals = async (req, res) => {
 
 const getAllGiahanGPLX = async (req, res) => {
     try {
-        // Get page and pageSize from query parameters, default to 1 and 5 if not provided
+        // Lấy page và pageSize từ tham số truy vấn, mặc định là 1 và 5 nếu không có
         const page = parseInt(req.query.page) || 1;
         const pageSize = parseInt(req.query.pageSize) || 5;
         
-        // Calculate the number of records to skip based on the page
+        // Tính toán số bản ghi cần bỏ qua dựa trên trang hiện tại
         const skip = (page - 1) * pageSize;
 
-        // Count the total number of records
-        const totalRecords = await GiahanGPLXModel.countDocuments();
+        // Sắp xếp theo Status để ưu tiên "Chờ kiểm định" lên trên
+        const sort = { 
+            Status: 1,  // Sắp xếp để "Chờ kiểm định" lên trên
+        };
 
-        // Calculate the total number of pages
+        // Đếm tổng số bản ghi có trạng thái "Chờ kiểm định"
+        const totalRecords = await GiahanGPLXModel.countDocuments({ Status: "Chờ kiểm định" });
+
+        // Tính toán tổng số trang
         const totalPages = Math.ceil(totalRecords / pageSize);
 
-        // Fetch the records with pagination
-        const kiemdinhGPLXList = await GiahanGPLXModel.find()
-            .skip(skip)      // Skip the records based on the page number
-            .limit(pageSize) // Limit the records to the pageSize
-            .exec();
-
-        // If no records found
-        if (!kiemdinhGPLXList.length) {
-            return res.status(404).json({ message: 'Không có dữ liệu' });
+        // Nếu không có dữ liệu thì trả về thông báo
+        if (totalRecords === 0) {
+            return res.status(404).json({ message: 'Không có dữ liệu kiểm định với trạng thái "Chờ kiểm định"' });
         }
 
-        // Return the results with pagination details
+        // Lấy các bản ghi với phân trang và sắp xếp
+        const kiemdinhGPLXList = await GiahanGPLXModel.find({ Status: "Chờ kiểm định" })
+            .sort(sort)    // Sắp xếp theo Status để "Chờ kiểm định" lên trên
+            .skip(skip)    // Bỏ qua các bản ghi theo trang
+            .limit(pageSize) // Giới hạn số bản ghi theo kích thước trang
+            .exec();
+
+        // Nếu không có bản ghi nào trong trang yêu cầu
+        if (!kiemdinhGPLXList.length) {
+            return res.status(404).json({ message: 'Không có dữ liệu trong trang này' });
+        }
+
+        // Trả về kết quả cùng với thông tin phân trang
         return res.status(200).json({
             kiemdinhGPLXList,
             totalRecords,
@@ -140,6 +153,7 @@ const getAllGiahanGPLX = async (req, res) => {
         });
     }
 };
+
 const getallRenewal = async (req, res) => {
     try {
         // Get page and pageSize from query parameters, default to 1 and 5 if not provided

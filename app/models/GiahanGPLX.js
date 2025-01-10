@@ -33,6 +33,12 @@ const LicenseRenewalSchema = new Schema({
         enum: ['B1', 'B2', 'C', 'D', 'E'], // Danh sách các hạng GPLX có sẵn
         trim: true
     },
+       Country: {
+        type: String,
+        required: true,
+        enum: ['Vietnam', 'USA', 'UK', 'France', 'Germany', 'Other'], // Danh sách các quốc gia
+        default: 'Vietnam'
+    },
     PhoneNumber: {
         type: String,
         required: true,

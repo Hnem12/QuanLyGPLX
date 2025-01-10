@@ -9,14 +9,14 @@ const addLicenseHolderRenew = async (req, res) => {
         // Validate input data
         const { 
             MaGPLX, Name , DateOfBirth, CCCD, Gender, Address, PhoneNumber, Email, Ngaycap, Ngayhethan, 
-            Status, Giamdoc, Ngaytrungtuyen, HangGPLX ,Lidocaplai
+            Status, Giamdoc, Ngaytrungtuyen, HangGPLX ,Lidocaplai, Country
         } = req.body;
 
         // Handle image path (null if no file is uploaded)
         const image = req.file ? req.file.path : null;
 
         // Required fields validation
-        if (!MaGPLX || !Name || !DateOfBirth || !CCCD || !Address || !PhoneNumber || !Email || !Ngaycap || !Ngayhethan || !Giamdoc || !Ngaytrungtuyen || !HangGPLX || !Gender) {
+        if (!MaGPLX || !Name || !DateOfBirth || !CCCD || !Address || !PhoneNumber || !Email || !Ngaycap || !Ngayhethan || !Giamdoc || !Ngaytrungtuyen || !HangGPLX || !Gender || !Country) {
             return res.status(400).json({
                 success: false,
                 message: 'Mã GPLX, tên, ngày sinh, CCCD, địa chỉ, số điện thoại, email, ngày cấp, ngày hết hạn, giám đốc, ngày trúng tuyển, và hạng GPLX là bắt buộc.'
@@ -75,6 +75,7 @@ const addLicenseHolderRenew = async (req, res) => {
             Giamdoc,
             Ngaytrungtuyen,
             HangGPLX,
+            Country,
             image,
             
         });

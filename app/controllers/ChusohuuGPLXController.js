@@ -55,7 +55,9 @@ const addNewGPLXtoBlockchain = async (req, res) => {
         Ngaycap, 
         Ngayhethan, 
         Email, 
-        PhoneNumber, 
+        PhoneNumber,
+        HangGPLX, 
+            Country, 
         Giamdoc, 
         Status, // Don't set default value here
     } = req.body;
@@ -77,6 +79,8 @@ const addNewGPLXtoBlockchain = async (req, res) => {
             Ngayhethan, 
             Email, 
             PhoneNumber, 
+            HangGPLX, 
+            Country,
             Giamdoc, 
             status // Use the status variable here
         );
@@ -109,6 +113,8 @@ const addGPLXKDtoBlockchain = async (req, res) => {
         Ngayhethan, 
         Email, 
         PhoneNumber, 
+        HangGPLX, 
+        Country,
         Giamdoc, 
         Status, // Don't set default value here
     } = req.body;
@@ -129,7 +135,9 @@ const addGPLXKDtoBlockchain = async (req, res) => {
             Ngaycap, 
             Ngayhethan, 
             Email, 
-            PhoneNumber, 
+            PhoneNumber,
+            HangGPLX, 
+            Country, 
             Giamdoc, 
             status // Use the status variable here
         );
@@ -158,6 +166,7 @@ const updateGPLXData = async (req, res) => {
             CCCD, 
             Address, 
             HangGPLX, 
+            Country,
             PhoneNumber, 
             Email, 
             Ngaycap, 
@@ -179,6 +188,7 @@ const updateGPLXData = async (req, res) => {
             CCCD, 
             Address, 
             HangGPLX, 
+            Country,
             PhoneNumber, 
             Email, 
             Ngaycap, 
@@ -263,7 +273,8 @@ const addLicenseHolder = async (req, res) => {
     try {
         // Validate input data
         const { 
-            MaGPLX, Name, DateOfBirth, CCCD, Address, PhoneNumber, Email, Ngaycap, Ngayhethan, Status, Giamdoc, Ngaytrungtuyen, HangGPLX ,Gender
+            MaGPLX, Name, DateOfBirth, CCCD, Address, PhoneNumber, Email, Ngaycap, Ngayhethan, Status, Giamdoc, Ngaytrungtuyen, HangGPLX, 
+            Country ,Gender
         } = req.body;
 
         // Handle image path (null if no file is uploaded)
@@ -327,7 +338,8 @@ const addLicenseHolder = async (req, res) => {
             Status: 'Chờ kiểm định',
             Giamdoc,
             Ngaytrungtuyen,
-            HangGPLX,
+            HangGPLX, 
+            Country,
             Gender,
             image
         });
@@ -357,7 +369,8 @@ const addLicenseHoldertoKiemdinh = async (req, res) => {
     try {
         // Validate input data
         const { 
-            MaGPLX, Name, DateOfBirth, CCCD, Address, PhoneNumber, Email, Ngaycap, Ngayhethan, Status, Giamdoc, Ngaytrungtuyen, HangGPLX , Gender
+            MaGPLX, Name, DateOfBirth, CCCD, Address, PhoneNumber, Email, Ngaycap, Ngayhethan, Status, Giamdoc, Ngaytrungtuyen, HangGPLX, 
+            Country, Gender
         } = req.body;
 
         // Handle image path (null if no file is uploaded)
@@ -421,7 +434,8 @@ const addLicenseHoldertoKiemdinh = async (req, res) => {
             Status: 'Đã kích hoạt',
             Giamdoc,
             Ngaytrungtuyen,
-            HangGPLX,
+            HangGPLX, 
+            Country,
             image,
             Gender
         });

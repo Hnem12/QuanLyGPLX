@@ -143,6 +143,7 @@ function openModal(holder) {
   document.getElementById('expiryDate').value = holder.Ngayhethan ? holder.Ngayhethan.split('T')[0] : '';
   document.getElementById('ngaytrungtuyen').value = holder.Ngaytrungtuyen ? holder.Ngaytrungtuyen.split('T')[0] : '';
   document.getElementById('hangGPLX').value = holder.HangGPLX || '';
+  document.getElementById('country').value = holder.Country || '';
   document.getElementById('status').value = holder.Status || 'Đang kiểm định';
   document.getElementById('giamdoc').value = holder.Giamdoc || ''; 
 
@@ -327,6 +328,7 @@ async function pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey) 
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     HangGPLX: holder.HangGPLX,
+    Country: holder.Country,
     signature: {
       credentials: {
         certificate: caKeyInfo.publicKey,
@@ -401,6 +403,7 @@ document.addEventListener('DOMContentLoaded', function () {
         formData.append('PhoneNumber', document.getElementById('phone').value.trim());
         formData.append('Email', document.getElementById('email').value.trim());
         formData.append('HangGPLX', document.getElementById('hangGPLX').value);
+        formData.append('Country', document.getElementById('country').value);
         formData.append('Ngaycap', document.getElementById('issueDate').value);
         formData.append('Ngayhethan', document.getElementById('expiryDate').value);
         formData.append('Ngaytrungtuyen', document.getElementById('ngaytrungtuyen').value);

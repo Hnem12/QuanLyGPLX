@@ -356,6 +356,7 @@ async function pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey) 
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     HangGPLX: holder.HangGPLX,
+    Country: holder.Country,
     signature: {
       credentials: {
         certificate: caKeyInfo.publicKey,

@@ -99,6 +99,7 @@ function openModal(holder) {
   document.getElementById('expiryDate').value = holder.Ngayhethan ? holder.Ngayhethan.split('T')[0] : '';
   document.getElementById('ngaytrungtuyen').value = holder.Ngaytrungtuyen ? holder.Ngaytrungtuyen.split('T')[0] : '';
   document.getElementById('hangGPLX').value = holder.HangGPLX || '';
+  document.getElementById('country').value = holder.Country || '';
   document.getElementById('status').value = holder.Status || 'Chưa kiểm định';  // Set initial status to 'Đang kiểm định'
   document.getElementById('giamdoc').value = holder.Giamdoc || '';
 
@@ -131,6 +132,7 @@ document.getElementById('licenseHolderForm').addEventListener('submit', async fu
   formData.append('PhoneNumber', document.getElementById('phone').value.trim());
   formData.append('Email', document.getElementById('email').value.trim());
   formData.append('HangGPLX', document.getElementById('hangGPLX').value);
+  formData.append('Country', document.getElementById('country').value);
   formData.append('Ngaycap', document.getElementById('issueDate').value);
   formData.append('Ngayhethan', document.getElementById('expiryDate').value);
   formData.append('Ngaytrungtuyen', document.getElementById('ngaytrungtuyen').value);
@@ -231,6 +233,8 @@ document.getElementById('addInspectionForm').addEventListener('submit', async (e
   formData.append('PhoneNumber', document.getElementById('phone1').value.trim());
   formData.append('Email', document.getElementById('email1').value.trim());
   formData.append('HangGPLX', document.getElementById('hangGPLX1').value);
+  formData.append('Country', document.getElementById('country1').value);
+
   formData.append('Ngaycap', document.getElementById('issueDate1').value);
   formData.append('Ngayhethan', document.getElementById('expiryDate1').value);
   formData.append('Ngaytrungtuyen', document.getElementById('ngaytrungtuyen1').value);

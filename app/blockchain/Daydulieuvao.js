@@ -1,7 +1,8 @@
 const { Wallets, Gateway } = require("fabric-network");
 const fs = require('fs');
 
-async function pushDataBlockchain(idSignature, signature,  MaGPLX, Tenchusohuu,image, Ngaysinh, CCCD, Gender, Ngaytrungtuyen, Ngaycap, Ngayhethan, Email, PhoneNumber, Giamdoc, Status ){
+async function pushDataBlockchain(idSignature, signature,  MaGPLX, Tenchusohuu,image, Ngaysinh, CCCD, Gender, Ngaytrungtuyen, Ngaycap,
+     Ngayhethan, Email, PhoneNumber,HangGPLX, Country, Giamdoc, Status ){
     try {
       
         const ccpPath = "/home/hnem/fabric-samples/test-network/organizations/peerOrganizations/org1.example.com/connection-org1.json";
@@ -20,7 +21,8 @@ async function pushDataBlockchain(idSignature, signature,  MaGPLX, Tenchusohuu,i
         const contract = network.getContract('fabcar');
 
         // Submit transaction to chaincode
-        await contract.submitTransaction('ThemGPLX', MaGPLX, Tenchusohuu,image, Ngaysinh, CCCD, Gender, Ngaytrungtuyen, Ngaycap, Ngayhethan, Email, PhoneNumber, Giamdoc, Status);
+        await contract.submitTransaction('ThemGPLX', MaGPLX, Tenchusohuu,image, Ngaysinh, CCCD, Gender, Ngaytrungtuyen, Ngaycap, Ngayhethan, Email, PhoneNumber,HangGPLX, 
+            Country, Giamdoc, Status);
 
         // Disconnect from the gateway
         await gateway.disconnect();
