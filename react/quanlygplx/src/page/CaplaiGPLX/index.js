@@ -1,15 +1,13 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, DatePicker, Select, Upload, Checkbox } from "antd";
+import { Form, Input, Button, DatePicker, Select, Upload, Checkbox, message } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from 'axios';  // Import axios to make the API call
 import './GplxReissueForm.scss';
-import dayjs from 'dayjs';
-
-
 
 const GplxReissueForm = () => {
   const [isChecked, setIsChecked] = useState(false);
-
+  const { Option } = Select;
+  const [form] = Form.useForm()
   const handleCheckboxChange = (e) => {
     setIsChecked(e.target.checked); // Update the state when checkbox is selected or deselected
   };
@@ -42,28 +40,30 @@ const GplxReissueForm = () => {
         })
         .then((response) => {
           console.log("Response from backend:", response.data);
-          alert("Thông tin GPLX đã được gửi thành công!");
+          message.success("Thông tin GPLX đã được gửi thành công!");  // Sử dụng message.success thay cho alert
+          form.resetFields();  // Xóa dữ liệu form
         })
         .catch((error) => {
           if (error.response) {
             console.error("Backend error:", error.response.data);
-            alert(`Error: ${error.response.data.message || "Unknown error"}`);
+            message.error(`Error: ${error.response.data.message || "Unknown error"}`);  // Sử dụng message.error thay cho alert
           } else {
             console.error("Connection error:", error.message);
-            alert("Unable to connect to the server.");
+            message.error("Unable to connect to the server.");  // Sử dụng message.error thay cho alert
           }
         });
-    } else {
-      console.error("No image file uploaded or invalid file list:", fileList);
-      alert("Please upload an image.");
-    }
+        
+        } else {
+          console.error("No image file uploaded or invalid file list:", fileList);
+          message.error("Please upload an image.");  // Sử dụng message.error thay cho alert
+        }
   };
   
   
   return (
     <div className="form-container1">
       <h2 className="form-title1">ĐƠN YÊU CẦU CẤP LẠI GPLX</h2>
-      <Form layout="vertical" onFinish={onFinish}>
+      <Form  form={form}  layout="vertical"  onFinish={onFinish}>
         {/* Mã GPLX */}
         <Form.Item
           name="MaGPLX"
@@ -92,6 +92,18 @@ const GplxReissueForm = () => {
             rules={[{ required: true, message: "Vui lòng chọn ngày sinh!" }]}>
             <DatePicker style={{ width: "100%" }} />
           </Form.Item>
+
+    {/* Giới tính */}
+       <Form.Item
+        name="Gender"
+        label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px' }}>Giới tính</span>}
+        rules={[{ required: true, message: "Vui lòng chọn giới tính!" }]}
+      >
+        <Select placeholder="Chọn giới tính">
+          <Option value="Male">Nam</Option>
+          <Option value="Female">Nữ</Option>
+        </Select>
+      </Form.Item>
 
         {/* CCCD */}
         <Form.Item
@@ -168,6 +180,22 @@ const GplxReissueForm = () => {
             <Select.Option value="E">E</Select.Option>
           </Select>
         </Form.Item>
+                
+        {/* Quốc gia */}
+        <Form.Item
+                name="Country"
+                label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px' }}>Quốc gia</span>}
+                rules={[{ required: true, message: 'Vui lòng chọn quốc gia!' }]}
+              >
+                <Select className="form-item-input" placeholder="Chọn quốc gia">
+                  <Option value="Vietnam">Việt Nam</Option>
+                  <Option value="USA">Mỹ</Option>
+                  <Option value="UK">Anh</Option>
+                  <Option value="France">Pháp</Option>
+                  <Option value="Germany">Đức</Option>
+                  <Option value="Other">Khác</Option>
+                </Select>
+              </Form.Item>
 
         <Form.Item
           name="status"
