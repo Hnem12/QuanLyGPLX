@@ -1,0 +1,255 @@
+/* CSS cho phần body và sidebar */
+body {
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  overflow-y: hidden; /* Ẩn cuộn dọc cho body */
+  font-family: 'Times New Roman', Times, serif, sans-serif;
+}
+
+/* CSS cho phần nội dung chính */
+.main-content-wrapper {
+  display: flex;
+  flex-grow: 1; 
+  overflow-y: auto; /* Cho phép cuộn dọc cho nội dung chính */
+}
+
+.main-content {
+  flex-grow: 1;
+  padding: 2rem;
+  overflow-y: auto; /* Đảm bảo nội dung chính cuộn được nếu vượt quá chiều cao màn hình */
+}
+/* Table container */
+.table-container {
+  overflow-x: auto;
+  margin: 0 auto;
+  padding: 0;
+  width: 100%;
+}
+
+/* Table styling */
+table.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  background-color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Table header */
+table.table thead th {
+  text-align: center;
+  padding: 5px;
+  background-color: #ececec;
+  font-weight: bold;
+  border-bottom: 1px solid #aaa;
+}
+
+/* Table body cell styling */
+table.table td {
+  text-align: center; /* Center text horizontally */
+  padding: 5px; /* Space inside each cell */
+  background-color: #f0f0f0; /* Light gray background */
+  border-bottom: 1px solid #aaa; /* Border below each cell */
+}
+
+/* Zebra striping: Alternate row background colors */
+table.table tbody tr:nth-child(odd) td {
+  background-color: #ffffff; /* Light gray for odd rows */
+}
+
+table.table tbody tr:nth-child(even) td {
+  background-color: #ececec; /* White for even rows */
+}
+
+/* Hover effect on table rows */
+table.table tbody tr:hover {
+  background-color: #e6f7ff; /* Light blue background on hover */
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+}
+
+/* Status styling */
+.status {
+  background-color: #d0f0d4;
+  color: #2a7f3f;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Email column styling */
+.email {
+  display: inline-block;
+  max-width: 90px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Sidebar */
+.Canngang {
+  margin-left: 205px;
+  transition: margin-left 0.3s ease;
+
+;}
+
+
+/* Pagination styling */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  margin-top: 20px;
+  flex-wrap: wrap; /* Make it responsive */
+}
+
+#paginationControls button {
+  padding: 4px 8px;
+  border: 1px solid #020202;
+  background-color: #e2366f;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  border-radius: 5px;
+}
+
+#paginationControls button:hover {
+  background-color: #c92a57; /* Hover effect */
+  transform: scale(1.05);
+}
+
+#paginationControls button:disabled {
+  background-color: #e2366f;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* Breadcrumb styling */
+.breadcrumb-item a {
+  color: #495057;
+}
+
+.breadcrumb-item.active {
+  font-weight: bold;
+}
+
+h3 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.table th, .table td {
+  text-align: center;
+  vertical-align: middle;
+}
+
+.btn-primary {
+  background-color: #e2366f;
+  border-color: #e2366f;
+}
+
+.btn-primary:hover {
+  background-color: #c92a57;
+  border-color: #c92a57;
+}
+
+/* Responsive Design - Các thay đổi cho các màn hình nhỏ */
+@media (max-width: 768px) {
+  .main-content-wrapper {
+    flex-direction: column; /* Đảm bảo phần nội dung chính cuộn trên màn hình nhỏ */
+  }
+
+
+
+  #paginationControls {
+    flex-direction: column; /* Đặt các nút phân trang thành dọc trên màn hình nhỏ */
+    align-items: center;
+  }
+}
+
+
+/* General Modal Styling */
+.modal-dialog {
+  max-width: 800px; /* Adjust width */
+  margin: auto; /* Center the modal */
+}
+
+.modal-content {
+  border-radius: 10px; /* Rounded corners for modal */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+/* Header Styling */
+.modal-header {
+  background-color: #e2366f; /* Blue header background */
+  color: white; /* White text for contrast */
+  border-bottom: 2px solid #e2366f; /* Darker border for emphasis */
+  text-align: center;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 auto;
+}
+
+.btn-close {
+  color: white; /* Close button in white */
+  background: none;
+  border: none;
+}
+
+/* Body Styling */
+.modal-body {
+  padding: 20px;
+  background-color: #f9f9f9; /* Light grey background for contrast */
+}
+
+/* Form Styling */
+.form-label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-control {
+  border: 1px solid #ced4da;
+  border-radius: 5px;
+}
+
+input[type="file"] {
+  padding: 5px;
+}
+
+/* Select Field Styling */
+select.form-control {
+  padding: 8px;
+  border-radius: 5px;
+}
+
+/* Buttons */
+#submitBtn {
+  width: 100%;
+  padding: 10px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+#submitBtn:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .modal-dialog {
+    max-width: 90%; /* Make modal take most of the screen on small devices */
+  }
+}
