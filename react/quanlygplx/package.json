@@ -9,6 +9,7 @@
     "@testing-library/user-event": "^13.5.0",
     "antd": "^5.21.2",
     "axios": "^1.7.9",
+    "browser-image-compression": "^2.0.2",
     "cors": "^2.8.5",
     "dayjs": "^1.11.13",
     "less": "^4.2.0",

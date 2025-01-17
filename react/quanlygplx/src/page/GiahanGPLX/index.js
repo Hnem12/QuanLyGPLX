@@ -3,7 +3,9 @@ import { Input, Select, Button, DatePicker, Upload, Form, Checkbox, Modal , Coll
 import { UploadOutlined, CameraOutlined  } from '@ant-design/icons';
 import { PlusOutlined } from '@ant-design/icons';
 import moment from 'moment';
+import imageCompression from 'browser-image-compression';
 import './RenewallForm.scss';
+import dayjs from 'dayjs';
 const { Panel } = Collapse;
 const { Option } = Select;
 
@@ -141,6 +143,7 @@ const provinces = [
 function GplxRenewForm() {
     const [form] = Form.useForm();
     const selectedFile = useRef(null);
+    const selectedFile2 = useRef(null);
     const [formData, setFormData] = useState({
         gplxCode: '',
         issuingPlaces: '',
@@ -148,7 +151,7 @@ function GplxRenewForm() {
         birthDate: null,
         expirationDate: null,
         nationality: '',
-        issueDate: null,
+        Ngaycap: null,
         gender: '',
         idNumber: '',
         placeOfIssue: '',
@@ -156,6 +159,20 @@ function GplxRenewForm() {
         portrait: null,
         signature: null,
     });
+
+    // UDPATE
+// Tạo instance form
+    const [formHoSo, setFromHoso] = useState({
+        passportNumber: "",
+        placeOfBirth: "",
+        issueDate: null,
+        email: "",
+        phone: "",
+        frontImage: null,
+        infoImage: null
+      });
+
+    // END UPDATE
 
     const [data, setData] = useState([]);   
     const [loading, setLoading] = useState(false);
@@ -234,7 +251,7 @@ function GplxRenewForm() {
         const updatedData = {
             fullName: data.Name || '',
             birthDate: data.DateOfBirth ? moment(data.DateOfBirth, 'YYYY-MM-DD') : null,
-            issueDate: data.Ngaycap ? moment(data.Ngaycap, 'YYYY-MM-DD') : null,
+            Ngaycap: data.Ngaycap ? moment(data.Ngaycap, 'YYYY-MM-DD') : null,
             expirationDate: data.Ngayhethan ? moment(data.Ngayhethan, 'YYYY-MM-DD') : null,
             gender: data.Gender || '',
             nationality: data.Country || '',
@@ -244,9 +261,7 @@ function GplxRenewForm() {
         };    
         setFormData(updatedData);
         form.setFieldsValue(updatedData);
-    };
-    
-    
+    };  
 
     // Fetch data on component mount
     useEffect(() => {
@@ -265,7 +280,7 @@ const clearFormData = () => {
         fullName: '',
         birthDate: null,
         expirationDate: null,
-        issueDate: null,
+        Ngaycap: null,
         nationality: '',
         idNumber: '',
         residence: '',
@@ -274,6 +289,8 @@ const clearFormData = () => {
     setError(''); // Clear the error message
     form.resetFields();  // Ensure this line is called to reset the form fields in the UI
 };
+
+
 
 
     const handleCheckboxChange = (e) => {
@@ -293,22 +310,27 @@ const clearFormData = () => {
     };
 
     const handleSubmit = () => {
+     
+
         form
           .validateFields()
           .then((values) => {
             // Transform and merge with additional data
             const combinedData = {
               ...values,
-              ...formData, // Include any additional fields from updateFormData
+              ...formData,
+              ...formHoSo
+              // Include any additional fields from updateFormData
             };
       
             // Format dates if necessary
             if (combinedData.birthDate) {
               combinedData.birthDate = combinedData.birthDate.format('YYYY-MM-DD');
             }
-            if (combinedData.issueDate) {
-              combinedData.issueDate = combinedData.issueDate.format('YYYY-MM-DD');
+            if (combinedData.Ngaycap) {
+              combinedData.Ngaycap = combinedData.Ngaycap.format('YYYY-MM-DD');
             }
+     
             if (combinedData.expirationDate) {
               combinedData.expirationDate = combinedData.expirationDate.format('YYYY-MM-DD');
             }
@@ -322,6 +344,7 @@ const clearFormData = () => {
       };
 
       const submitFormData = async (data) => {
+        console.log(data)
         try {
             const response = await fetch('http://localhost:3000/api/renewal/addRenewals', {
                 method: 'POST',
@@ -346,43 +369,17 @@ const clearFormData = () => {
             setError('Gửi dữ liệu thất bại. Vui lòng thử lại sau.');
         }
     };
-    
-      
       
 
     const chonFileAnhInput = () => {
         selectedFile.current.click();
     }
-    const Themanhlensave = async (e) => {
+    const Themanhlensave = async (e, type = "frontImage") => {
         const image = e.target.files[0];
-    
-        if (!image) {
-            console.error('No file selected.');
-            return setError('Vui lòng chọn một tệp để tải lên.');
-        }
-    
-        const formData = new FormData();
-        formData.append('image', image);
-    
-        try {
-            const response = await fetch('http://localhost:3000/api/images', {
-                method: 'POST',
-                body: formData,
-            });
-    
-            const result = await response.json();
-    
-            if (response.ok) {
-                console.log('Tải lên thành công!', result);
-                setError(''); // Clear error messages
-            } else {
-                console.error('Lỗi tải lên:', result.message);
-                setError(result.message || 'Tải lên thất bại. Vui lòng thử lại sau.');
-            }
-        } catch (error) {
-            console.error('Có lỗi xảy ra:', error);
-            setError('Có lỗi xảy ra khi tải lên. Vui lòng thử lại sau.');
-        }
+        setFromHoso(({
+            ...formHoSo,
+            [type]: image
+        }))
     };
     
 
@@ -489,9 +486,10 @@ const clearFormData = () => {
                                 <Form.Item label="Ngày sinh" name="birthDate" style={{ flex: 1, margin: '0 5px' }}>
                                     <DatePicker format="DD/MM/YYYY" value={formData.birthDate} disabled style={{ width: '70%' }} />
                                 </Form.Item>
-                                <Form.Item label="Ngày cấp" name="issueDate" style={{ flex: 1, margin: '0 5px' }}>
-                                    <DatePicker format="DD/MM/YYYY" value={formData.issueDate} disabled style={{ width: '70%' }} />
+                                <Form.Item label="Ngày cấp" name="Ngaycap" style={{ flex: 1, margin: '0 5px' }}>
+                                    <DatePicker format="DD/MM/YYYY" value={formData.Ngaycap} disabled style={{ width: '70%' }} />
                                 </Form.Item>
+                          
                                 <Form.Item label="Ngày hết hạn" name="expirationDate" style={{ flex: 1, margin: '0 5px' }}>
                                     <DatePicker format="DD/MM/YYYY" value={formData.expirationDate} disabled style={{ width: '70%' }} />
                                 </Form.Item>
@@ -570,35 +568,99 @@ const clearFormData = () => {
             <Panel header={<span className="header-text">Thông tin bổ sung</span>}  key="3" >
     <div className="form-container2">
       {/* Additional Information Section */}
-            <Form>
-        <Form.Item label="Số hộ chiếu" name="passportNumber" rules={[{ required: true, message: 'Vui lòng nhập số hộ chiếu!' }]} className="form-item">
-            <Input />
+      <Form
+      form={form}
+      initialValues={formHoSo} // Giá trị mặc định
+      onFinish={handleSubmit}
+      layout="vertical"
+    >
+      <Form.Item
+        label="Số hộ chiếu"
+        name="passportNumber"
+        rules={[{ required: true, message: "Vui lòng nhập số hộ chiếu!" }]}
+      >
+        <Input 
+        value={formHoSo.passportNumber}
+        onChange={(e) => setFromHoso({
+            ...formHoSo,
+            passportNumber: e.target.value
+        })}
+        />
+      </Form.Item>
+
+      <div style={{ display: "flex", gap: "20px" }}>
+        <Form.Item
+          label="Nơi sinh"
+          name="placeOfBirth"
+          rules={[{ required: true, message: "Vui lòng chọn nơi sinh!" }]}
+          style={{ flex: 1 }}
+        >
+          <Select 
+          value={formHoSo.placeOfBirth}
+          onChange={(value) => setFromHoso({
+            ...formHoSo,
+            placeOfBirth: value // Giá trị được lấy trực tiếp từ Select
+          })}
+        
+          placeholder="Chọn nơi sinh">
+            {provinces.map((province) => (
+              <Option key={province.value} value={province.value}>
+                {province.label}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
 
-        <div className="Xepngang" >
-            <Form.Item label="Nơi sinh" name="placeOfBirth" rules={[{ required: true, message: 'Vui lòng chọn nơi sinh!' }]} className="form-item" >
-            <Select placeholder="Chọn nơi sinh" style={{marginLeft:'20px', width:'60%'}}>
-                {provinces.map(province => (
-                <Select.Option key={province.value} value={province.value}>
-                    {province.label}
-                </Select.Option>
-                ))}
-            </Select>
-            </Form.Item>
-            
-            <Form.Item label="Ngày cấp" name="issueDate" rules={[{ required: true, message: 'Vui lòng chọn ngày cấp!' }]}  style={{ width:'100%'}} className="form-item">
-            <DatePicker />
-            </Form.Item>
-        </div>
-
-        <Form.Item label="Thư điện tử" name="email" rules={[{ required: true, message: 'Vui lòng nhập email!' }]}  style={{marginTop:'-15px'}} className="form-item">
-            <Input />
+        <Form.Item label="Ngày cấp">
+        <DatePicker
+          value={formHoSo.Ngaycap ? dayjs(formHoSo.Ngaycap) : null}
+          onChange={(date, dateString) => setFromHoso({
+            ...formHoSo,
+            Ngaycap: date, // Store the Day.js object
+            issueDate: dateString || null // Store the formatted string or null
+          })}
+          style={{ width: "100%" }}
+        />
         </Form.Item>
+      </div>
 
-        <Form.Item  label="Điện thoại" name="phone" rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]} className="form-item">
-            <Input  style={{marginLeft:'10px'}}/>
-        </Form.Item>
-        </Form>
+      <Form.Item
+        label="Thư điện tử"
+        name="email"
+        rules={[
+          { required: true, message: "Vui lòng nhập email!" },
+          { type: "email", message: "Email không hợp lệ!" },
+        ]}
+      >
+        <Input 
+          value={formHoSo.email}
+          onChange={(e) => setFromHoso({
+              ...formHoSo,
+              email: e.target.value
+          })}
+        />
+      </Form.Item>
+
+      <Form.Item
+        label="Điện thoại"
+        name="phone"
+        rules={[
+          { required: true, message: "Vui lòng nhập số điện thoại!" },
+          {
+            pattern: /^[0-9]{10,11}$/,
+            message: "Số điện thoại không hợp lệ!",
+          },
+        ]}
+      >
+        <Input 
+        value={formHoSo.phone}
+        onChange={(e) => setFromHoso({
+            ...formHoSo,
+            phone: e.target.value
+        })}
+        />
+      </Form.Item>
+    </Form>
         </div>
      </Panel>
     </Collapse>        
@@ -623,7 +685,9 @@ const clearFormData = () => {
           <Button className="choose-file-btn" icon={<PlusOutlined />} onClick={chonFileAnhInput}>
             Chọn tệp
           </Button>
-          <input type='file' accept='image/*' style={{display: 'none'}} onChange={Themanhlensave} ref={selectedFile}></input>
+          <input
+      
+          type='file' accept='image/*' style={{display: 'none'}} onChange={e => Themanhlensave(e, "frontImage")} ref={selectedFile}></input>
         </td>
         <td>
             <p> 
@@ -635,10 +699,11 @@ const clearFormData = () => {
         <td>2</td>
         <td>Ảnh chụp trang thông tin hộ chiếu (có ảnh và nơi sinh)</td>
         <td>
-          <Button className="choose-file-btn" icon={<PlusOutlined />}>
+          <Button className="choose-file-btn" icon={<PlusOutlined/>} onClick={() => selectedFile2.current.click()}>
             Chọn tệp
           </Button>
-          <input type='file' accept='image/*' style={{display: 'none'}} onChange={Themanhlensave} ref={selectedFile}></input>
+
+          <input type='file' accept='image/*' style={{display: 'none'}} onChange={e => Themanhlensave(e, "infoImage")} ref={selectedFile2}></input>
         </td>
         <td>
             <p>
