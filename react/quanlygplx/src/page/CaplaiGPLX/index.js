@@ -30,34 +30,27 @@ const GplxReissueForm = () => {
         }
       });
   
-      // Send the form data via Axios
       axios
-        .post("http://localhost:3000/api/Caplai/addRenew", formData, {
-          // Don't manually set Content-Type as axios will handle it
-          headers: {
-            // 'Content-Type': 'multipart/form-data',  // Let Axios handle this automatically
-          },
-        })
-        .then((response) => {
-          console.log("Response from backend:", response.data);
-          message.success("Thông tin GPLX đã được gửi thành công!");  // Sử dụng message.success thay cho alert
-          form.resetFields();  // Xóa dữ liệu form
-        })
-        .catch((error) => {
-          if (error.response) {
-            console.error("Backend error:", error.response.data);
-            message.error(`Error: ${error.response.data.message || "Unknown error"}`);  // Sử dụng message.error thay cho alert
-          } else {
-            console.error("Connection error:", error.message);
-            message.error("Unable to connect to the server.");  // Sử dụng message.error thay cho alert
-          }
-        });
-        
+      .post("http://localhost:3000/api/Caplai/addRenew", formData)
+      .then((response) => {
+        console.log("Response from backend:", response.data);
+        message.success("Thông tin GPLX đã được gửi thành công!"); // Success notification
+        form.resetFields(); // Clear form fields
+      })
+      .catch((error) => {
+        if (error.response) {
+          console.error("Backend error:", error.response.data);
+          message.error(`Error: ${error.response.data.message || "Unknown error"}`); // Error message from backend
         } else {
-          console.error("No image file uploaded or invalid file list:", fileList);
-          message.error("Please upload an image.");  // Sử dụng message.error thay cho alert
+          console.error("Connection error:", error.message);
+          message.error("Unable to connect to the server."); // Connection error
         }
-  };
+      });
+  } else {
+    console.error("No image file uploaded or invalid file list:", fileList);
+    message.error("Please upload an image."); // Notify user about missing file
+  }
+};
   
   
   return (

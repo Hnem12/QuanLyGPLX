@@ -170,13 +170,10 @@ function GplxRenewForm() {
             const response = await fetch('http://localhost:3000/api/renewal/getall', { signal });
     
             if (!response.ok) {
-                const errorText = await response.text();
-                console.error('Server responded with error:', errorText);
                 throw new Error('Server returned an error.');
             }
 
             const result = await response.json();
-            
             if (!result.GiahanGPLXList || !Array.isArray(result.GiahanGPLXList)) {
                 setData([]);
                 setError('API không trả về dữ liệu hợp lệ.');
@@ -186,9 +183,7 @@ function GplxRenewForm() {
             setData(result.GiahanGPLXList);  // Cập nhật dữ liệu từ 'GiahanGPLXList'
         } catch (error) {
             if (error.name === 'AbortError') {
-                console.log('Fetch aborted.');
             } else {
-                console.error('Error fetching data:', error);
                 setError('Lỗi không thể lấy dữ liệu từ API. Vui lòng thử lại sau.');
             }
         } finally {
@@ -242,7 +237,7 @@ function GplxRenewForm() {
             issueDate: data.Ngaycap ? moment(data.Ngaycap, 'YYYY-MM-DD') : null,
             expirationDate: data.Ngayhethan ? moment(data.Ngayhethan, 'YYYY-MM-DD') : null,
             gender: data.Gender || '',
-            nationality: data.Nationality || '',
+            nationality: data.Country || '',
             idNumber: data.CCCD || '',
             residence: data.Address || '',
             placeOfIssue: data.issuingPlaces || '',
@@ -260,27 +255,7 @@ function GplxRenewForm() {
 
         // Cleanup on unmount
         return () => controller.abort();
-    }, []);
-    
-    
-        
-    // const updateFormData = (data) => {
-    //     console.log('Updating form data with:', data); // Debugging
-    //     const updatedData = {
-    //         fullName: data.Name || '',
-    //         birthDate: data.DateOfBirth ? moment(data.DateOfBirth, 'YYYY-MM-DD') : null,
-    //         expirationDate: data.ExpirationDate ? moment(data.ExpirationDate, 'YYYY-MM-DD') : null,
-    //         issueDate: data.IssueDate ? moment(data.IssueDate, 'YYYY-MM-DD') : null,
-    //         gender: data.Gender || '',
-    //         nationality: data.Nationality || '',
-    //         idNumber: data.CCCD || '',
-    //         residence: data.Address || '',
-    //         placeOfIssue: data.IssuingPlace || '',
-    //     };    
-    //     setFormData(updatedData);
-    //     form.setFieldsValue(updatedData);
-    // };
-    
+    }, []);    
 
 
 const clearFormData = () => {
@@ -317,10 +292,63 @@ const clearFormData = () => {
         setIsCameraModalVisible(false);
     };
 
-    const handleSubmit = (values) => {
-        console.log('Form submitted:', values);
-        // Handle form submission logic
+    const handleSubmit = () => {
+        form
+          .validateFields()
+          .then((values) => {
+            // Transform and merge with additional data
+            const combinedData = {
+              ...values,
+              ...formData, // Include any additional fields from updateFormData
+            };
+      
+            // Format dates if necessary
+            if (combinedData.birthDate) {
+              combinedData.birthDate = combinedData.birthDate.format('YYYY-MM-DD');
+            }
+            if (combinedData.issueDate) {
+              combinedData.issueDate = combinedData.issueDate.format('YYYY-MM-DD');
+            }
+            if (combinedData.expirationDate) {
+              combinedData.expirationDate = combinedData.expirationDate.format('YYYY-MM-DD');
+            }
+      
+            // Send data to the server
+            submitFormData(combinedData);
+          })
+          .catch((error) => {
+            console.error('Validation failed:', error);
+          });
+      };
+
+      const submitFormData = async (data) => {
+        try {
+            const response = await fetch('http://localhost:3000/api/renewal/addRenewals', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+            });
+    
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+    
+            const result = await response.json();
+            console.log('Submission successful:', result);
+    
+            // Clear form and errors after successful submission
+            clearFormData();
+            setError('');
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            setError('Gửi dữ liệu thất bại. Vui lòng thử lại sau.');
+        }
     };
+    
+      
+      
 
     const chonFileAnhInput = () => {
         selectedFile.current.click();
@@ -328,27 +356,35 @@ const clearFormData = () => {
     const Themanhlensave = async (e) => {
         const image = e.target.files[0];
     
-        // Tạo đối tượng FormData để gửi tệp
+        if (!image) {
+            console.error('No file selected.');
+            return setError('Vui lòng chọn một tệp để tải lên.');
+        }
+    
         const formData = new FormData();
         formData.append('image', image);
     
         try {
-          // Gửi yêu cầu POST đến API
-          const response = await fetch('https://quanligplx-hdu-edu-vn.onrender.com/api/images', {
-            method: 'POST',
-            body: formData,
-          });
+            const response = await fetch('http://localhost:3000/api/images', {
+                method: 'POST',
+                body: formData,
+            });
     
-          const result = await response.json();
-          if (response.ok) {
-            console.log('Tải lên thành công!', result);
-          } else {
-            console.error('Lỗi tải lên:', result.message);
-          }
+            const result = await response.json();
+    
+            if (response.ok) {
+                console.log('Tải lên thành công!', result);
+                setError(''); // Clear error messages
+            } else {
+                console.error('Lỗi tải lên:', result.message);
+                setError(result.message || 'Tải lên thất bại. Vui lòng thử lại sau.');
+            }
         } catch (error) {
-          console.error('Có lỗi xảy ra:', error);
+            console.error('Có lỗi xảy ra:', error);
+            setError('Có lỗi xảy ra khi tải lên. Vui lòng thử lại sau.');
         }
-      };
+    };
+    
 
     return (
         <div>
@@ -443,8 +479,8 @@ const clearFormData = () => {
                                     </Form.Item>
                                     <Form.Item className="gioitinh" label="Giới tính" name="gender">
                                         <Checkbox.Group value={formData.gender} disabled>
-                                            <Checkbox value="Nam">Nam</Checkbox>
-                                            <Checkbox value="Nữ">Nữ</Checkbox>
+                                            <Checkbox value="Male">Nam</Checkbox>
+                                            <Checkbox value="Female">Nữ</Checkbox>
                                         </Checkbox.Group>
                                     </Form.Item>
                                 </div>
@@ -532,7 +568,7 @@ const clearFormData = () => {
 
         <Collapse>
             <Panel header={<span className="header-text">Thông tin bổ sung</span>}  key="3" >
-    <div className="form-container1">
+    <div className="form-container2">
       {/* Additional Information Section */}
             <Form>
         <Form.Item label="Số hộ chiếu" name="passportNumber" rules={[{ required: true, message: 'Vui lòng nhập số hộ chiếu!' }]} className="form-item">
@@ -628,9 +664,14 @@ const clearFormData = () => {
                 </div>
            
             {isChecked && ( // Hiển thị nút Submit chỉ khi checkbox được chọn
-                <Button type="primary" htmlType="submit" style={{ marginTop:'10px', fontWeight:'bold', fontSize:'18px' }}>
-                    Gửi yêu cầu 
-                </Button>
+              <Button
+              type="primary"
+              htmlType="button"
+              style={{ marginTop: '10px', fontWeight: 'bold', fontSize: '18px' }}
+              onClick={handleSubmit}
+            >
+              Gửi yêu cầu
+            </Button>
             )}
         </div>
     </div>
