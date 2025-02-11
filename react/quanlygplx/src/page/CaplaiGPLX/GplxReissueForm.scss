@@ -14,17 +14,17 @@
     box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
   }
 }
-
 .form-title1 {
   font-family: 'Times New Roman', serif;
-  font-size: 25px;
+  font-size: 27px;
   font-weight: bold;
   text-align: center;
   color: white;
-  background: linear-gradient(90deg, #5c8f5e, #0d47a1);
-  background-clip: text; /* Thuộc tính chuẩn */
-  -webkit-background-clip: text; /* Thuộc tính với tiền tố -webkit */
+  background: black;
+  background-clip: text;
+  -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.4); /* Glowing effect */
 }
 
 .form-submit-button {
@@ -66,4 +66,73 @@
 }
 .form-item-upload{
   display: flex;
+}
+.form-container1 {
+  max-width: 1250px;
+  margin: 10px auto;
+  padding: 10px;
+  background: #ffffff;
+  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  margin-top: -12px;
+}
+
+.form-item-input {
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  padding: 6px 10px;
+  font-size: 16px;
+  transition: all 0.3s ease-in-out;
+
+  &:focus, &:hover {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  }
+}
+
+.ant-select-selector {
+  border-radius: 8px !important;
+}
+
+.ant-picker {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.ant-btn-primary {
+  background: #007bff;
+  border-radius: 8px;
+  font-size: 16px;
+  padding: 8px 16px;
+  transition: all 0.3s;
+
+  &:hover {
+    background: #0056b3;
+  }
+}
+
+.upload-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: 2px dashed #007bff;
+  padding: 10px;
+  border-radius: 8px;
+  transition: all 0.3s;
+
+  &:hover {
+    background: rgba(0, 123, 255, 0.1);
+  }
+}
+
+/* Customize Ant Design notification globally */
+.ant-message-custom-content {
+  font-size: 18px; /* Increase the font size */
+  font-weight: bold; /* Make the text bold */
+  text-align: center; /* Center align the text */
+}
+
+.ant-message-success {
+  color: black; /* Text color */
+  padding: 7px 15px; /* Add some padding */
 }
