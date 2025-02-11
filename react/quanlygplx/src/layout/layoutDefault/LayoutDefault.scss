@@ -20,7 +20,7 @@
 
 
 .custom-header {
-    background-color: #001d58; // Deep blue background
+    background-color: #003366 ; // Deep blue background
     height: 100px; // Standard Ant Design header height
     display: flex;
     align-items: center;
@@ -48,7 +48,7 @@
     font-family: 'Times New Roman', Times, serif;
 }
 .navbar-header {
-    background-color: #001d58; // Màu nền cho header
+    background-color: #003366 ; // Màu nền cho header
     justify-content: left; // Căn giữa toàn bộ header
     align-items: center; // Căn giữa theo chiều dọc
     height: 30px; // Chiều cao của header
@@ -61,7 +61,7 @@
     font-family: 'Times New Roman', Times, serif;
     margin-top: -28px;
     justify-content: center; // Căn giữa nội dung trong navbar
-    background-color: #001d58; // Đảm bảo màu nền đen
+    background-color: #003366 ; // Đảm bảo màu nền đen
 }
 
 .navbar .ant-menu-item a {
@@ -94,7 +94,7 @@
 
 
 .ant-menu {
-    background-color: #001d58 !important; // Màu nền cho menu
+    background-color: #003366  !important; // Màu nền cho menu
 }
 
 .ant-menu-item a {
@@ -106,7 +106,7 @@
 }
 
 .ant-menu-item-active a {
-    color: #1890ff !important; // Màu chữ khi active
+    color: #003366 !important; // Màu chữ khi active
 }/* Make the footer stick to the bottom */
 html, body {
     height: 100%;
@@ -122,7 +122,7 @@ html, body {
   .footer {
     font-size: 17px;
     font-family: 'Times New Roman', Times, serif;
-    background-color: #1c287e; /* Dark blue background */
+    background-color: #003366 ; /* Dark blue background */
     color: white;
     text-align: center;
     padding: 20px 0;

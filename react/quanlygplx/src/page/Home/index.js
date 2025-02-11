@@ -81,7 +81,7 @@ const LicenseSearch = () => {
     return (
         <div className="container mx-auto mt-8">
             <div className="form-container mx-auto p-8 max-w-lg">
-                <h2 className="text-2xl font-bold mb-4">TRA CỨU THÔNG TIN GIẤY PHÉP LÁI XE</h2>
+                <h2 className="text-2xl font-bold mb-4">TRA CỨU THÔNG TIN GIẤY PHÉP LÁI XE HIỆN HÀNH</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
                         <label className="block font-bold mb-21" htmlFor="so-gplx">Số GPLX:</label>
@@ -116,6 +116,7 @@ const LicenseSearch = () => {
                             <button 
                                 type="button"
                                 onClick={generateCaptcha}
+                                style={{marginLeft:'10px', fontSize:'15px'}}
                                 className="bg-blue-500 text-white p-2 rounded-md ml-4 hover:bg-blue-600 transition duration-200 canle"
                             >
                                 Tải lại
@@ -129,7 +130,7 @@ const LicenseSearch = () => {
                             onChange={(e) => setCaptchaInput(e.target.value)}
                         />
                     </div>
-                    <button type="submit" className="bg-blue-500 text-white p-2 rounded canle">
+                    <button type="submit" style={{fontWeight:'bold', fontSize:'17px'}} className="bg-blue-500 text-white p-2 rounded canle">
                         TRA CỨU GIẤY PHÉP LÁI XE
                     </button>
                 </form>
@@ -140,17 +141,16 @@ const LicenseSearch = () => {
                 {showModal && (
                     <div className={`modal ${showModal ? 'show' : ''}`}>
                         <div className="modal-content">
-                            <h2 className="modal-header">THÔNG TIN GPLX</h2>
+                            <h2 className="modal-header" style={{color:'red'}}>THÔNG TIN GPLX</h2>
                             {holder && (
                             <div className="modal-body" style={{ display: 'flex', justifyContent: 'space-between' }}>
                             <div className="modal-info-left" style={{ flex: 1, paddingRight: '10px' }}>
                                 <p><strong>Họ và tên:</strong> {holder.Name || 'N/A'}</p>
                                 <p><strong>Số giấy phép lái xe:</strong> {holder.MaGPLX || 'N/A'}</p>
-                                <p><strong>Nơi cấp GPLX:</strong> {holder.Noicap || 'N/A'}</p>
                                 <p><strong>Ngày sinh:</strong> {holder.DateOfBirth ? new Date(holder.DateOfBirth).toLocaleDateString() : 'N/A'}</p>
                                 <p><strong>Ngày cấp GPLX:</strong> {holder.Ngaycap ? new Date(holder.Ngaycap).toLocaleDateString() : 'N/A'}</p>                           
                                 <p><strong>Ngày hết hạn GPLX:</strong> {holder.Ngayhethan ? new Date(holder.Ngayhethan).toLocaleDateString() : 'N/A'}</p>
-                                <p><strong>Ngày trúng tuyển:</strong> {holder.Ngaytrungtuyen || 'N/A'}</p>
+                                <p><strong>Ngày trúng tuyển:</strong> {holder.Ngaytrungtuyen ? new Date(holder.Ngayhethan).toLocaleDateString() : 'N/A'}</p>
                             </div>
                             
                             <div className="modal-info-right" style={{ flex: 1, paddingLeft: '10px' }}>
@@ -160,11 +160,14 @@ const LicenseSearch = () => {
                                 <p><strong>Hạng GPLX:</strong> {holder.HangGPLX || 'N/A'}</p>
                                 <p><strong>Trạng thái:</strong> <span className={`status ${holder.Status === 'Đã kích hoạt' ? 'active' : 'inactive'}`}>{holder.Status || 'N/A'}</span></p>
                                 <p><strong>Giám đốc:</strong> {holder.Giamdoc || 'N/A'}</p>
+                                
                             </div>
+                           
                         </div>
-
+                        
+                      
                             )}
-                            <button onClick={closeModal} className="modal-close">
+                            <button onClick={closeModal} style={{fontSize:'15px', fontWeight:'bold'}} className="modal-close">
                                 Đóng
                             </button>
                         </div>
