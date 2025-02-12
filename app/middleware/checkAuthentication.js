@@ -1,51 +1,45 @@
 const jwt = require('jsonwebtoken');
+const { default: api } = require('../../react/quanlygplx/src/utils/request');
 
-// Middleware to check if the user is logged in and has the appropriate role
+
+// Danh sách quyền cho từng vai trò
+const rolePermissions = {
+    'User': [],
+    'Admin': ['/licenseHolder', '/ApprovelicenselHoder', '/renewals', '/renew', '/kiemdinhGPLX', '/account', '/truyxuatbanglaixeoto', '/trangchu'],
+    'Director Admin': ['/licenseHolder', '/trangchu', '/truyxuatbanglaixeoto'],
+    'Test Admin': ['/ApprovelicenselHoder', '/renewals', '/renew', '/trangchu'],
+    'Verified Admin': ['/ApprovelicenselHoder', '/renewals', '/renew', '/kiemdinhGPLX', '/trangchu']
+};
+
+// Middleware kiểm tra xác thực và phân quyền
 const checkAuthentication = (req, res, next) => {
-    const token = req.cookies.token; // Access the token from the cookies
+    const token = req.cookies.token; // Lấy token từ cookies
 
     if (!token) {
-        // If no token is present in the cookies, redirect to login
-        return res.redirect('/');
+        return res.redirect('/'); // Nếu không có token, chuyển hướng về trang đăng nhập
     }
 
     try {
-        const decoded = jwt.verify(token, 'Hnem'); // Verify the token using the secret key
-        req.user = decoded; // Attach the decoded token (user data) to the request
+        const decoded = jwt.verify(token, 'Hnem'); // Giải mã token
+        req.user = decoded; // Gán thông tin người dùng vào request
+        const { role } = req.user; // Lấy vai trò của người dùng
 
-        const { role } = req.user;
-
+        // Nếu là User, chuyển hướng về trang localhost:5000
         if (role === 'User') {
-            return res.redirect('http://localhost:5000/');
+            return res.redirect(api.baseURLFE); // Nếu api.baseURL chứa URL như http://localhost:5000
         }
 
-        // Check the requested path and restrict access based on roles
-        if (req.path === '/licenseHolder' && (role === 'Admin' || role === 'Director Admin')) {
-            return next();
-        } else if (req.path === '/ApprovelicenselHoder' && (role === 'Admin' || role === 'Test Admin' || role === 'Verified Admin')) {
-            return next();
-        } else if (req.path === '/renewals' && (role === 'Admin' || role === 'Verified Admin' || role === 'Test Admin')) {
-            return next();
-        } else if (req.path === '/renew' && (role === 'Admin' || role === 'Test Admin' || role === 'Verified Admin')) {
-            return next();
-        }else if (req.path === '/kiemdinhGPLX' && (role === 'Admin' || role === 'Verified Admin')) {
-            return next();
-        } else if (req.path === '/account' && (role === 'Admin' )) {
-            return next();
-        } else if (req.path === '/truyxuatbanglaixeoto' ) {
-            // All admins can access the home page
-            return next();
-        } else if (req.path === '/trangchu' ) {
-            // All admins can access the home page
-            return next();
-        } else {
-            // If the user role does not have permissions, redirect to a "no access" page or home page
-            return res.redirect('/trangchu');
+        // Kiểm tra quyền dựa trên danh sách rolePermissions
+        const allowedPaths = rolePermissions[role] || [];
+
+        if (allowedPaths.includes(req.path)) {
+            return next(); // Nếu có quyền, tiếp tục xử lý request
         }
 
+        // Nếu không có quyền truy cập, chuyển hướng về trang chủ
+        return res.redirect('/trangchu');
     } catch (err) {
-        // If token verification fails, redirect to login
-        return res.redirect('/api/account/login');
+        return res.redirect('/api/account/login'); // Nếu token không hợp lệ, chuyển về trang đăng nhập
     }
 };
 
