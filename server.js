@@ -23,14 +23,17 @@ module.exports = { dbconnect };
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'app/views'));
-app.use(express.json()); // để xử lý dạng dữ liệu json
-app.use(express.urlencoded({ extended: true })); // để xử lý dữ liệu url encoded
-app.use(cors({ credentials: true, origin: "*" })); 
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(express.json());
-app.use(cookieParser()); // Use cookie-parser middleware here
+// Middleware xử lý request body
+app.use(express.json({ limit: '50mb' })); // Hỗ trợ JSON, tăng giới hạn nếu cần
+app.use(express.urlencoded({ extended: true, limit: '50mb' })); // Hỗ trợ form-data
+
+// Cấu hình CORS
+app.use(cors({ credentials: true, origin: '*' }));
+
+// Middleware xử lý cookie
+app.use(cookieParser());
+
 
 app.use(express.static(path.join(__dirname, 'app/public')));
 app.use(express.static(path.join(__dirname, 'app/public/js')));
@@ -38,6 +41,7 @@ app.use(express.static(path.join(__dirname, 'app/public/css')));
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
+DangKyAdmin();
 // Sử dụng router upload ảnh
 app.use('/api/images', imageRoutes);
 // Use routes
@@ -103,6 +107,10 @@ app.get('/renew',checkAuthentication, (req, res) => {
 app.get('/trangchu',checkAuthentication, (req, res) => {
     res.render('Home/index'); // Render the index page
 });
+app.get('/loi404', (req, res) => {
+    res.render('Home/404'); // Render the 404 page
+});
+
 app.get('/kiemdinhGPLX',checkAuthentication, (req, res) => {
     res.render('Kiemdinh/KiemdinhGPLX'); // Render the index page
 });
