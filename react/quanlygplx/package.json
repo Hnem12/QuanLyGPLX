@@ -12,6 +12,7 @@
     "browser-image-compression": "^2.0.2",
     "cors": "^2.8.5",
     "dayjs": "^1.11.13",
+    "dotenv": "^16.4.7",
     "less": "^4.2.0",
     "less-loader": "^12.2.0",
     "moment": "^2.30.1",

@@ -3,6 +3,7 @@ import { Form, Input, Button, DatePicker, Select, Upload, Checkbox, message, Row
 import { UploadOutlined } from "@ant-design/icons";
 import './RenewallForm.scss';
 import axios from 'axios';  // Import axios to make the API call
+import api from '../../utils/request';
 
   
 const GplxRenewForm = () => {
@@ -32,7 +33,7 @@ const GplxRenewForm = () => {
       });
   
       axios
-      .post("http://localhost:3000/api/renewal/addRenewals", formData)
+      .post(api.addRenewals, formData)
       .then((response) => {
         console.log("Response from backend:", response.data);
         message.success("Đơn yêu cầu gia hạn GPLX đã được gửi thành công!"); // Success notification

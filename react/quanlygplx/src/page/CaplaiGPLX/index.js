@@ -3,6 +3,7 @@ import { Form, Input, Button, DatePicker, Select, Upload, Checkbox, message, Row
 import { UploadOutlined } from "@ant-design/icons";
 import axios from 'axios';  // Import axios to make the API call
 import './GplxReissueForm.scss'
+import api from '../../utils/request';
 
 const GplxReissueForm = () => {
   const [isChecked, setIsChecked] = useState(false);
@@ -31,7 +32,7 @@ const GplxReissueForm = () => {
       });
   
       axios
-      .post("http://localhost:3000/api/Caplai/addRenew", formData)
+      .post(api.addRenew, formData)
       .then((response) => {
         console.log("Response from backend:", response.data);
         message.success("Đơn yêu cầu cấp lại GPLX đã được gửi thành công!"); // Success notification

@@ -1,5 +1,6 @@
 import './tracuuGPLX.scss';
 import React, { useState, useEffect } from 'react';
+import api from '../../utils/request';
 
 const LicenseSearch = () => {
     const [data, setData] = useState([]);
@@ -25,7 +26,7 @@ const LicenseSearch = () => {
         const fetchDataAndGenerateCaptcha = async () => {
             setLoading(true);
             try {
-                const response = await fetch("http://localhost:3000/api/licenseHolder");
+                const response = await fetch(api.findLicenseHolder);
                 if (!response.ok) throw new Error("Network response was not ok");
 
                 const result = await response.json();
