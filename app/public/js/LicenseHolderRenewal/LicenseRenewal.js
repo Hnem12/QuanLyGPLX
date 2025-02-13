@@ -43,7 +43,6 @@ async function fetchKiemDinhGPLX() {
                 <i class="fas fa-eye" style="font-size: 14px; color: white;"></i> <!-- Eye icon -->
             </button>
             <button class="btn btn-danger btn-sm" style="transform: scale(1.10); margin-left: 5px;font-weight:bold;" onclick="deleteRenewal('${holder._id}')">Xóa</button>
-
                 </td>
 
           </tr>
@@ -239,7 +238,6 @@ async function deleteAccount(holderId) {
 }
 
 
-// Function to delete account by holderId
 // Function to delete account by holderId
 async function deleteRenewal(holderId) {
   if (!holderId) {
