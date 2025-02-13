@@ -1,6 +1,6 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 import React from 'react';
-import { Layout, Menu, Input, Button, ConfigProvider , Space } from 'antd';
+import { Layout, Menu } from 'antd';
 import './LayoutDefault.scss';
 import api from "../../utils/request";
 
@@ -54,10 +54,10 @@ function LayoutDefault() {
             <Footer className="footer">
                 <div className="footer-content">
                     <ul className="footer-menu">
-                        <li><a href="#">Trang chủ</a></li>
-                        <li><a href="/Test">Giới thiệu</a></li>
-                        <li><a href="#">Quản lý vi phạm</a></li>
-                        <li><a href="#">Đổi GPLX trực tuyến</a></li>
+                        <li><a href="/">Trang chủ</a></li>
+                        <li><a href="/">Giới thiệu</a></li>
+                        <li><a href="/">Quản lý vi phạm</a></li>
+                        <li><a href="/">Đổi GPLX trực tuyến</a></li>
                     </ul>
                     <div className="footer-info">
                         <p>Trang Thông tin điện tử giấy phép lái xe</p>

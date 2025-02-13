@@ -92,9 +92,13 @@ table.table tbody tr:hover {
 
 /* Sidebar */
 .Canngang {
-  margin-left: 205px;
   transition: margin-left 0.3s ease;
-
+  margin-top: 60px;
+  position: absolute; /* Use absolute positioning */
+  top: 0;
+  left: 210px;
+  right: 0;
+  height: 85vh;
 ;}
 
 

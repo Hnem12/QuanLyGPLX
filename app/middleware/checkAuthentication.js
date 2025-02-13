@@ -1,14 +1,13 @@
 const jwt = require('jsonwebtoken');
 const { default: api } = require('../../react/quanlygplx/src/utils/request');
 
-
 // Danh sách quyền cho từng vai trò
 const rolePermissions = {
     'User': [],
     'Admin': ['/licenseHolder', '/ApprovelicenselHoder', '/renewals', '/renew', '/kiemdinhGPLX', '/account', '/truyxuatbanglaixeoto', '/trangchu'],
-    'Director Admin': ['/licenseHolder', '/trangchu', '/truyxuatbanglaixeoto'],
-    'Test Admin': ['/ApprovelicenselHoder', '/renewals', '/renew', '/trangchu'],
-    'Verified Admin': ['/ApprovelicenselHoder', '/renewals', '/renew', '/kiemdinhGPLX', '/trangchu']
+    'Director Admin': ['/licenseHolder', '/ApprovelicenselHoder', '/renewals', '/renew', '/kiemdinhGPLX', '/truyxuatbanglaixeoto', '/trangchu'],
+    'Test Admin': ['/ApprovelicenselHoder', '/renewals', '/renew', '/trangchu', '/truyxuatbanglaixeoto'],
+    'Verified Admin': ['/ApprovelicenselHoder', '/renewals', '/renew', '/kiemdinhGPLX', '/truyxuatbanglaixeoto', '/trangchu']
 };
 
 // Middleware kiểm tra xác thực và phân quyền
@@ -26,11 +25,15 @@ const checkAuthentication = (req, res, next) => {
 
         // Nếu là User, chuyển hướng về trang localhost:5000
         if (role === 'User') {
-            return res.redirect(api.baseURLFE); // Nếu api.baseURL chứa URL như http://localhost:5000
+            return res.redirect(api.baseURLFE);
         }
 
         // Kiểm tra quyền dựa trên danh sách rolePermissions
         const allowedPaths = rolePermissions[role] || [];
+        
+        // Truyền allowedPaths vào res.locals để sử dụng trong EJS
+        res.locals.userRole = role;
+        res.locals.allowedPaths = allowedPaths;
 
         if (allowedPaths.includes(req.path)) {
             return next(); // Nếu có quyền, tiếp tục xử lý request

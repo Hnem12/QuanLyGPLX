@@ -38,7 +38,14 @@ async function fetchKiemDinhGPLX() {
             <td>${holder.Giamdoc}</td>
             <td><span class="status1">${holder.Status}</span></td>
             <td>
- <button class="btn btn-danger btn-sm" style="transform: scale(1.15);  font-weight: bold; font-size:14px" onclick='openModal(${JSON.stringify(holder)})'>Kiểm định</button>            </td>
+             <button class="btn btn-sm" 
+        style="background-color: #168e60; color: white; padding: 8px; border-radius: 5px;  border: none;" 
+        onclick='openModal(${JSON.stringify(holder)})'>
+                <i class="fas fa-eye" style="font-size: 14px; color: white;"></i> <!-- Eye icon -->
+            </button> 
+            <button class="btn btn-danger btn-sm" style="transform: scale(1.10); margin-left: 5px;font-weight:bold;" onclick="deleteRenew('${holder._id}')">Xóa</button>
+
+            </td>
           </tr>
         `;
         tableBody.insertAdjacentHTML('beforeend', row);
@@ -59,10 +66,22 @@ async function fetchKiemDinhGPLX() {
   }
 }
 
-// Call fetchKiemDinhGPLX when the page loads
+// Call fetchLicenseHolders when the page loads
 window.onload = async () => {
-  await fetchKiemDinhGPLX(); // Fetch list of GPLX inspections
-};
+  await fetchKiemDinhGPLX(); // Fetch list of license holders
+  const gplxInput = document.getElementById('gplx1');
+  if (gplxInput) {
+    gplxInput.value = generateGPLX(); // Fill the input with the generated value
+  }
+}
+
+// Function to regenerate 'Mã GPLX' when the button is clicked
+function regenerateGPLX() {
+  const gplxInput = document.getElementById('gplx1');
+  if (gplxInput) {
+    gplxInput.value = generateGPLX(); // Regenerate and update the field
+  }
+}
 
 // Pagination button functions
 function previousPage() {
@@ -183,6 +202,38 @@ function resetForm() {
   // Add more fields here if needed
 }
 
+
+// Function to delete account by holderId
+async function deleteRenew(holderId) {
+  if (!holderId) {
+    console.error('Invalid holder ID');
+    return;
+  }
+
+  const confirmDelete = confirm('Bạn có chắc chắn muốn xóa không?');
+
+  if (!confirmDelete) {
+    console.log('Xóa không thành công!!!');
+    return; // Exit the function if the user doesn't confirm
+  }
+
+  try {
+    const response = await fetch(`/api/Caplai/${holderId}`, {
+      method: 'DELETE'
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      alert('Xóa thành công!');
+      location.reload(); // Tải lại trang sau khi xóa
+    } else {
+      alert(result.message || 'Lỗi khi xóa, vui lòng thử lại.');
+    }
+  } catch (error) {
+    console.error('Lỗi:', error);
+    alert('Lỗi khi gửi yêu cầu xóa. Vui lòng kiểm tra kết nối mạng.');
+  }
+}
 
 // Function to delete account by holderId
 async function deleteAccount(holderId) {
@@ -309,3 +360,10 @@ imageInput1.addEventListener('change', function() {
       pushDataButton1.disabled = true;
     }
 });
+
+function generateGPLX() {
+  const prefix = "GPLX";
+  const randomNum = Math.floor(Math.random() * 100000); // Random number between 0 and 99999
+  return prefix + randomNum.toString().padStart(5, '0'); // Format like GPLX00001, GPLX12345
+}
+

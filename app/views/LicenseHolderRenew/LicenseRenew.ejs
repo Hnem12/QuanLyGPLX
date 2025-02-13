@@ -94,24 +94,24 @@
                   <input type="hidden" id="holderId"> <!-- Hidden input for editing -->
                   <div class="modal-left">
                       <div class="mb-3">
-                          <label for="gplx" class="form-label">Mã GPLX</label>
+                          <label for="gplx" class="form-label">Mã GPLX:</label>
                           <input type="text" class="form-control" id="gplx" required>
                       </div>
                       <div class="mb-3">
-                          <label for="name" class="form-label">Tên</label>
+                          <label for="name" class="form-label">Tên:</label>
                           <input type="text" class="form-control" id="name" required>
                       </div>
                     
                       <div class="mb-3">
-                          <label for="dob" class="form-label">Ngày sinh</label>
+                          <label for="dob" class="form-label">Ngày sinh:</label>
                           <input type="date" class="form-control" id="dob" required>
                       </div>
                       <div class="mb-3">
-                          <label for="cccd" class="form-label">CCCD</label>
+                          <label for="cccd" class="form-label">CCCD:</label>
                           <input type="text" class="form-control" id="cccd" required>
                       </div>
                       <div class="mb-3">
-                        <label for="gender" class="form-label">Giới tính</label>
+                        <label for="gender" class="form-label">Giới tính:</label>
                         <select class="form-control" id="gender" required>
                             <option value="">Chọn giới tính</option>
                             <option value="Male">Nam</option>
@@ -119,33 +119,33 @@
                         </select>
                     </div>
                       <div class="mb-3">
-                          <label for="phone" class="form-label">Số điện thoại</label>
+                          <label for="phone" class="form-label">Số điện thoại:</label>
                           <input type="tel" class="form-control" id="phone" required>
                       </div>
                       <div class="mb-3">
-                          <label for="email" class="form-label">Email</label>
+                          <label for="email" class="form-label">Email:</label>
                           <input type="email" class="form-control" id="email" required>
                       </div>
                   </div>
                   <div class="modal-right">
                       <div class="mb-3">
-                          <label for="address" class="form-label">Địa chỉ</label>
+                          <label for="address" class="form-label">Địa chỉ:</label>
                           <input type="text" class="form-control" id="address" required>
                       </div>
                       <div class="mb-3">
-                          <label for="issueDate" class="form-label">Ngày cấp</label>
+                          <label for="issueDate" class="form-label">Ngày cấp:</label>
                           <input type="date" class="form-control" id="issueDate" required>
                       </div>
                       <div class="mb-3">
-                          <label for="expiryDate" class="form-label">Ngày hết hạn</label>
+                          <label for="expiryDate" class="form-label">Ngày hết hạn:</label>
                           <input type="date" class="form-control" id="expiryDate" required>
                       </div>
                       <div class="mb-3">
-                          <label for="ngaytrungtuyen" class="form-label">Ngày trúng tuyển</label>
+                          <label for="ngaytrungtuyen" class="form-label">Ngày trúng tuyển:</label>
                           <input type="date" class="form-control" id="ngaytrungtuyen" required>
                       </div>
                       <div class="mb-3">
-                          <label for="hangGPLX" class="form-label">Hạng GPLX (Ô tô)</label>
+                          <label for="hangGPLX" class="form-label">Hạng GPLX (Ô tô):</label>
                           <select class="form-control" id="hangGPLX" required>
                               <option value="B1">B1</option>
                               <option value="B2">B2</option>
@@ -155,7 +155,7 @@
                           </select>
                       </div>
                       <div class="mb-3">
-                        <label for="country" class="form-label">Quốc gia</label>
+                        <label for="country" class="form-label">Quốc gia:</label>
                         <select class="form-control" id="country" name="Country" required>
                             <option value="Vietnam">Việt Nam</option>
                             <option value="USA">Mỹ</option>
@@ -166,7 +166,7 @@
                         </select>
                     </div> 
                       <div class="mb-3">
-                          <label for="status" class="form-label">Trạng thái</label>
+                          <label for="status" class="form-label">Trạng thái:</label>
                           <select class="form-control" id="status" required>
                             <option value="Đã hết hạn" selected>Hết hạn</option>
                             <option value="Chờ kiểm định" selected>Chờ kiểm định</option>
@@ -174,15 +174,15 @@
                           </select>
                       </div>
                       <div class="mb-3">
-                          <label for="giamdoc" class="form-label">Giám đốc</label>
+                          <label for="giamdoc" class="form-label">Giám đốc:</label>
                           <input type="text" class="form-control" id="giamdoc">
                       </div>
                       <div class="mb-3">
-                        <label for="image" class="form-label">Hình ảnh (Tùy chọn)</label>
+                        <label for="image" class="form-label">Hình ảnh (Tùy chọn):</label>
                         <input type="file" class="form-control" id="image" accept="image/*">
                     </div>   
                   </div>
-                  <button type="submit" disabled="true" class="btn btn-primary" id="saveInspectionButton">Lưu kiểm định</button>
+                  <button type="submit" disabled="true" class="btn btn-primary" id="saveInspectionButton" style="background-color: #e2366f; color: white; font-size: 18px; text-align: center; display: block; margin: 0 auto;">Lưu hồ sơ kiểm định</button>
               </form>
           </div>
       </div>
@@ -202,28 +202,35 @@
             
             <!-- Left modal section -->
             <div class="modal-left">
-              <div class="mb-3">
-                <label for="gplx" class="form-label">Mã GPLX</label>
-                <input type="text" class="form-control" id="gplx1" required> <!-- Unique ID for first field -->
+              <div class="container mt-4">
+                <div class="mb-3">
+                  <label for="gplx"  style="margin-left: -10px;" class="form-label">Mã GPLX:</label>
+                  <div class="input-group">
+                    <input type="text" style="margin-left: -10px;" class="form-control" id="gplx1" disabled required readonly>
+                    <button type="button" style="margin-left: 5px; margin-top: -15px; " class="btn btn-primary btn-regenerate" onclick="regenerateGPLX()">
+                      <i style="color: white;" class="fas fa-sync-alt"></i> <!-- Font Awesome reload icon -->
+                    </button>
+                  </div>
+                </div>
               </div>
               <div class="mb-3">
-                <label for="name" class="form-label">Tên</label>
+                <label for="name" class="form-label">Tên:</label>
                 <input type="text" class="form-control" id="name1" required>
               </div>
               <div class="mb-3">
-                <label for="renewalReason1" class="form-label">Lý do cấp lại</label>
+                <label for="renewalReason1" class="form-label">Lý do cấp lại:</label>
                 <input type="text" class="form-control" id="renewalReason1" required>
               </div>
               <div class="mb-3">
-                <label for="dob" class="form-label">Ngày sinh</label>
+                <label for="dob" class="form-label">Ngày sinh:</label>
                 <input type="date" class="form-control" id="dob1" required>
               </div>
               <div class="mb-3">
-                <label for="cccd" class="form-label">CCCD</label>
+                <label for="cccd" class="form-label">CCCD:</label>
                 <input type="text" class="form-control" id="cccd1" required>
               </div>
               <div class="mb-3">
-                <label for="gender" class="form-label">Giới tính</label>
+                <label for="gender" class="form-label">Giới tính:</label>
                 <select class="form-control" id="gender1" required>
                     <option value="">Chọn giới tính</option>
                     <option value="Male">Nam</option>
@@ -231,11 +238,11 @@
                 </select>
             </div>
               <div class="mb-3">
-                <label for="phone" class="form-label">Số điện thoại</label>
+                <label for="phone" class="form-label">Số điện thoại:</label>
                 <input type="tel" class="form-control" id="phone1" required>
               </div>
               <div class="mb-3">
-                <label for="email" class="form-label">Email</label>
+                <label for="email" class="form-label">Email:</label>
                 <input type="email" class="form-control" id="email1" required>
               </div>
             </div>
@@ -243,23 +250,23 @@
             <!-- Right modal section -->
             <div class="modal-right">
               <div class="mb-3">
-                <label for="address" class="form-label">Địa chỉ</label>
+                <label for="address" class="form-label">Địa chỉ:</label>
                 <input type="text" class="form-control" id="address1" required>
               </div>
               <div class="mb-3">
-                <label for="issueDate" class="form-label">Ngày cấp</label>
+                <label for="issueDate" class="form-label">Ngày cấp:</label>
                 <input type="date" class="form-control" id="issueDate1" required>
               </div>
               <div class="mb-3">
-                <label for="expiryDate" class="form-label">Ngày hết hạn</label>
+                <label for="expiryDate" class="form-label">Ngày hết hạn:</label>
                 <input type="date" class="form-control" id="expiryDate1" required>
               </div>
               <div class="mb-3">
-                <label for="ngaytrungtuyen" class="form-label">Ngày trúng tuyển</label>
+                <label for="ngaytrungtuyen" class="form-label">Ngày trúng tuyển:</label>
                 <input type="date" class="form-control" id="ngaytrungtuyen1" required>
               </div>
               <div class="mb-3">
-                <label for="hangGPLX" class="form-label">Hạng GPLX (Ô tô)</label>
+                <label for="hangGPLX" class="form-label">Hạng GPLX (Ô tô):</label>
                 <select class="form-control" id="hangGPLX1" required>
                   <option value="B1">B1</option>
                   <option value="B2">B2</option>
@@ -269,7 +276,7 @@
                 </select>
               </div>
               <div class="mb-3">
-                <label for="country" class="form-label">Quốc gia</label>
+                <label for="country" class="form-label">Quốc gia:</label>
                 <select class="form-control" id="country1" name="Country" required>
                     <option value="Vietnam">Việt Nam</option>
                     <option value="USA">Mỹ</option>
@@ -280,17 +287,17 @@
                 </select>
             </div> 
               <div class="mb-3">
-                <label for="status" class="form-label">Trạng thái</label>
+                <label for="status" class="form-label">Trạng thái:</label>
                 <select class="form-control" id="status1" required>
                   <option value="Chờ kiểm định" selected>Chờ kiểm định</option>
                 </select>
               </div>
               <div class="mb-3">
-                <label for="giamdoc" class="form-label">Giám đốc</label>
+                <label for="giamdoc" class="form-label">Giám đốc:</label>
                 <input type="text" class="form-control" id="giamdoc1">
               </div>
               <div class="mb-3">
-                <label for="image" class="form-label">Hình ảnh (Tùy chọn)</label>
+                <label for="image" class="form-label">Hình ảnh (Tùy chọn):</label>
                 <input type="file" class="form-control" id="image1" accept="image/*">
               </div>
             </div>

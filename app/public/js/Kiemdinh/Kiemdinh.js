@@ -33,8 +33,12 @@ async function fetchKiemDinhGPLX() {
 
             <td><span class="status">${holder.Status}</span></td>
             <td>
-                <button class="button-tacvu" onclick='openModal(${JSON.stringify(holder)})'>Xem</button>
-            </td>
+             <button class="btn btn-sm" 
+        style="background-color: #168e60; color: white; padding: 8px; border-radius: 5px;  border: none;" 
+        onclick='openModal(${JSON.stringify(holder)})'>
+                <i class="fas fa-eye" style="font-size: 14px; color: white;"></i> <!-- Eye icon -->
+            </button>
+                </td>
           </tr>
         `;
         tableBody.insertAdjacentHTML('beforeend', row);

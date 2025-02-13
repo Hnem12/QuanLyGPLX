@@ -170,48 +170,58 @@ tr:hover {
 th{
   text-align: center;
 
+  }/* Styling for dropdown menu */
+.dropdown-menu {
+  min-width: 250px; /* Slightly wider menu for better readability */
+  border-radius: 8px; /* Rounded corners for a smooth, clean look */
+  padding: 0.5rem 0; /* Adjusted padding for spacing */
+  background-color: #ffffff; /* Clean white background */
+  border: none; /* Remove border to avoid a boxy appearance */
 }
 
 /* Styling for dropdown items */
-.dropdown-menu {
-  min-width: 200px; /* Ensuring the menu is wide enough */
-  border-radius: 8px; /* Slightly rounded corners for the menu */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Soft shadow for dropdown */
-  padding: 0.5rem 0; /* Adjusted padding */
-}
-
 .dropdown-item {
   display: flex;
-  align-items: center; /* Aligns icon and text */
-  padding: 0.5rem 1rem; /* Better padding for each item */
-  font-size: 18px; /* Adjust font size */
-  color: #333; /* Darker text color for better readability */
-  text-align: left;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  align-items: center; /* Vertically center icon and text */
+  padding: 0.75rem 1.25rem; /* Slightly more padding for improved spacing */
+  font-size: 16px; /* Slightly smaller text for a refined appearance */
+  color: #333; /* Dark text for better readability */
+  text-align: left; /* Align text to the left */
+  transition: background-color 0.3s ease, color 0.3s ease, padding 0.2s ease; /* Smooth transition on hover */
+  cursor: pointer; /* Change cursor to pointer for better user experience */
 }
 
 .dropdown-item i {
   font-size: 18px; /* Icon size */
-  margin-right: 10px; /* Space between icon and text */
+  margin-right: 12px; /* Space between icon and text */
+  color: #d63384; /* Icon color */
+  transition: color 0.3s ease; /* Smooth transition for icon color */
 }
 
+/* Hover effect for dropdown items */
 .dropdown-item:hover {
-  background-color: #f8f9fa; /* Hover effect for background */
-  color: #007bff; /* Text color on hover */
-  border-radius: 4px; /* Rounded corners on hover */
+  background-color: #f8d7e0; /* Soft pink background on hover */
+  color: #d63384; /* Pink text color on hover */
+  border-radius: 4px; /* Slightly rounded corners on hover */
 }
 
+.dropdown-item:hover i {
+  color: #d63384; /* Change icon color to match the text color on hover */
+}
+
+/* Remove line breaks for better layout */
 .dropdown-item br {
-  display: none; /* Hides the <br> tag for better layout */
+  display: none;
 }
 
-/* Responsive Adjustments */
+/* Responsive adjustments for mobile */
 @media (max-width: 768px) {
   .dropdown-item {
-      font-size: 18px; /* Smaller text on mobile */
+    font-size: 14px; /* Slightly smaller text on mobile */
+    padding: 0.5rem 1rem; /* Adjust padding for better fit on smaller screens */
   }
 
   .dropdown-item i {
-      font-size: 18px; /* Smaller icons on mobile */
+    font-size: 16px; /* Slightly smaller icons on mobile */
   }
 }

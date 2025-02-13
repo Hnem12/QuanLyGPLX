@@ -143,8 +143,13 @@ i {
 
 /* Sidebar adjustments */
 .Canngang {
-  margin-left: 205px; /* Margin for expanded sidebar */
   transition: margin-left 0.3s ease;
+  margin-top: 60px;
+  position: absolute; /* Use absolute positioning */
+  top: 0;
+  left: 210px;
+  right: 0;
+  height: 85vh;
 }
 /* Pagination Controls Styling */
 #paginationControls {
