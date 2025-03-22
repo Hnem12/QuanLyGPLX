@@ -13,6 +13,7 @@ const CaplaiGPLXRouter = require('./app/routes/caplaiGPLXRoute');
 const GiahanGPLXRouter = require('./app/routes/GiahanGPLX');
 const imageRoutes = require('./app/routes/imageRoute');
 const { DangKyAdmin } = require('./app/blockchain/enrollAdmin'); // Điều chỉnh đường dẫn
+const { queryGPLXData } = require('./app/blockchain/Truyvandulieu');
 const KiemdinhGPLXRoute = require('./app/routes/KiemdinhGPLXRoute') 
 
 
@@ -33,14 +34,12 @@ app.use(cors({ credentials: true, origin: '*' }));
 // Middleware xử lý cookie
 app.use(cookieParser());
 
-
 app.use(express.static(path.join(__dirname, 'app/public')));
 app.use(express.static(path.join(__dirname, 'app/public/js')));
 app.use(express.static(path.join(__dirname, 'app/public/css')));
 app.use(express.static(path.join(__dirname, 'client/build')));
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-DangKyAdmin();
 // Sử dụng router upload ảnh
 app.use('/api/images', imageRoutes);
 // Use routes
