@@ -431,17 +431,6 @@ h3 {
 }
 
 /* Responsive design */
-@media (max-width: 768px) {
-  .modal-content-key {
-    width: 95%; /* Increase width for smaller screens */
-    padding: 20px; /* Reduce padding for compact design */
-  }
-
-  .modal-buttons {
-    flex-direction: column; /* Stack buttons vertically */
-    gap: 10px; /* Space between stacked buttons */
-  }
-}
 
 /* Bootstrap Modal Styling Fixes */
 .modal.fade {

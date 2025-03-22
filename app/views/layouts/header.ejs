@@ -43,13 +43,13 @@
             <h2>Cấp khóa cho người dùng</h2>
             <span style="margin-left: 150px; font-size: 35px;" class="close" onclick="closeKeyModal()">&times;</span>
         </div>
-        <p id="KeyLabel" style="display: none;">Bạn có muốn cấp khóa cho người dùng này không???</p> 
+        <p id="KeyLabel" style="display: none; margin-left: 10px;">Bạn muốn tạo chữ ký???</p> 
         <input type="text" id="KeyCA" style="margin-top: -5px; font-weight: bold; width: 100%; padding: 10px; border: 2px solid #4CAF50; border-radius: 5px;" readonly hidden />
         <!-- Message to indicate if the public key exists -->
         <p id="publicKeyStatus" style="color: red; display: none; margin-top: 5px;">Chưa có khóa công khai.</p>
              
         <div class="Xepngang">
-            <button id="generateKeyBtn" onclick="generateUserKey()" class="modal-button">Xác nhận cấp khóa</button>
+            <button id="generateKeyBtn" onclick="generateUserKey()" class="modal-button">Đồng ý</button>
             <button style="margin-left:10px;" onclick="closeKeyModal()" class="modal-button cancel-btn">Hủy</button>
         </div>
 
@@ -114,8 +114,6 @@
                 </label>
                 <input type="file" id="imageInput" accept="image/*" style="display: none;">
             </div>
-            
-            
 
             <!-- Nút bấm -->
             <div class="upload-section">

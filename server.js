@@ -13,7 +13,6 @@ const CaplaiGPLXRouter = require('./app/routes/caplaiGPLXRoute');
 const GiahanGPLXRouter = require('./app/routes/GiahanGPLX');
 const imageRoutes = require('./app/routes/imageRoute');
 const { DangKyAdmin } = require('./app/blockchain/enrollAdmin'); // Điều chỉnh đường dẫn
-const { queryGPLXData } = require('./app/blockchain/Truyvandulieu');
 const KiemdinhGPLXRoute = require('./app/routes/KiemdinhGPLXRoute') 
 
 

@@ -1,5 +1,5 @@
 .image-container1 {
-  height: 82vh; /* Let the container adjust its height based on the content */
+  height: 100vh; /* Let the container adjust its height based on the content */
   display: flex;
   justify-content: center; /* Center the image horizontally */
   align-items: center; /* Center the image vertically */
@@ -7,10 +7,11 @@
   margin-right: auto;
   overflow: hidden; /* Prevent image from overflowing */
   margin-left: 200px; /* Add margin on the left if you need to offset the container */
+  margin-top: -80px;
 }
 
 .image-container1 img {
-  max-width: 88%; /* Limit the image's width */
+  max-width: 80%; /* Limit the image's width */
   max-height: 100vh; /* Limit the image height to avoid exceeding the viewport */
   width: auto; /* Maintain the aspect ratio */
   height: auto; /* Ensure aspect ratio is preserved */

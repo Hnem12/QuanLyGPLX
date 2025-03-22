@@ -431,15 +431,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const result = await response.json();
 
         if (response.ok) {
-          
           messages.push(result.message || 'Thêm GPLX thành công!');
           const newHolderId = document.getElementById('holderId').value || result.data._id;
           await deleteAccount(newHolderId);
-          if (newHolderId) {
-            const blockchainMessage = await pushDataToBlockchain(formData, holderId, caKeyInfo, privateKey);
-            messages.push(blockchainMessage);
-          }
-
           resetForm();
           location.reload();
         } else {
