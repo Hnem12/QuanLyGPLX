@@ -108,7 +108,8 @@ table.table tbody tr:hover {
   justify-content: center;
   align-items: center;
   gap: 5px;
-  margin-top: 20px;
+  font-weight: bold;
+  margin-top: 5px !important;
   flex-wrap: wrap; /* Make it responsive */
 }
 
@@ -202,11 +203,11 @@ h3 {
   margin: 0 auto;
 }
 
-.btn-close {
+.btn-close:hover {
   color: white; /* Close button in white */
-  background: none;
-  border: none;
+  background-color: #e2366f;
 }
+
 
 /* Body Styling */
 .modal-body {

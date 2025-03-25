@@ -466,10 +466,11 @@ h3 {
   margin: 0 auto;
 }
 
-.btn-close1 {
+.btn-close:hover {
   color: white; /* Close button in white */
-  background: rgb(158, 58, 58);
+  background-color: #e2366f;
 }
+
 
 /* Body Styling */
 .modal-body {

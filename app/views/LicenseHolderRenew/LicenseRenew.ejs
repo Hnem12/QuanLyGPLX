@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Quản lý chủ sở hữu GPLX</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="css/LicenseHolder/index.css">
+  <link rel="stylesheet" href="css/LicenseHolder/AddLicensehoder.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="icon" href="/uploads/h8.png" type="image/x-icon">
@@ -34,7 +34,7 @@
       <h3>Danh sách chờ cấp lại giấy phép lái xe</h3>
   
       <!-- Button to Open Modal -->
-      <button class="btn mb-3" style="background-color: #e2366f; color: white; font-size: 20px;" data-bs-toggle="modal" data-bs-target="#addInspectionModal">
+      <button class="btn mb-3 custom-btn" data-bs-toggle="modal" data-bs-target="#addInspectionModal">
         Thêm vào danh sách chờ
       </button>
   
@@ -145,13 +145,16 @@
                           <input type="date" class="form-control" id="ngaytrungtuyen" required>
                       </div>
                       <div class="mb-3">
-                          <label for="hangGPLX" class="form-label">Hạng GPLX (Ô tô):</label>
+                          <label for="hangGPLX" class="form-label">Hạng GPLX:</label>
                           <select class="form-control" id="hangGPLX" required>
-                              <option value="B1">B1</option>
-                              <option value="B2">B2</option>
-                              <option value="C">C</option>
-                              <option value="D">D</option>
-                              <option value="E">E</option>
+                            <option value="B1">B1</option>
+                            <option value="B2">B2</option>
+                            <option value="A1">A1</option>
+                            <option value="A">A</option>
+                            <option value="A1">A2</option>
+                            <option value="C">C</option>
+                            <option value="D">D</option>
+                            <option value="E">E</option>
                           </select>
                       </div>
                       <div class="mb-3">
@@ -182,7 +185,9 @@
                         <input type="file" class="form-control" id="image" accept="image/*">
                     </div>   
                   </div>
-                  <button type="submit" disabled="true" class="btn btn-primary" id="saveInspectionButton" style="background-color: #e2366f; color: white; font-size: 18px; text-align: center; display: block; margin: 0 auto;">Lưu hồ sơ kiểm định</button>
+                  <button type="submit" disabled="true" class="btn btn-primary custom-btn-sumit" id="saveInspectionButton" >
+                    Lưu hồ sơ kiểm định
+                  </button>
               </form>
           </div>
       </div>
@@ -203,17 +208,17 @@
             <!-- Left modal section -->
             <div class="modal-left">
               <div class="container mt-4">
-                <div class="mb-3">
+                <div class="mb-3 custom-mb-3">
                   <label for="gplx"  style="margin-left: -10px;" class="form-label">Mã GPLX:</label>
                   <div class="input-group">
-                    <input type="text" style="margin-left: -10px;" class="form-control" id="gplx1" disabled required readonly>
+                    <input type="text" style="margin-left: -10px;" class="form-control btn" id="gplx1" disabled required readonly>
                     <button type="button" style="margin-left: 5px; margin-top: -15px; " class="btn btn-primary btn-regenerate" onclick="regenerateGPLX()">
                       <i style="color: white;" class="fas fa-sync-alt"></i> <!-- Font Awesome reload icon -->
                     </button>
                   </div>
                 </div>
               </div>
-              <div class="mb-3">
+              <div class="mb-3 custom-mb-31">
                 <label for="name" class="form-label">Tên:</label>
                 <input type="text" class="form-control" id="name1" required>
               </div>
@@ -266,10 +271,13 @@
                 <input type="date" class="form-control" id="ngaytrungtuyen1" required>
               </div>
               <div class="mb-3">
-                <label for="hangGPLX" class="form-label">Hạng GPLX (Ô tô):</label>
+                <label for="hangGPLX" class="form-label">Hạng GPLX:</label>
                 <select class="form-control" id="hangGPLX1" required>
                   <option value="B1">B1</option>
                   <option value="B2">B2</option>
+                  <option value="A1">A1</option>
+                  <option value="A">A</option>
+                  <option value="A1">A2</option>
                   <option value="C">C</option>
                   <option value="D">D</option>
                   <option value="E">E</option>
@@ -302,7 +310,8 @@
               </div>
             </div>
             
-            <button type="submit" id="saveInspectionButton1" disabled="true" class="btn btn-primary"style="background-color: #e2366f; color: white; font-size: 18px; text-align: center; display: block; margin: 0 auto;">Thêm hồ sơ kiểm định</button>
+            <button type="submit" id="saveInspectionButton1" disabled="true" class="btn btn-primary custom-btn-sumit">
+              Thêm hồ sơ kiểm định</button>
           </form>
         </div>
       </div>

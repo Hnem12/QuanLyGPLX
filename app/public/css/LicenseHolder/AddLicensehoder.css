@@ -1,0 +1,485 @@
+
+/* CSS cho phần body và sidebar */
+body {
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden; /* Ẩn cuộn dọc cho body */
+    font-family: 'Times New Roman', Times, serif, sans-serif;
+    background: #fff;
+  }
+  
+  /* CSS cho phần nội dung chính */
+  .main-content-wrapper {
+    display: flex;
+    flex-grow: 1; 
+    overflow-y: auto; /* Cho phép cuộn dọc cho nội dung chính */
+  }
+  
+  .main-content {
+    flex-grow: 1;
+    padding: 2rem;
+    overflow-y: auto; /* Đảm bảo nội dung chính cuộn được nếu vượt quá chiều cao màn hình */
+  }
+  
+  /* Table styling */
+  table {
+    width: 100%;
+    margin: 0 auto;
+    border-collapse: collapse;
+    table-layout: fixed; /* Cố định độ rộng cột */
+    background-color: #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Thêm bóng đổ nhẹ cho bảng */
+    border: none; /* Loại bỏ viền bảng */
+  
+  }
+  
+  /* Table container */
+  .table-container {
+    overflow-x: auto; /* Cuộn ngang nếu cần */
+    margin: 0; /* Loại bỏ khoảng cách thừa */
+    width: 100%; /* Đảm bảo container chiếm toàn bộ chiều rộng */
+    box-sizing: border-box; /* Đảm bảo padding không làm thay đổi kích thước */
+    border: none; /* Bỏ viền container */
+    padding: 0; /* Loại bỏ khoảng cách giữa container và bảng */
+  }
+  
+  
+  
+  .table th, .table td {
+    text-align: center; /* Canh giữa nội dung */
+    vertical-align: middle; /* Canh giữa theo chiều dọc */
+    border: none; /* Loại bỏ viền ô */
+    padding: 10px; /* Khoảng cách giữa nội dung và viền */
+  }
+  
+  .table th {
+    background-color: #f0f0f0; /* Màu nền tiêu đề bảng */
+    font-weight: bold;
+  }
+  
+  .table tr:nth-child(odd) {
+    background-color: #fff; /* Màu nền hàng lẻ */
+  }
+  
+  .table tr:nth-child(even) {
+    background-color: #f9f9f9; /* Màu nền hàng chẵn */
+  }
+  
+  .table tr:hover {
+    background-color: #f1f1f1; /* Hiệu ứng hover */
+  }
+  table.table thead th {
+    text-align: center;
+    padding: 5px;
+    background-color: #ececec;
+    font-weight: bold;
+    border-bottom: 1px solid #aaa;
+  }
+  
+  /* Table body cell styling */
+  table.table td {
+    text-align: center; /* Center text horizontally */
+    padding: 5px; /* Space inside each cell */
+    background-color: #f0f0f0; /* Light gray background */
+    border-bottom: 1px solid #aaa; /* Border below each cell */
+  }
+  
+  /* Zebra striping: Alternate row background colors */
+  table.table tbody tr:nth-child(odd) td {
+    background-color: #ffffff; /* Light gray for odd rows */
+  }
+  
+  table.table tbody tr:nth-child(even) td {
+    background-color: #ececec; /* White for even rows */
+  }
+  
+  
+  /* Status styling */
+  .status {
+    background-color: #d0f0d4; /* Lighter green background */
+    color: #2a7f3f; /* Darker green text color */
+    padding: 10px; /* Padding inside */
+    border-radius: 5px; /* Rounded corners */
+    text-align: center; /* Center text */
+    display: inline-block; /* Inline block display to wrap around text */
+    font-size: 14px; /* Font size */
+    font-weight: bold; /* Bold text */
+  }
+  
+  /* Status styling */
+  .status1 {
+    background-color: #f8cdcd; /* Lighter green background */
+    color: #e60000;
+    padding: 10px; /* Padding inside */
+    border-radius: 5px; /* Rounded corners */
+    text-align: center; /* Center text */
+    display: inline-block; /* Inline block display to wrap around text */
+    font-size: 15px; /* Font size */
+    font-weight: bold; /* Bold text */
+  }
+  
+  span {
+    color: rgb(0, 0, 0);
+  }
+  
+  i {
+    color: black;
+  }
+  
+  /* Email column styling */
+  .email {
+    display: inline-block;
+    max-width: 110px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+    text-align: left;
+    padding-right: 10px; /* Added padding */
+  }
+  
+  /* Sidebar adjustments */
+  .Canngang {
+    margin-top: 60px;
+    position: absolute; /* Use absolute positioning */
+    top: 0;
+    left: 210px;
+    right: 0;
+    height: 85vh;
+    transition: margin-left 0.3s ease;
+  
+  }
+  /* Pagination Controls Styling */
+  #paginationControls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  
+  #paginationControls button {
+    padding: 6px 12px;
+    border: 1px solid #020202;
+    background-color: #e2366f;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    border-radius: 5px;
+  }
+  
+  #paginationControls button:hover {
+    background-color: #ff4500;
+    transform: scale(1.1);
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  #paginationControls button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  
+  #paginationControls #pageInfo {
+    font-size: 16px;
+    color: #333;
+    font-weight: bold;
+  }
+  /* Checkbox adjustments */
+  .row-checkbox, #select-all {
+    accent-color: steelblue;
+  }
+  
+  .button-cell {
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    padding: 0;
+  }
+  
+  /* Button styling */
+  .button-tacvu {
+    background: steelblue;
+    width: 35px;
+    height: 35px;
+    border: none;
+    border-radius: 3px; /* Tăng độ tròn */
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng */
+    transition: all 0.3s ease-in-out;
+    min-width: 35px;
+    min-height: 35px; /* Ensure buttons maintain a minimum size */
+  }
+  
+  .button-tacvu:hover {
+    background: darkorange;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Tăng bóng */
+    transform: scale(1.05); /* Phóng lớn hơn chút */
+  }
+  
+  .column-width-tacvu { width: 65px; }
+  .column-width-anh { width: 140px; }
+  .column-width-thongtin { width: 170px; }
+  .column-width-status1 { width: 130px; }
+  
+  .column-width-status { width: 120px; }
+  .column-width-select { width: 94px; }
+  .column-width-ngaysinh { width: 112px; }
+  
+  
+  .hidden { display: none; }
+  
+  
+  /* View button styling */
+  .btn-view {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .main-content-wrapper {
+      flex-direction: column;
+      margin-left: 0;
+    }
+  
+    #paginationControls button {
+      padding: 6px 10px; /* Adjust button size */
+    }
+  
+    .table-container {
+      padding: 10px; /* Reduced padding */
+    }
+  
+    .email {
+      max-width: 110px; /* Shorten email max width for mobile */
+    }
+  
+    /* Optional: Reduce font sizes for smaller screens */
+    .table-container, .main-content-wrapper {
+      font-size: 0.9rem;
+    }
+  }
+  
+  /* Aspect ratio handling */
+  .aspect-ratio-16-9, .aspect-ratio-4-3 {
+    position: relative;
+    width: 100%;
+  }
+  
+  .aspect-ratio-16-9 {
+    padding-top: 56.25%; /* 16:9 aspect ratio */
+  }
+  
+  .aspect-ratio-4-3 {
+    padding-top: 75%; /* 4:3 aspect ratio */
+  }
+  
+  .aspect-ratio-16-9 img, .aspect-ratio-4-3 img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .breadcrumb-item a {
+      color: #495057;
+  }
+  .breadcrumb-item.active {
+      font-weight: bold;
+  }
+  h3 {
+      font-size: 2rem;
+      font-weight: 600;
+      color: #333;
+  }
+  .table {
+      border-radius: 8px;
+      background-color: #fff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  .table th, .table td {
+      text-align: center;
+      vertical-align: middle;
+  }
+  .btn-primary {
+      background-color: #e2366f;
+      border-color: #e2366f;
+  }
+  .btn-primary:hover {
+      background-color: #c92a57;
+      border-color: #c92a57;
+  }
+  
+  
+  /* Modal button container */
+  .modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    gap: 15px; /* Add space between buttons */
+  }
+  
+  /* Button styling */
+  .modal-buttons button {
+    flex: 1; /* Equal button widths */
+    padding: 12px 15px;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .modal.fade {
+    z-index: 1051; /* Ensure Bootstrap modal's z-index is higher */
+    margin: auto;
+  }
+  
+  .modal-dialog {
+    z-index: 1052; /* Modal dialog appears above overlay */
+  }
+  
+  /* General Modal Styling */
+  .modal-dialog {
+    max-width: 700px; /* Adjust width */
+    margin: auto; /* Center the modal */
+  }
+  
+  .modal-content {
+    border-radius: 10px; /* Rounded corners for modal */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    margin-top: 5px;
+  }
+  
+  /* Header Styling */
+  .modal-header {
+    background-color: #e2366f; /* Blue header background */
+    color: white; /* White text for contrast */
+    border-bottom: 1px solid #e2366f; /* Darker border for emphasis */
+    text-align: center;
+    padding: 10px !important;
+  }
+  
+  .modal-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 0 auto;
+    text-align: center; 
+    width: 100%;
+  }
+  .custom-btn {
+    background-color: #e2366f;
+     color: white; 
+     font-size: 20px;
+  }
+  .custom-btn:hover {
+    background-color: #e2366f;
+  }
+
+  
+  .btn-close:hover {
+    color: white; /* Close button in white */
+    background-color: #e2366f;
+  }
+  
+  /* Body Styling */
+  .modal-body {
+    padding: 20px;
+    background-color: #f9f9f9; /* Light grey background for contrast */
+  }
+  
+  /* Form Styling */
+  .form-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+ 
+  
+  .form-control {
+    padding: 6px !important;
+    border: 1px solid #ced4da;
+  }
+
+
+  input[type="file"] {
+    padding: 5px;
+  }
+  
+  /* Select Field Styling */
+  select.form-control {
+    padding: 8px;
+    border-radius: 5px;
+  }
+  
+  /* Buttons */
+  #submitBtn {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  #submitBtn:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  
+  .input-group {
+    display: flex;
+    align-items: center;
+  }
+  
+  .input-group .form-control {
+    border-radius: 0.375rem; /* Slightly rounded input corners */
+  }
+  .custom-mb-3 {
+    margin-top: -30px;
+  }
+  .custom-mb-31 {
+    margin-top: -25px;
+  }
+  .input-group button {
+    margin-left: 10px;
+    border-radius: 0.375rem; /* Slightly rounded button corners */
+    font-size: 14px;
+    padding: 0.5rem 1rem;
+  }
+  
+  .input-group button:hover {
+    background-color: #e46ea9; /* Hover effect */
+    border-color: #e46ea9;
+  }
+  
+  .form-label {
+    font-weight: 500;
+  }
+  
+  /* Optional: Ensure spacing between form elements */
+  .mb-3 {
+    margin-bottom: 1.5rem;
+  }
+  .custom-btn-sumit {
+    background-color: #e2366f !important; 
+    color: white; 
+    font-size: 18px; 
+    text-align: center; 
+    display: block; 
+    margin: 0 auto;
+  }

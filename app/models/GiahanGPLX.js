@@ -30,7 +30,7 @@ const LicenseRenewalSchema = new Schema({
     HangGPLX: {
         type: String,
         required: true,
-        enum: ['B1', 'B2', 'C', 'D', 'E'], // Danh sách các hạng GPLX có sẵn
+        enum: ['B1', 'B2', 'C', 'D', 'E', 'A', 'A1', 'A2'], // Danh sách các hạng GPLX có sẵn
         trim: true
     },
        Country: {
