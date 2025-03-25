@@ -1,5 +1,5 @@
 // Đoạn mã này sẽ lấy giá trị từ biến môi trường
-const Base = "https://quanlygplx.onrender.com/";
+const Base = "https://quanlygplx.onrender.com";
 const baseURL = Base + ":3000"; // Backend URL
 const baseURLFE = Base + ":5000"; // Frontend URL
 
