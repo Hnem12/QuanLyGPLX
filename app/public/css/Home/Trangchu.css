@@ -6,12 +6,12 @@
   margin-left: auto; /* Ensure the container is centered */
   margin-right: auto;
   overflow: hidden; /* Prevent image from overflowing */
-  margin-left: 200px; /* Add margin on the left if you need to offset the container */
+  margin-left: 250px; /* Add margin on the left if you need to offset the container */
   margin-top: -80px;
 }
 
 .image-container1 img {
-  max-width: 80%; /* Limit the image's width */
+  max-width: 90%; /* Limit the image's width */
   max-height: 100vh; /* Limit the image height to avoid exceeding the viewport */
   width: auto; /* Maintain the aspect ratio */
   height: auto; /* Ensure aspect ratio is preserved */
