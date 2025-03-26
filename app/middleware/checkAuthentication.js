@@ -4,7 +4,7 @@ const { default: api } = require('../../react/quanlygplx/src/utils/request');
 // Danh sách quyền cho từng vai trò
 const rolePermissions = {
     'User': [],
-    'Admin': ['/licenseHolder', '/ApprovelicenselHoder', '/renewals', '/renew', '/kiemdinhGPLX', '/account', '/truyxuatbanglaixeoto', '/trangchu'],
+    'Admin': ['/licenseHolder', '/ApprovelicenselHoder', '/renewals', '/renew', '/kiemdinhGPLX', '/account', '/truyxuatbanglaixeoto', '/trangchu','/Gioithieu'],
     'Director Admin': ['/licenseHolder', '/ApprovelicenselHoder', '/renewals', '/renew', '/kiemdinhGPLX', '/truyxuatbanglaixeoto', '/trangchu'],
     'Test Admin': ['/ApprovelicenselHoder', '/renewals', '/renew', '/trangchu', '/truyxuatbanglaixeoto'],
     'Verified Admin': ['/ApprovelicenselHoder', '/renewals', '/renew', '/kiemdinhGPLX', '/truyxuatbanglaixeoto', '/trangchu']
