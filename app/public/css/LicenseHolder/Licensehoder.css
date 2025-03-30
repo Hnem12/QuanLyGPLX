@@ -9,6 +9,24 @@ body {
   font-family: 'Times New Roman', Times, serif, sans-serif;
   background: #fff;
 }
+.custom-alert {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 15px;
+  font-weight: 400;
+  text-align: center;
+}
+
+.custom-icon {
+  width: 20px;
+  height: 20px;
+}
+.custom-title {
+  margin-left: 5px;
+  text-align: center !important;
+}
+
 
 /* CSS cho phần nội dung chính */
 .main-content-wrapper {

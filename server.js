@@ -15,7 +15,8 @@ const imageRoutes = require('./app/routes/imageRoute');
 const { DangKyAdmin } = require('./app/blockchain/enrollAdmin'); // Điều chỉnh đường dẫn
 const { queryGPLXData } = require('./app/blockchain/Truyvandulieu');
 const KiemdinhGPLXRoute = require('./app/routes/KiemdinhGPLXRoute') 
-
+const apiRoutes = require('./app/routes/api') 
+const fs = require("fs");
 
 const app = express();
 dbconnect();
@@ -57,6 +58,42 @@ app.use('/api/search/', licenseHolderRoutes);
 app.use('/api/renewal', GiahanGPLXRouter);
 app.use('/api/Caplai', CaplaiGPLXRouter);
 app.use('/api/kiemdinh/', KiemdinhGPLXRoute);
+
+const normalizeKey = (key) => {
+    return key
+        .replace(/\r\n/g, "\\r\\n")  // Giữ nguyên ký tự xuống dòng Windows dưới dạng chuỗi
+        .replace(/\n/g, "\\r\\n");   // Đảm bảo tất cả xuống dòng đều là \\r\\n
+};
+
+app.post("/verify-key", async (req, res) => {
+    const { accountId, privateKey } = req.body;
+    const keyFilePath = path.join("/home/hnem/QuanLyGPLX/wallet", `${accountId}.id`);
+
+    if (!fs.existsSync(keyFilePath)) {
+        return res.status(404).json({ success: false, message: "Không tìm thấy khóa cho tài khoản này!" });
+    }
+
+    try {
+        const storedData = JSON.parse(fs.readFileSync(keyFilePath, "utf8"));
+        const storedKey = normalizeKey(storedData.credentials.privateKey);
+        const inputKey = normalizeKey(privateKey);
+
+        // Debug để kiểm tra chính xác ký tự ẩn
+        console.log("Stored Key:", JSON.stringify(storedKey)); 
+        console.log("Input Key:", JSON.stringify(inputKey));
+
+        if (storedKey === inputKey) {
+            return res.json({ success: true });
+        } else {
+            return res.status(401).json({ success: false, message: "Khóa không chính xác!" });
+        }
+    } catch (error) {
+        console.error("Lỗi đọc khóa:", error);
+        return res.status(500).json({ success: false, message: "Lỗi xử lý tệp khóa!" });
+    }
+});
+
+
 
 DangKyAdmin();
 app.get('/', (req, res) => {

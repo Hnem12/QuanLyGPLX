@@ -276,11 +276,31 @@ async function waitForPrivateKeyInput() {
 
     newSubmitButton.addEventListener("click", () => {
       const privateKey = privateKeyInput.value;
-      if (!privateKey) {
-        alert("Khóa bí mật không hợp lệ.");
-        reject("Private key is invalid");
-        return;
-      }
+      if (
+        !privateKey ||
+        !privateKey.startsWith("-----BEGIN PRIVATE KEY-----") ||
+        !privateKey.endsWith("-----END PRIVATE KEY-----")
+      ) {
+        document.getElementById("privateKeyInput").value = "";
+        Swal.fire({
+          html: `
+              <div class="custom-alert">
+              <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" class="custom-icon" />
+              <span class="custom-title">Khóa bí mật không hợp lệ. Vui lòng nhập lại!</span>
+              </div>
+          `,
+          showConfirmButton: false, // Ẩn nút mặc định
+          allowOutsideClick: true, // Không cho đóng khi click ra ngoài
+          width: "420px", // Giảm kích thước popup
+          position: "top", // Hiển thị trên cao
+          background: "#f6fff8", // Màu nền nhẹ nhàng
+          customClass: {
+              popup: "custom-alert-popup"
+          }
+      });
+        throw new Error("Private key is invalid"); // Dừng ngay chương trình
+      }      
+      
       hideSecretKeyModal();
       resolve(privateKey);
     });
@@ -333,7 +353,22 @@ async function pushAllDataToBlockchain() {
     );
 
     await Promise.all(promises);
-    alert("Tất cả dữ liệu đã được đẩy vào BlockChain thành công!");
+    Swal.fire({
+      html: `
+          <div class="custom-alert">
+              <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" class="custom-icon" />
+              <span class="custom-title">Tất cả dữ liệu đã được đẩy vào BlockChain thành công!</span>
+          </div>
+      `,
+      showConfirmButton: false, // Ẩn nút mặc định
+      allowOutsideClick: true, // Không cho đóng khi click ra ngoài
+      width: "420px", // Giảm kích thước popup
+      position: "top", // Hiển thị trên cao
+      background: "#f6fff8", // Màu nền nhẹ nhàng
+      customClass: {
+          popup: "custom-alert-popup"
+      }
+  });
   } catch (error) {
     console.error("Error:", error);
   }
