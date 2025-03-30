@@ -307,21 +307,27 @@ imageInput.addEventListener('change', function() {
 
 // Handle the Submit Key button inside the modal
 document.getElementById('submitKey').addEventListener('click', async function () {
+  const accountId = localStorage.getItem('accountId'); // Lấy accountId từ localStorage
+  const privateKey = document.getElementById('privateKeyInput').value.trim(); // Lấy khóa bí mật
   const holderId = document.getElementById('holderId').value.trim(); // Get holder ID
-  const privateKey = document.getElementById('privateKeyInput').value.trim(); // Get private key
 
-  if (!holderId ||  !privateKey ||
+  if (!accountId) {
+    Swal.fire("Lỗi", "Không tìm thấy thông tin tài khoản. Vui lòng đăng nhập lại!", "error");
+    return;
+  }
+
+  if (!holderId || !privateKey ||
     !privateKey.startsWith("-----BEGIN PRIVATE KEY-----") ||
     !privateKey.endsWith("-----END PRIVATE KEY-----")
   ) {
     document.getElementById("privateKeyInput").value = "";
     Swal.fire({
-      html: 
-          `<div class="custom-alert">
+      html: `
+          <div class="custom-alert">
           <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" class="custom-icon" />
           <span class="custom-title">Khóa bí mật không hợp lệ. Vui lòng nhập lại!</span>
-          </div>`
-      ,
+          </div>
+      `,
       showConfirmButton: false,
       allowOutsideClick: true,
       width: "420px",
@@ -337,16 +343,34 @@ document.getElementById('submitKey').addEventListener('click', async function ()
   hideModal(); // Hide the modal after confirmation
 
   try {
-    // Push all data to the blockchain
-    const result = await pushAllDataToBlockchain(holderId, privateKey);
-    
-    // Only if blockchain push is successful, proceed with form submission
-    if (result && result.success) {
-      await submitFormData();
+    // Gửi yêu cầu kiểm tra khóa lên server
+    const response = await fetch("/verify-key", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ accountId, privateKey })
+    });
+
+    const result = await response.json();
+    if (!result.success) {
+      Swal.fire("Lỗi", result.message, "error");
+      return;
     }
+
+    // Nếu khóa đúng, tiếp tục xử lý
+    hideModal();
+    const formSubmitResult = await submitFormData();
+
+    if (formSubmitResult?.success) {  
+      const holderId = document.getElementById('holderId').value.trim(); // Get holder ID
+      // Lấy holderId sau khi form đã được submit
+      await pushAllDataToBlockchain(holderId, privateKey);
+    } else {
+      console.warn("Form chưa được gửi thành công, không thực hiện đẩy lên blockchain.");
+    }
+
   } catch (error) {
-    console.error("Error in data processing:", error);
-    alert("Có lỗi xảy ra trong quá trình xử lý dữ liệu.");
+    console.error("Lỗi:", error);
+    Swal.fire("Lỗi", "Có lỗi xảy ra trong quá trình xử lý!", "error");
   }
 });
 
@@ -403,16 +427,56 @@ async function pushAllDataToBlockchain(holderId, privateKey) {
       return pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey);
     });
     const results = await Promise.all(promises);
-    alert("Dữ liệu đã được đẩy vào BlockChain thành công!");
-    return { success: true, results };
+    Swal.fire({
+      html: `
+          <div class="custom-alert">
+              <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" class="custom-icon" />
+              <span class="custom-title">Dữ liệu đã được đẩy vào BlockChain thành công!!!</span>
+          </div>
+      `,
+      showConfirmButton: false, // Ẩn nút mặc định
+      allowOutsideClick: true, // Không cho đóng khi click ra ngoài
+      width: "420px", // Giảm kích thước popup
+      position: "top", // Hiển thị trên cao
+      background: "#f6fff8", // Màu nền nhẹ nhàng
+      customClass: {
+          popup: "custom-alert-popup"
+      }
+  });     // Get holder ID
+  const newHolderId = document.getElementById('holderId').value || result.data._id;
+
+  // Đợi 20 giây rồi mới xóa KD
+  setTimeout(async () => {
+      try {
+          await deleteKD(newHolderId);
+      } catch (deleteError) {
+          console.error("Error in deleteKD:", deleteError);
+          messages.push("Lỗi khi xóa dữ liệu kiểm định, nhưng dữ liệu đã được thêm thành công.");
+      }
+  }, 10000); // 20 giây = 20000ms   
+  return { success: true, results };
   } catch (error) {
     console.error("Error:", error);
-    alert("Có lỗi xảy ra khi đẩy dữ liệu vào BlockChain.");
+    Swal.fire({
+      html: `
+          <div class="custom-alert">
+          <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" class="custom-icon" />
+          <span class="custom-title">Có lỗi xảy ra khi đẩy dữ liệu vào BlockChain !!!</span>
+          </div>
+      `,
+      showConfirmButton: false, // Ẩn nút mặc định
+      allowOutsideClick: true, // Không cho đóng khi click ra ngoài
+      width: "420px", // Giảm kích thước popup
+      position: "top", // Hiển thị trên cao
+      background: "#f6fff8", // Màu nền nhẹ nhàng
+      customClass: {
+          popup: "custom-alert-popup"
+      }
+  });
     return { success: false, error };
   }
 }
 
-// Form submission function that will only be called after blockchain push succeeds
 // Define the resetForm function
 function resetForm() {
   // Reset the form fields
@@ -435,8 +499,6 @@ function resetForm() {
   // Additional reset logic if needed
   console.log("Form has been reset");
 }
-
-// Updated Form submission function
 async function submitFormData() {
   try {
     const messages = [];
@@ -481,28 +543,17 @@ async function submitFormData() {
 
     if (response.ok) {
       messages.push(result.message || 'Thêm GPLX thành công!');
-      
-      // Get holder ID
-      const newHolderId = document.getElementById('holderId').value || result.data._id;
-      
-      // Delete KD
-      try {
-        await deleteKD(newHolderId);
-      } catch (deleteError) {
-        console.error("Error in deleteKD:", deleteError);
-        messages.push("Lỗi khi xóa dữ liệu kiểm định, nhưng dữ liệu đã được thêm thành công.");
-      }
-      
-      // Reset and reload
-      resetForm(); // Now this function is defined
-      location.reload();
+    
+      return { success: true };
     } else {
       messages.push(result.message || 'Đã có lỗi xảy ra khi thêm GPLX.');
       alert(messages.join('\n'));
+      return { success: false };
     }
   } catch (error) {
     console.error('Detailed error during form submission:', error);
     alert('Có lỗi xảy ra khi gửi dữ liệu: ' + error.message);
+    return { success: false };
   }
 }
 

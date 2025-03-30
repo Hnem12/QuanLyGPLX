@@ -22,8 +22,10 @@ body {
   width: 20px;
   height: 20px;
 }
+
 .custom-title {
   margin-left: 5px;
+  font-size: 18px;
   text-align: center !important;
 }
 

@@ -357,7 +357,7 @@ async function pushAllDataToBlockchain() {
       html: `
           <div class="custom-alert">
               <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" class="custom-icon" />
-              <span class="custom-title">Tất cả dữ liệu đã được đẩy vào BlockChain thành công!</span>
+              <span class="custom-title">Dữ liệu đã được đẩy vào BlockChain thành công!!!</span>
           </div>
       `,
       showConfirmButton: false, // Ẩn nút mặc định

@@ -60,9 +60,7 @@ app.use('/api/Caplai', CaplaiGPLXRouter);
 app.use('/api/kiemdinh/', KiemdinhGPLXRoute);
 
 const normalizeKey = (key) => {
-    return key
-        .replace(/\r\n/g, "\\r\\n")  // Giữ nguyên ký tự xuống dòng Windows dưới dạng chuỗi
-        .replace(/\n/g, "\\r\\n");   // Đảm bảo tất cả xuống dòng đều là \\r\\n
+    return key.replace(/\r\n/g, "").replace(/\n/g, "").trim();
 };
 
 app.post("/verify-key", async (req, res) => {
@@ -78,9 +76,6 @@ app.post("/verify-key", async (req, res) => {
         const storedKey = normalizeKey(storedData.credentials.privateKey);
         const inputKey = normalizeKey(privateKey);
 
-        // Debug để kiểm tra chính xác ký tự ẩn
-        console.log("Stored Key:", JSON.stringify(storedKey)); 
-        console.log("Input Key:", JSON.stringify(inputKey));
 
         if (storedKey === inputKey) {
             return res.json({ success: true });
