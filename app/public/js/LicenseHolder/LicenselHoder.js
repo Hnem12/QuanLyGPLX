@@ -268,43 +268,71 @@ async function waitForPrivateKeyInput() {
     const cancelButton = document.getElementById("cancelKey");
     const privateKeyInput = document.getElementById("privateKeyInput");
 
+    // Xóa các event listener cũ (tránh trùng lặp)
     submitButton.replaceWith(submitButton.cloneNode(true));
     cancelButton.replaceWith(cancelButton.cloneNode(true));
 
+    // Lấy lại button mới sau khi clone
     const newSubmitButton = document.getElementById("submitKey");
     const newCancelButton = document.getElementById("cancelKey");
 
-    newSubmitButton.addEventListener("click", () => {
-      const privateKey = privateKeyInput.value;
+    // Xử lý khi nhấn "Xác nhận"
+    newSubmitButton.addEventListener("click", async () => {
+      const privateKey = privateKeyInput.value.trim();
+
+      // Kiểm tra định dạng khóa bí mật
       if (
         !privateKey ||
         !privateKey.startsWith("-----BEGIN PRIVATE KEY-----") ||
         !privateKey.endsWith("-----END PRIVATE KEY-----")
       ) {
-        document.getElementById("privateKeyInput").value = "";
+        privateKeyInput.value = "";
         Swal.fire({
           html: `
-              <div class="custom-alert">
+            <div class="custom-alert">
               <img src="https://cdn-icons-png.flaticon.com/512/564/564619.png" class="custom-icon" />
               <span class="custom-title">Khóa bí mật không hợp lệ. Vui lòng nhập lại!</span>
-              </div>
+            </div>
           `,
-          showConfirmButton: false, // Ẩn nút mặc định
-          allowOutsideClick: true, // Không cho đóng khi click ra ngoài
-          width: "420px", // Giảm kích thước popup
-          position: "top", // Hiển thị trên cao
-          background: "#f6fff8", // Màu nền nhẹ nhàng
-          customClass: {
-              popup: "custom-alert-popup"
-          }
-      });
-        throw new Error("Private key is invalid"); // Dừng ngay chương trình
-      }      
+          showConfirmButton: false,
+          allowOutsideClick: true,
+          width: "420px",
+          position: "top",
+          background: "#f6fff8",
+          customClass: { popup: "custom-alert-popup" }
+        });
+        return; // Không tiếp tục nếu khóa không hợp lệ
+      }
+
+      try {
+        // Gửi yêu cầu kiểm tra khóa lên server
+        const response = await fetch("/verify-key", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ accountId, privateKey })
+        });
       
-      hideSecretKeyModal();
-      resolve(privateKey);
+        const result = await response.json();
+      
+        if (!response.ok || !result.success) {
+          privateKeyInput.value = ""; // Xóa nội dung input nếu xác minh thất bại
+          Swal.fire("Lỗi", result.message || "Lỗi khi xác minh khóa", "error");
+          return;
+        }
+      
+        // Nếu khóa hợp lệ, đóng modal & resolve giá trị
+        hideSecretKeyModal();
+        resolve(privateKey);
+      } catch (error) {
+        privateKeyInput.value = ""; // Xóa input nếu có lỗi
+        console.error("Lỗi khi xác minh khóa:", error);
+        Swal.fire("Lỗi", "Có lỗi xảy ra khi xác minh khóa.", "error");
+        reject(error);
+      }
+      
     });
 
+    // Xử lý khi nhấn "Hủy"
     newCancelButton.addEventListener("click", () => {
       console.log("Private key input canceled.");
       hideSecretKeyModal();
@@ -312,6 +340,7 @@ async function waitForPrivateKeyInput() {
     });
   });
 }
+
 
 async function pushAllDataToBlockchain() {
   try {
@@ -357,12 +386,12 @@ async function pushAllDataToBlockchain() {
       html: `
           <div class="custom-alert">
               <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" class="custom-icon" />
-              <span class="custom-title">Dữ liệu đã được đẩy vào BlockChain thành công!!!</span>
+              <span class="custom-title">Dữ liệu đã được đẩy vào BlockChain thành công!</span>
           </div>
       `,
       showConfirmButton: false, // Ẩn nút mặc định
       allowOutsideClick: true, // Không cho đóng khi click ra ngoài
-      width: "420px", // Giảm kích thước popup
+      width: "450px", // Giảm kích thước popup
       position: "top", // Hiển thị trên cao
       background: "#f6fff8", // Màu nền nhẹ nhàng
       customClass: {

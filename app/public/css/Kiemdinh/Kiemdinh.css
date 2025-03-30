@@ -23,6 +23,7 @@ body {
 }
 .custom-title {
   margin-left: 5px;
+  font-size: 18px;
   text-align: center !important;
 }
 
@@ -546,4 +547,26 @@ select.form-control {
   .modal-dialog {
     max-width: 90%; /* Make modal take most of the screen on small devices */
   }
+}
+
+
+/* Nút xác nhận màu hồng */
+.pink-confirm {
+  background: #e2366f !important;
+  color: white !important;
+  font-weight: bold !important;
+  border-radius: 10px !important;
+}
+
+/* Nút hủy màu xám */
+.pink-cancel {
+  background: #ccc !important;
+  color: black !important;
+  font-weight: bold !important;
+  border-radius: 10px !important;
+}
+
+.swal2-input {
+  width: 450px !important; /* Giảm chiều rộng */
+  
 }

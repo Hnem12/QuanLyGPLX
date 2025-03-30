@@ -43,8 +43,11 @@ async function fetchKiemDinhGPLX() {
         onclick='openModal(${JSON.stringify(holder)})'>
                 <i class="fas fa-eye" style="font-size: 14px; color: white;"></i> <!-- Eye icon -->
             </button> 
-            <button class="btn btn-danger btn-sm" style="transform: scale(1.10); margin-left: 5px;font-weight:bold;" onclick="deleteRenew('${holder._id}')">Xóa</button>
-
+          <button class="btn btn-danger btn-sm"
+              style="transform: scale(1.10); margin-left: 5px; font-weight: bold;"
+              onclick="confirmDelete('${holder._id}')">
+              Xóa
+          </button>
             </td>
           </tr>
         `;
@@ -96,6 +99,71 @@ function nextPage() {
   fetchKiemDinhGPLX();
 }
 
+
+async function confirmDelete(holderId) {
+  const accountId = localStorage.getItem('accountId'); // Lấy accountId từ localStorage
+  const { value: privateKey } = await Swal.fire({
+        title: "Nhập khóa bí mật",
+        input: "password",
+        inputPlaceholder: "Dán khóa bí mật vào đây...",
+        inputAttributes: { autocapitalize: "off" },
+      showCancelButton: true,
+      confirmButtonText: "Xác nhận",
+      cancelButtonText: "Hủy",
+      customClass: {
+          confirmButton: "pink-confirm",
+          cancelButton: "pink-cancel"
+      },
+      preConfirm: async (privateKey) => {
+          if (!privateKey || 
+              !privateKey.startsWith("-----BEGIN PRIVATE KEY-----") || 
+              !privateKey.endsWith("-----END PRIVATE KEY-----")) {
+              Swal.showValidationMessage("🔒 Khóa bí mật không hợp lệ!");
+              return false;
+          }
+          return privateKey;
+      }
+  });
+
+  if (!privateKey) return;
+
+  try {
+      const response = await fetch("/verify-key", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({accountId, privateKey })
+      });
+
+      const result = await response.json();
+
+      if (!response.ok || !result.success) {
+          Swal.fire("Lỗi", result.message || "Khóa bí mật không đúng!", "error");
+          return;
+      }
+
+      Swal.fire({
+          title: "Bạn có chắc chắn muốn xóa?",
+          text: "Hành động này không thể hoàn tác!",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Xóa",
+          cancelButtonText: "Hủy",
+          customClass: {
+              popup: "pink-popup",
+              confirmButton: "pink-confirm",
+              cancelButton: "pink-cancel"
+          }
+      }).then((result) => {
+          if (result.isConfirmed) {
+            deleteGPLX(holderId);
+          }
+      });
+
+  } catch (error) {
+      console.error("Lỗi khi xác minh khóa:", error);
+      Swal.fire("Lỗi", "Có lỗi xảy ra khi kiểm tra khóa bí mật.", "error");
+  }
+}
 
 // Function to open the main modal for adding/editing the license holder
 function openModal(holder) {
@@ -204,17 +272,10 @@ function resetForm() {
 
 
 // Function to delete account by holderId
-async function deleteRenew(holderId) {
+async function deleteGPLX(holderId) {
   if (!holderId) {
     console.error('Invalid holder ID');
     return;
-  }
-
-  const confirmDelete = confirm('Bạn có chắc chắn muốn xóa không?');
-
-  if (!confirmDelete) {
-    console.log('Xóa không thành công!!!');
-    return; // Exit the function if the user doesn't confirm
   }
 
   try {
@@ -224,8 +285,22 @@ async function deleteRenew(holderId) {
 
     const result = await response.json();
     if (response.ok) {
-      alert('Xóa thành công!');
-      location.reload(); // Tải lại trang sau khi xóa
+      Swal.fire({
+        html: `
+            <div class="custom-alert">
+                <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" class="custom-icon" />
+                <span class="custom-title">Xóa thành công!!!</span>
+            </div>
+        `,
+        showConfirmButton: false, // Ẩn nút mặc định
+        allowOutsideClick: true, // Không cho đóng khi click ra ngoài
+        width: "450px", // Giảm kích thước popup
+        position: "top", // Hiển thị trên cao
+        background: "#f6fff8", // Màu nền nhẹ nhàng
+        customClass: {
+        popup: "custom-alert-popup"
+        }
+    });       location.reload(); // Tải lại trang sau khi xóa
     } else {
       alert(result.message || 'Lỗi khi xóa, vui lòng thử lại.');
     }
@@ -249,8 +324,22 @@ async function deleteAccount(holderId) {
 
     const result = await response.json();
     if (response.ok) {
-      alert('Xóa thành công!');
-      location.reload(); // Tải lại trang sau khi xóa
+      Swal.fire({
+        html: `
+            <div class="custom-alert">
+                <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" class="custom-icon" />
+                <span class="custom-title">Xóa thành công!!!</span>
+            </div>
+        `,
+        showConfirmButton: false, // Ẩn nút mặc định
+        allowOutsideClick: true, // Không cho đóng khi click ra ngoài
+        width: "450px", // Giảm kích thước popup
+        position: "top", // Hiển thị trên cao
+        background: "#f6fff8", // Màu nền nhẹ nhàng
+        customClass: {
+        popup: "custom-alert-popup"
+        }
+    });       location.reload(); // Tải lại trang sau khi xóa
     } else {
       alert(result.message || 'Lỗi khi xóa, vui lòng thử lại.');
     }

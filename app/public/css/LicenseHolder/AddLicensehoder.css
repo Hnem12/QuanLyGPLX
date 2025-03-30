@@ -483,3 +483,43 @@ body {
     display: block; 
     margin: 0 auto;
   }
+  .custom-alert {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 15px;  
+    font-weight: 400;
+    text-align: center;
+  }
+  
+  .custom-icon {
+    width: 20px;
+    height: 20px;
+  }
+  
+  .custom-title {
+    margin-left: 5px;
+    font-size: 18px;
+    text-align: center !important;
+  }
+  
+/* Nút xác nhận màu hồng */
+.pink-confirm {
+  background: #e2366f !important;
+  color: white !important;
+  font-weight: bold !important;
+  border-radius: 10px !important;
+}
+
+/* Nút hủy màu xám */
+.pink-cancel {
+  background: #ccc !important;
+  color: black !important;
+  font-weight: bold !important;
+  border-radius: 10px !important;
+}
+
+.swal2-input {
+  width: 450px !important; /* Giảm chiều rộng */
+  
+}
