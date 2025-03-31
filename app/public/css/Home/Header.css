@@ -1,32 +1,73 @@
+/* Biến màu sắc chính để dễ dàng thay đổi theme */
+:root {
+  --primary-color: #e2366f;
+  --primary-hover: #d0265b;
+  --text-light: #ffffff;
+  --text-dark: #333333;
+  --bg-light: #ffffff;
+  --border-light: #cccccc;
+  --accent-color: #4CAF50;
+  --accent-hover: #45a049;
+  --cancel-color: #afafaf;
+  --cancel-hover: #909090;
+  --shadow-light: 0 2px 5px rgba(0, 0, 0, 0.1);
+  --shadow-medium: 0 4px 8px rgba(0, 0, 0, 0.2);
+  --radius-small: 4px;
+  --radius-medium: 8px;
+  --radius-large: 10px;
+  --transition-standard: all 0.3s ease;
+}
 
-  @media (max-width: 768px) {
-    .header {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  
-    .sidebar {
-      width: 100px; /* Chiều rộng sidebar trên thiết bị nhỏ */
-    }
-  
-    .main-content {
-      padding: 1rem; /* Padding cho nội dung chính trên thiết bị nhỏ */
-    }
+/* Reset và base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Times New Roman', Times, serif;
+  line-height: 1.6;
+  color: var(--text-dark);
+}
+
+/* Responsive layouts */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
   }
   
-  span {
-    color: rgb(0, 0, 0);
+  .sidebar {
+    width: 100px;
   }
   
-  #toggleButton {
-    margin-left: 20px; 
-    font-size: 13px; 
-    cursor: pointer; 
+  .main-content {
+    padding: 1rem;
   }
   
-  i {
-    color: black;
+  #usernameDisplay {
+    font-size: 1rem;
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    word-wrap: break-word;
   }
+}
+
+/* Header Styles */
+.header {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: var(--shadow-light);
+}
 
 .logo {
   display: flex;
@@ -35,153 +76,188 @@
 
 .logo img {
   height: 35px;
-  margin: 0 7px;
+  margin-right: 10px;
+  transition: transform 0.3s ease;
+}
+
+.logo img:hover {
+  transform: scale(1.1);
 }
 
 .title {
   font-size: 1.5em;
-  margin-left: 10px;
-  color: white; 
+  color: var(--text-light);
   text-decoration: none;
+  font-weight: bold;
 }
 
-/* Liên kết sang trọng */
-/* Link đơn giản và tinh tế */
 .simple-elegant-link {
-  color: #ffffff; /* Màu trắng sang trọng */
-  text-decoration: none; /* Bỏ gạch chân */
-  font-weight: 500; /* Độ đậm vừa phải */
-  font-size: 1.8rem; /* Kích thước chữ lớn hơn một chút */
-  font-family:'Times New Roman', Times, serif ; /* Font serif thanh lịch */
-  letter-spacing: 1px; /* Khoảng cách giữa các ký tự */
-  font-weight: bold;
-  transition: color 0.3s ease; /* Hiệu ứng chuyển màu mượt */
+  color: var(--text-light);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.8rem;
+  font-family: 'Times New Roman', Times, serif;
+  letter-spacing: 1px;
+  transition: var(--transition-standard);
 }
 
 .simple-elegant-link:hover {
-  color: #f0e68c; /* Chỉ thay đổi màu vàng nhạt khi hover */
+  color: #f0e68c;
+  text-shadow: 0 0 5px rgba(255,255,255,0.3);
 }
 
-
+/* User Info Styles */
 .user-info {
   display: flex;
   align-items: center;
+  gap: 15px;
 }
 
 .user-info img {
   border-radius: 50%;
   height: 40px;
   width: 40px;
-  margin-left: 10px;
+  border: 2px solid var(--text-light);
+  transition: transform 0.3s ease;
 }
 
-.system-name {
-  margin-right: 10px;
+.user-info img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(255,255,255,0.5);
 }
 
-/* CSS cho phần header */
-.header {
-    background-color: #e2366f;
-    color: rgb(0, 0, 0);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 20px;
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    font-family: 'Times New Roman', Times, serif, sans-serif;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-  
-  .logo {
-    display: flex;
-    align-items: center;
-  }
-  
-  .logo img {
-    height: 35px;
-    margin: 0 7px;
-  }
-  
-  .title {
-    font-size: 1.5em;
-    margin-left: 10px;
-  }
-  .user-info {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
- 
-  
-  .username {
-    font-size: 18px; 
-    font-weight: bold; 
-    color: #ffffff; /* Màu sắc chữ */
-    margin-left: 7px;
-    background-color: rgba(255, 255, 255, 0.2); /* Nền nhẹ để nổi bật */
-    padding: 5px; /* Khoảng cách xung quanh chữ */
-    border-radius: 5px; /* Bo tròn góc */
-    transition: transform 0.3s; /* Hiệu ứng khi hover */
+.username {
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--text-light);
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 5px 10px;
+  border-radius: var(--radius-small);
+  transition: transform 0.3s, background-color 0.3s;
 }
 
 .username:hover {
-    transform: scale(1.05); /* Phóng to một chút khi hover */
-}
-.notification{
-    margin-right: -10px;
-}/* Style cho dropdown menu */
-.dropdown-menu {
-  display: none; /* Initially hidden */
-  position: absolute;
-  top: 100%; /* Position below the avatar */
-  right: 0;
-  background-color: white;
-  border: 1px solid #ccc;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: auto; /* Tự động điều chỉnh chiều rộng theo nội dung */
-  min-width: 120px; /* Thiết lập chiều rộng tối thiểu */
-  z-index: 1000;
+  transform: scale(1.05);
+  background-color: rgba(255, 255, 255, 0.3);
 }
 
-/* Danh sách các mục trong menu */
+#usernameDisplay {
+  font-size: 1.2rem;
+  font-weight: bold;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+  display: block;
+  text-align: center;
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: var(--bg-light);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-medium);
+  box-shadow: var(--shadow-medium);
+  min-width: 180px;
+  z-index: 1000;
+  overflow: hidden;
+}
+
 .dropdown-menu ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-/* Cải thiện mục dropdown li */
 .dropdown-menu ul li {
-  padding: 8px 12px; /* Điều chỉnh padding để làm menu nhỏ gọn hơn */
+  padding: 10px 15px;
   cursor: pointer;
-  font-size: 16px; /* Giảm kích thước font */
+  font-size: 16px;
+  transition: background-color 0.2s;
+  display: flex;
+  align-items: center;
 }
 
-/* Hiệu ứng hover khi di chuột qua các mục */
 .dropdown-menu ul li:hover {
-  background-color: #f0f0f0;
+  background-color: #f5f5f5;
 }
 
+.dropdown-menu ul li i {
+  margin-right: 10px;
+  color: var(--primary-color);
+  font-size: 18px;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Logout Button */
 .logout-button {
-        display: inline-block; /* Make it behave like a button */ 
-        background-color: #e2366f; /* Set the background color to red */
-        color: rgb(255, 255, 255); /* Set the text color to white */
-        padding: 5px 6px; /* Add some padding for size */
-        border: 1px solid white; /* Add a white border */
-        border-radius: 5px; /* Optional: Add rounded corners */
-        text-decoration: none; /* Remove underline from the link */
-        margin-left: 2px; /* Left margin */
-        font-weight: bold; /* Make the text bold */
-        transition: background-color 0.3s; /* Smooth transition for hover effect */
+  display: inline-block;
+  background-color: var(--primary-color);
+  color: var(--text-light);
+  padding: 6px 12px;
+  border: 1px solid var(--text-light);
+  border-radius: var(--radius-small);
+  text-decoration: none;
+  margin-left: 10px;
+  font-weight: bold;
+  transition: var(--transition-standard);
 }
-      
- .logout-button:hover {
-        background-color: rgba(224, 35, 35, 0.849); /* Darken the button on hover */
-      }/* Modal */
 
-.modal1 {
+.logout-button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Notification Styles */
+.notification {
+  position: relative;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.notification-content {
+  display: none;
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  background-color: var(--bg-light);
+  border: 1px solid var(--border-light);
+  padding: 15px;
+  box-shadow: var(--shadow-medium);
+  max-width: 350px;
+  border-radius: var(--radius-medium);
+  z-index: 1000;
+}
+
+.notification.new-notification::after {
+  content: '•';
+  color: #ff3d3d;
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  font-size: 18px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+#notificationBell:hover + .notification-content,
+.notification-content:hover {
+  display: block;
+}
+
+/* Modal Styles - General */
+.modal1, .modal2, .custom-modal {
   display: none;
   position: fixed;
   z-index: 1050;
@@ -190,395 +266,373 @@
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
+  animation: fadeIn 0.3s ease;
 }
 
-.modal-content1 {
-  background-color: white;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modal-content1, .modal-content2, .custom-modal-content {
+  background-color: var(--bg-light);
   margin: 5% auto;
-  padding: 20px;
-  border-radius: 8px;
-  width: 60%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-top: 10px;
+  padding: 30px;
+  border-radius: var(--radius-large);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  max-width: 600px;
+  width: 90%;
+  animation: slideDown 0.4s ease;
+  position: relative;
 }
 
-/* Hai phần form cạnh nhau */
-.form-sections-container {
+@keyframes slideDown {
+  from { transform: translateY(-50px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Certificate Modal Specific */
+.modal-header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 15px;
+}
+
+.close, .btn-exitKey {
+  color: #ff3d3d;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: color 0.2s;
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  background: none;
+  border: none;
+  line-height: 1;
+}
+
+.close:hover, .btn-exitKey:hover {
+  color: #c00000;
+  transform: rotate(90deg);
+  transition: transform 0.3s ease;
+}
+
+/* Key Input Styles */
+.key-input, #KeyCA, #privateKeyField {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid var(--accent-color);
+  border-radius: var(--radius-small);
+  background-color: #f9f9f9;
+  font-family: monospace;
+  font-size: 14px;
+  margin-bottom: 15px;
+  transition: border-color 0.3s;
+}
+
+.key-input:focus, #KeyCA:focus, #privateKeyField:focus {
+  border-color: var(--accent-hover);
+  outline: none;
+  box-shadow: 0 0 5px rgba(69, 160, 73, 0.3);
+}
+
+#publicKeyStatus {
+  margin: 10px 0;
+  padding: 8px;
+  font-weight: 500;
+  border-radius: var(--radius-small);
+}
+
+#publicKeyStatus.success {
+  color: #4CAF50;
+  background-color: rgba(76, 175, 80, 0.1);
+}
+
+#publicKeyStatus.warning {
+  color: #f44336;
+  background-color: rgba(244, 67, 54, 0.1);
+}
+
+/* Button Styles */
+.modal-button, .button1, .custom-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: var(--radius-small);
+  cursor: pointer;
+  font-weight: 500;
+  min-width: 120px;
+  transition: all 0.3s ease;
+  text-align: center;
+  font-size: 16px;
+}
+
+.primary-btn, .button1 {
+  background-color: var(--primary-color);
+  color: var(--text-light);
+}
+
+.primary-btn:hover, .button1:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+}
+
+.cancel-btn {
+  background-color: var(--cancel-color);
+  color: var(--text-dark);
+}
+
+.cancel-btn:hover {
+  background-color: var(--cancel-hover);
+}
+
+.action-btn {
+  background-color: #2196F3;
+  color: white;
+}
+
+.action-btn:hover {
+  background-color: #0b7dda;
+}
+
+/* Form styles */
+.form-sections-container {
+  display: flex;
+  flex-wrap: wrap;
   gap: 20px;
 }
 
 .form-section1, .form-section2 {
   flex: 1;
+  min-width: 250px;
 }
-
-/* Địa chỉ */
-.updateanh {
-  margin-top: -10px;
-}
-
-/* Phần upload ảnh */
-.image-upload-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  position: relative;
-  margin-top: -10px;
-}
-
-.image-upload-container img {
-  max-width: 150px;
-  margin-top: -10px;
-  border-radius: 50%; /* Ảnh tròn */
-  cursor: pointer;
-}
-
-.icon-overlay {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  width: 30px;
-  height: 30px;
-  background-color: rgba(255, 255, 255, 0.7);
-  border-radius: 50%;
-  padding: 5px;
-  cursor: pointer;
-}
-
-/* Nút bấm */
-.upload-section {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-
 
 input[type="text"],
+input[type="password"],
 select {
-    width: calc(100% - 10px); /* Đảm bảo chiều rộng tối ưu */
-    padding: 10px;
-    margin-bottom: 15px; /* Khoảng cách giữa các trường */
-    border: 1px solid #ccc;
-    border-radius: 4px;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 15px;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-small);
+  transition: border-color 0.3s;
 }
 
-.button1 {
-  background-color: #e2366f; /* Nổi bật với màu chủ đạo */
-  color: white;
-  padding: 8px 15px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 10px; /* Khoảng cách trên */
-  transition: background-color 0.3s ease; /* Hiệu ứng khi hover */
+input:focus, select:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 5px rgba(226, 54, 111, 0.2);
 }
 
-.button1:hover {
-  background-color: #d0265b;
-}
-
+/* Image upload styles */
 .image-upload-container {
   display: flex;
-  flex-direction: column; /* Sắp xếp theo chiều dọc */
-  align-items: flex-start; /* Căn trái */
-  margin-right: 20px; /* Khoảng cách bên phải form */
-  gap: 8px; /* Khoảng cách giữa các phần tử bên trong */
-}
-
-.image-upload-container span {
-  font-size: 16px;
-  margin-bottom: 8px; /* Khoảng cách với ảnh */
-}
-
-label {
-  position: relative; /* Giữ vị trí tương đối để chứa icon bên trong ảnh */
-}
-
-#imagePreview {
-  width: 150px; /* Kích thước ảnh */
-  height: 150px; /* Kích thước ảnh */
-  object-fit: cover; /* Đảm bảo ảnh vừa khung vuông */
-  border: 3px solid rgb(0, 150, 255); /* Khung màu RGB */
-  border-radius: 0; /* Không bo tròn để đảm bảo hình vuông */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng cho ảnh */
-}
-.icon-overlay {
-  position: absolute; /* Đặt icon lên trên ảnh */
-  bottom: 5px; /* Căn sát góc dưới */
-  right: 5px; /* Căn sát góc phải */
-  width: 30px;
-  height: 30px;
-  background-color: rgba(255, 255, 255, 0.7); /* Nền trắng bán trong suốt */
-  border-radius: 50%; /* Bo tròn icon */
-  padding: 4px;
-  cursor: pointer;
-  z-index: 1; /* Đảm bảo icon luôn nổi trên ảnh */
-}
-.custom-modal {
-  display: none;
-  position: fixed;
-  z-index: 1050;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  overflow: auto;
-}
-
-/* Modal Content */
-.custom-modal-content {
-  background-color: #fff;
-  margin: 10% auto;
-  padding: 20px;
-  border-radius: 10px;
-  width: 80%;
-  max-width: 400px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  display: flex;
   flex-direction: column;
-  gap: 20px;
-}
-
-/* Form Sections */
-.custom-form-sections {
-  display: flex;
-  flex-direction: column;
+  align-items: flex-start; /* Changed from center to flex-start to align left */
   gap: 15px;
+  margin-bottom: 20px;
+  margin-left: 0; /* Explicitly set left margin to 0 */
+  width: 100%; /* Ensure the container takes full width */
 }
 
-/* Password Toggle */
-.show-password {
+/* You might want to adjust child elements as well for consistent left alignment */
+.image-upload-container > * {
+  margin-left: 0;
+  text-align: left;
+  size: 10px;
+}
+
+/* If there are any buttons or input elements that need adjustment */
+.image-upload-container button,
+.image-upload-container input {
+  align-self: flex-start;
+} 
+/* Professional button styling for upload section */
+.upload-section {
   display: flex;
+  gap: 15px;
+  margin-top: 20px;
   align-items: center;
-  gap: 8px;
-  margin-top: -10px;
 }
 
-/* Input Fields */
-input[type="password"] {
-  width: calc(100% - 10px);
-  padding: 10px;
-  margin-bottom: 15px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  transition: border-color 0.3s ease;
-}
-
-input:focus {
-  border-color: rgb(0, 150, 255);
+/* Base button styles */
+.upload-section button {
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border: none;
+  display: flex;
+  text-align: center !important;
+  justify-content: center !important;
   outline: none;
+  min-width: 150px;
 }
-.custom-button-group {
-  display: flex;
+.upload-section {
   justify-content: center;
-  gap: 10px;
-}
-
-.custom-button {
-  background-color: #e2366f;
-  color: white;
-  padding: 10px 15px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.custom-button:hover {
-  background-color: #d0265b;
-  transform: scale(1.05);
-}
-.custom-modal {
-  display: none; /* Ẩn modal mặc định */
-}
-
-.modal2 {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
-  background-color: rgba(0, 0, 0, 0.8); /* Dark overlay with higher opacity */
-}
-
-.modal-content2 {
-  background-color: #fff; /* White background */
-  margin: 5% auto; /* Adjusted margin for better centering */
-  padding: 30px;
-  border-radius: 10px; /* Rounded corners */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-  width: 90%; /* Full width of modal */
-  max-width: 600px; /* Maximum width for larger screens */
-}
-
-
-.close {
-  color: #ff3d3d; /* Change close button color to red */
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.close:hover,
-.close:focus {
-  color: #c00000; /* Darker red on hover */
-  text-decoration: none;
-  cursor: pointer;
-}
-
-h2 {
-  color: #333; /* Darker text color for headings */
-  margin-bottom: 20px; /* Spacing below heading */
-}
-
-button {
-  background-color: #007bff; /* Primary button color */
-  color: white; /* Button text color */
-  border: none; /* Remove border */
-  border-radius: 5px; /* Rounded corners */
-  padding: 10px 20px; /* Padding for buttons */
-  cursor: pointer; /* Pointer cursor on hover */
-  transition: background-color 0.3s ease; /* Smooth transition for background color */
-}
-
-button:hover {
-  background-color: #0056b3; /* Darker blue on hover */
-}
-
-#privateKeyField {
-  background-color: #f9f9f9; /* Màu nền sáng cho ô nhập liệu */
-  color: #333; /* Màu chữ tối để dễ đọc */
-  border: 2px solid #4CAF50; /* Màu viền xanh */
-  border-radius: 5px; /* Bo góc cho viền */
-  padding: 10px; /* Khoảng cách bên trong */
-  font-size: 16px; /* Kích thước chữ */
-  transition: border-color 0.3s; /* Hiệu ứng chuyển đổi khi hover */
-}
-
-#privateKeyField:focus {
-  border-color: #45a049; /* Thay đổi màu viền khi ô nhập liệu được chọn */
-  outline: none; /* Ẩn viền mặc định */
-}
-#privateKeyField:hover {
-  border-color: #45a049; /* Thay đổi màu viền khi di chuột qua */
-}
-
-.Xepngang {
-  display: flex; /* Sử dụng flexbox */
-  justify-content: center; /* Căn giữa theo chiều ngang */
-  align-items: center; /* Căn giữa theo chiều dọc (nếu cần) */
-  margin-top: 20px; /* Khoảng cách phía trên nếu cần */
-}
-/* Style cho phần nội dung thông báo */
-.notification-content {
-  display: none; /* Ban đầu ẩn thông báo */
-  position: fixed; /* Cố định vị trí thông báo */
-  top: 50px; /* Khoảng cách từ trên cùng của màn hình */
-  right: 360px; /* Khoảng cách từ cạnh phải của màn hình */
-  background-color: #fff;
-  border: 1px solid #ddd;
-  padding: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  max-width: 300px;
-  border-radius: 8px;
-  z-index: 1000;
-}
-
-/* Khi chuông có thông báo mới, chấm đỏ sẽ hiển thị */
-.notification.new-notification::after {
-  content: '•';
-  color: red;
-  position: absolute;
-  top: 0;
-  right: 0;
-  font-size: 18px;
-}
-
-/* Khi nhấn vào chuông, phần thông báo sẽ hiển thị */
-#notificationBell:hover + .notification-content {
-  display: block; /* Hiển thị thông báo khi hover chuông */
-}
-
-ul li i {
-  margin-right: 8px; /* Khoảng cách giữa biểu tượng và văn bản */
-  color: #e2366f;    /* Màu sắc của biểu tượng */
-  font-size: 18px;   /* Kích thước của biểu tượng */
-}
-
-/* Modal button styles */
-.modal-button {
-  background-color: #e2333f; /* Green background */
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-}
-
-.modal-button:hover {
-  background-color: #e2366f; /* Darker green on hover */
-  transform: translateY(-2px); /* Lift effect */
-}
-
-.modal-button:active {
-  background-color: #e2366f; /* Even darker green on click */
-  transform: translateY(2px); /* Pressed effect */
-}
-
-/* Cancel button */
-.cancel-btn {
-  background-color: #afafaf; /* Red background for cancel */
-  margin-left: 10px;
-}
-
-.cancel-btn:hover {
-  background-color: #afafaf; /* Darker red on hover */
-}
-
-/* Style for the Xepngang (container) for better alignment */
-.Xepngang {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* Modal button container (for the actions like "download" and "copy") */
-#keyActions {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-}
-
-#usernameDisplay {
-  font-size: 1.2rem;
-  font-weight: bold;
-  white-space: nowrap; /* Không xuống dòng */
-  overflow: hidden; /* Ẩn phần dư */
-  text-overflow: ellipsis; /* Hiển thị dấu "..." khi bị thu hẹp */
-  max-width: 100%; 
-  display: block; /* Đảm bảo hoạt động chính xác */
   text-align: center;
 }
 
-/* Nếu màn hình nhỏ hơn 600px, tự động xuống dòng thay vì dấu "..." */
-@media (max-width: 600px) {
-  #usernameDisplay {
-    font-size: 1rem;
-    white-space: normal; /* Cho phép xuống dòng */
-    overflow: visible; /* Không ẩn chữ nữa */
-    text-overflow: unset; /* Không cần dấu "..." */
-    word-wrap: break-word; /* Ngắt từ khi cần */
+/* Primary action button - Red button */
+.button1 {
+  font-weight: bold !important;
+  background-color: #e2366f; /* Using the primary color theme */
+  color: white;
+  border: 1px solid #e2366f;
+}
+
+
+.button1:hover {
+  background-color: #c62e60; /* Darker shade for hover */
+  box-shadow: 0 4px 8px rgba(226, 54, 111, 0.25);
+  transform: translateY(-1px);
+}
+
+.button1:active {
+  background-color: #b12857; /* Even darker shade for active/pressed state */
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(226, 54, 111, 0.25);
+}
+
+/* Secondary action button - White button */
+.button2 {
+  background: #ccc !important;
+  color: black !important;
+  font-weight: bold !important;
+  border-radius: 10px !important;
+  padding: 12px 24px !important;
+}
+
+.button2:hover {
+  background-color: #f8f8f8; /* Light gray on hover */
+  color: #c62e60;
+  box-shadow: 0 4px 8px rgba(226, 54, 111, 0.15);
+  transform: translateY(-1px);
+}
+
+.button2:active {
+  background-color: #f0f0f0; /* Darker gray for active/pressed state */
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(226, 54, 111, 0.15);
+}
+
+/* For focus states - accessibility */
+.button1:focus, .button2:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(226, 54, 111, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .upload-section {
+    flex-direction: column;
+    width: 100%;
   }
+  
+  .upload-section button {
+    width: 100%;
+    min-width: auto;
+  }
+}
+
+#imagePreview {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border: 3px solid #0096ff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#imagePreview:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.icon-overlay {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  width: 30px;
+  height: 30px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+
+.icon-overlay:hover {
+  background-color: rgba(255, 255, 255, 1);
+}
+/* Nút xác nhận màu hồng */
+.pink-confirm {
+  background: #e2366f !important;
+  color: white !important;
+  font-weight: bold !important;
+  border-radius: 10px !important;
+}
+
+/* Nút hủy màu xám */
+.pink-cancel {
+  background: #ccc !important;
+  color: black !important;
+  font-weight: bold !important;
+  border-radius: 10px !important;
+}
+
+.swal2-input {
+  width: 450px !important; /* Giảm chiều rộng */
+  
+}
+
+.custom-alert {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 15px;
+  font-weight: 300;
+  text-align: center;
+}
+
+.custom-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.custom-title {
+  margin-left: 5px;
+  font-size: 17px;
+  text-align: center !important;
+  font-weight: bold;
+}
+
+
+/* Button groups */
+.Xepngang, .custom-button-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+#keyActions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 25px;
 }

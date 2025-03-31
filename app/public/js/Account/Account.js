@@ -47,16 +47,52 @@ function displayAccounts(page) {
                     <span class="status">${account.status}</span>
                 </td>
                 <td>
-                <button class="btn btn-warning btn-sm" 
-                        style="transform: scale(1.15); margin-right: 10px; font-weight:bold;" 
-                        onclick='openModal(${JSON.stringify(account)})'>Sửa</button>
-                <button class="btn btn-danger btn-sm" style="transform: scale(1.15);font-weight:bold;" onclick="deleteAccount('${account._id}')">Xóa</button>
+        <button class="btn btn-sm" 
+            style="background-color: #168e60; color: white; padding: 8px; border-radius: 5px;  border: none;" 
+            onclick='openModal(${JSON.stringify(account)})'>
+                <i class="fas fa-eye" style="font-size: 14px; color: white; margin-left:10px"></i> <!-- Eye icon -->
+        </button>
+                <button class="btn btn-danger btn-sm" style="transform: scale(1.15);font-weight:bold; margin-left:5px" 
+                onclick="confirmDelete('${account._id}')">Xóa</button>
                 </td>
             </tr>
         `;
         tableBody.insertAdjacentHTML('beforeend', row);
     });
 }
+
+
+
+async function confirmDelete(holderId) {
+    console.log("Kiểm tra khóa trước khi xóa:", holderId);
+  
+    const isValidKey = await verifyKey();
+    if (!isValidKey) {
+        console.error("Khóa bí mật không hợp lệ, dừng thao tác xóa!");
+        return;
+    }
+  
+    Swal.fire({
+        title: "Bạn có chắc chắn muốn xóa?",
+        text: "Hành động này không thể hoàn tác!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Xóa",
+        cancelButtonText: "Hủy",
+        customClass: {
+            popup: "pink-popup",
+            confirmButton: "pink-confirm",
+            cancelButton: "pink-cancel"
+        }
+    }).then((result) => {
+        if (result.isConfirmed) {
+            console.log("Xác nhận xóa GPLX:", holderId);
+            deleteAccount(holderId);
+        } else {
+            console.log("Hủy xóa GPLX.");
+        }
+    });
+  }
 
 // Update pagination controls (disable buttons if needed)
 function updatePageControls() {
@@ -300,8 +336,23 @@ async function deleteAccount(id) {
         });
 
         if (response.ok) {
-            alert('Tài khoản đã được xóa thành công!');
-            location.reload();
+            Swal.fire({
+                html: `
+                    <div class="custom-alert">
+                        <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" class="custom-icon" />
+                        <span class="custom-title">Xóa thành công!!!</span>
+                    </div>
+                `,
+                showConfirmButton: false, // Ẩn nút mặc định
+                allowOutsideClick: true, // Không cho đóng khi click ra ngoài
+                width: "450px", // Giảm kích thước popup
+                position: "top", // Hiển thị trên cao
+                background: "#f6fff8", // Màu nền nhẹ nhàng
+                customClass: {
+                popup: "custom-alert-popup"
+                }
+            }); 
+              location.reload(); // Tải lại trang sau khi xóa
         } else {
             const errorMessage = await response.text();
             alert(`Lỗi khi xóa tài khoản: ${errorMessage}`);

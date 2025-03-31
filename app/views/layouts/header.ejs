@@ -37,20 +37,21 @@
 <div id="notificationContent" class="notification-content">
     <p>Thông báo mới yêu cầu...</p>
   </div>
+  
   <div id="keyModal" class="modal2">
     <div class="modal-content2">
         <div style="display: flex;">
             <h2>Cấp khóa cho người dùng</h2>
-            <span style="margin-left: 150px; font-size: 35px;" class="close" onclick="closeKeyModal()">&times;</span>
+            <span style="margin-left: 150px; font-size: 50px;" class="close" onclick="closeKeyModal()">&times;</span>
         </div>
         <p id="KeyLabel" style="display: none; margin-left: 10px;">Bạn muốn tạo chứng thực số???</p> 
         <input type="text" id="KeyCA" style="margin-top: -5px; font-weight: bold; width: 100%; padding: 10px; border: 2px solid #4CAF50; border-radius: 5px;" readonly hidden />
         <!-- Message to indicate if the public key exists -->
-        <p id="publicKeyStatus" style="color: red; display: none; margin-top: 5px;">Khóa công khai.</p>
+        <p id="publicKeyStatus" style="color: red; display: none; margin-top: 5px; ">Khóa công khai.</p>
 
         <div class="Xepngang">
-            <button id="generateKeyBtn" onclick="generateUserKey()" class="modal-button">Đồng ý</button>
-            <button style="margin-left:10px;" onclick="closeKeyModal()" class="modal-button cancel-btn">Hủy</button>
+            <button id="generateKeyBtn" onclick="generateUserKey()" style="background-color: #e2366f; color: white;" class="modal-button">Đồng ý</button>
+            <button style="margin-left:10px;" onclick="closeKeyModal()"  class="modal-button cancel-btn">Hủy</button>
         </div>
 
         <p id="privateKeyLabel" style="display: none; margin-top: -15px;">Khóa bí mật</p> <!-- Label for private key, initially hidden -->
@@ -58,8 +59,8 @@
 
         <!-- Nút tải khóa về và sao chép -->
         <div class="Xepngang" style="margin-top: 10px; display: none;" id="keyActions">
-            <button class="modal-button" onclick="downloadKey()">Tải về (.txt)</button>
-            <button class="modal-button" style="margin-left: 10px;" onclick="copyToClipboard()">Sao chép</button>
+            <button class="modal-button" style="background-color: #e2366f; color: white;" onclick="downloadKey()">Tải về (.txt)</button>
+            <button class="modal-button" style="margin-left: 10px; background-color: #e2366f; color: white;" onclick="copyToClipboard()">Sao chép</button>
         </div>
     </div>
 </div>
@@ -68,6 +69,8 @@
 <div id="personalInfoModal" class="modal1">
     <div class="modal-content1">
             <h2 style="text-align: center;">Thông Tin Cá Nhân</h2>
+            <span style="margin-left: 150px; font-size: 50px;" class="close" type="button" id="closeModalButton">&times;</span>
+
         <!-- Form chính với hai phần -->
         <form id="updateForm" class="modal-form1">
             <div class="form-sections-container">
@@ -118,7 +121,6 @@
             <!-- Nút bấm -->
             <div class="upload-section">
                 <button class="button1" type="submit">Cập Nhật Thông Tin</button>
-                <button class="button1" type="button" id="closeModalButton">Thoát</button>
             </div>
         </form>
     </div>

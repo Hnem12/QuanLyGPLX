@@ -178,64 +178,6 @@ h3 {
 }
 
 
-/* General Modal Styling */
-.modal-dialog {
-  max-width: 800px; /* Adjust width */
-  margin: auto; /* Center the modal */
-}
-
-.modal-content {
-  border-radius: 10px; /* Rounded corners for modal */
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
-}
-
-/* Header Styling */
-.modal-header {
-  background-color: #e2366f; /* Blue header background */
-  color: white; /* White text for contrast */
-  border-bottom: 2px solid #e2366f; /* Darker border for emphasis */
-  text-align: center;
-}
-
-.modal-title {
-  font-size: 18px;
-  font-weight: bold;
-  margin: 0 auto;
-}
-
-.btn-close:hover {
-  color: white; /* Close button in white */
-  background-color: #e2366f;
-}
-
-
-/* Body Styling */
-.modal-body {
-  padding: 20px;
-  background-color: #f9f9f9; /* Light grey background for contrast */
-}
-
-/* Form Styling */
-.form-label {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.form-control {
-  border: 1px solid #ced4da;
-  border-radius: 5px;
-}
-
-input[type="file"] {
-  padding: 5px;
-}
-
-/* Select Field Styling */
-select.form-control {
-  padding: 8px;
-  border-radius: 5px;
-}
-
 /* Buttons */
 #submitBtn {
   width: 100%;
@@ -258,3 +200,92 @@ select.form-control {
     max-width: 90%; /* Make modal take most of the screen on small devices */
   }
 }
+
+/* Nút xác nhận màu hồng */
+.pink-confirm {
+  background: #e2366f !important;
+  color: white !important;
+  font-weight: bold !important;
+  border-radius: 10px !important;
+}
+
+/* Nút hủy màu xám */
+.pink-cancel {
+  background: #ccc !important;
+  color: black !important;
+  font-weight: bold !important;
+  border-radius: 10px !important;
+}
+
+.swal2-input {
+  width: 450px !important; /* Giảm chiều rộng */
+  
+}
+
+.custom-alert {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 15px;
+  font-weight: 400;
+  text-align: center;
+}
+
+.custom-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.custom-title {
+  margin-left: 5px;
+  font-size: 15px;
+  text-align: center !important;
+}
+
+.modal.fade {
+  z-index: 1051; /* Ensure Bootstrap modal's z-index is higher */
+  margin: auto;
+}
+
+.modal-dialog {
+  z-index: 1052; /* Modal dialog appears above overlay */
+}
+
+/* General Modal Styling */
+.modal-dialog {
+  max-width: 700px; /* Adjust width */
+  margin: auto; /* Center the modal */
+}
+
+.modal-content {
+  border-radius: 10px; /* Rounded corners for modal */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+  margin-top: 5px;
+}
+
+/* Header Styling */
+.modal-header {
+  background-color: #e2366f; /* Blue header background */
+  color: white; /* White text for contrast */
+  border-bottom: 1px solid #e2366f; /* Darker border for emphasis */
+  text-align: center;
+  padding: 10px !important;
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 auto;
+  text-align: center; 
+  width: 100%;
+}
+.btn-custom {
+  background-color: #e2366f !important;
+   color: white; 
+   font-weight: bold;
+}
+
+.mb-3 {
+  margin-bottom: 1.5rem;
+}
+

@@ -39,31 +39,63 @@ if (username) {
 
     // Handle logout button click
     logoutButton.addEventListener('click', (event) => {
-        event.preventDefault(); // Prevent default behavior of the logout link
-        const confirmLogout = confirm('Bạn có chắc là muốn thoát không?'); // Ask for confirmation
-
-        if (confirmLogout) {
-            localStorage.removeItem('username'); // Clear username from localStorage
-            localStorage.removeItem('image');    // Clear image from localStorage if set
-            localStorage.removeItem('token');    // Clear token from localStorage
-
-            alert('Bạn đã đăng xuất thành công!'); // Notify user of successful logout
-            window.location.href = "/login";      // Redirect to login page
-        }
+        event.preventDefault(); // Ngăn chặn hành vi mặc định của nút
+    
+        Swal.fire({
+            title: 'Xác nhận đăng xuất',
+            text: 'Bạn có chắc chắn muốn thoát không?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Có, đăng xuất!',
+            cancelButtonText: 'Hủy'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Xóa dữ liệu người dùng khỏi localStorage
+                localStorage.removeItem('username');
+                localStorage.removeItem('image');
+                localStorage.removeItem('token');
+    
+                // Hiển thị thông báo đăng xuất thành công
+                Swal.fire({
+                    html: `
+                        <div class="custom-alert">
+                            <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" class="custom-icon" />
+                            <span class="custom-title">Bạn đã đăng xuất thành công!!!</span>
+                        </div>
+                    `,
+                    showConfirmButton: false, // Ẩn nút OK
+                    allowOutsideClick: true, // Không cho đóng khi click ra ngoài
+                    width: "450px",
+                    position: "top",
+                    background: "#f6fff8",
+                    customClass: {
+                        popup: "custom-alert-popup"
+                    },
+                    timer: 2000 // Đóng sau 2 giây
+                }).then(() => {
+                    window.location.href = "/login"; // Chuyển hướng về trang đăng nhập
+                });
+            }
+        });
     });
-
-    // Check if accountId is available
+    
+    // Kiểm tra accountId
     if (!accountId) {
-        alert('Không tìm thấy ID người dùng. Vui lòng đăng nhập lại.');
-        window.location.href = '/login'; // Redirect to login page if no ID
-        return;
+        Swal.fire({
+            title: 'Lỗi đăng nhập',
+            text: 'Không tìm thấy ID người dùng. Vui lòng đăng nhập lại.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        }).then(() => {
+            window.location.href = '/login'; // Chuyển hướng nếu không tìm thấy ID
+        });
     }
-
+    
     // Handle click event to view personal info
     personalInfoButton.addEventListener('click', async (event) => {
         event.preventDefault();
-    
-
         const isValidKey = await verifyKey();
         if (!isValidKey) {
             console.error("Khóa bí mật không hợp lệ, dừng thao tác kiểm định!");
@@ -284,52 +316,53 @@ passwordForm.addEventListener('submit', async (event) => {
 });
 
 // Get DOM elements
-const openKeyModalButton = document.getElementById('openKeyModal'); // Button to open the key modal
-const closeKeyModalButton = document.querySelector('#keyModal .close'); // Close button in the key modal
-const keyModal = document.getElementById('keyModal'); // Key modal element
-const privateKeyField = document.getElementById('privateKeyField'); // Element to display the private key
-const keyActions = document.getElementById('keyActions'); // Actions for downloading and copying keys
-const privateKeyLabel = document.getElementById('privateKeyLabel'); // Label for private key
-const keyLabel = document.getElementById('KeyLabel'); // Key confirmation label
+const openKeyModalButton = document.getElementById('openKeyModal'); 
+const closeKeyModalButton = document.querySelector('#keyModal .close'); 
+const keyModal = document.getElementById('keyModal'); 
+const privateKeyField = document.getElementById('privateKeyField'); 
+const keyActions = document.getElementById('keyActions'); 
+const privateKeyLabel = document.getElementById('privateKeyLabel'); 
+const keyLabel = document.getElementById('KeyLabel'); 
 
-// Function to toggle the visibility of the key modal
+// Hiển thị hoặc ẩn modal
 function toggleKeyModal(display) {
-    keyModal.style.display = display; // Show or hide the key modal based on the display parameter
-    keyLabel.style.display = display === 'block' ? 'block' : 'none'; // Show KeyLabel when modal is opened
+    keyModal.style.display = display;
+    keyLabel.style.display = display === 'block' ? 'block' : 'none';
 }
 
-// Function to close the key modal and reset the state
+// Đóng modal và reset trạng thái
 function closeKeyModal() {
-    toggleKeyModal('none'); // Hide the modal
-    resetKeyModal(); // Reset input fields and visibility
+    toggleKeyModal('none');
+    resetKeyModal();
 }
 
-// Function to reset modal input fields and labels
+// Reset các trường input trong modal
 function resetKeyModal() {
-    privateKeyField.value = ''; // Clear the private key field
-    privateKeyField.hidden = true; // Hide the input field for the private key
-    keyActions.style.display = 'none'; // Hide the key action buttons
-    privateKeyLabel.style.display = 'none'; // Hide private key label
-    keyLabel.style.display = 'none'; // Hide KeyLabel
-    document.getElementById('generateKeyBtn').style.display = 'inline-block'; // Show the generate button
-    document.querySelector('.Xepngang button:last-child').style.display = 'inline-block'; // Show the cancel button
+    privateKeyField.value = '';
+    privateKeyField.hidden = true;
+    keyActions.style.display = 'none';
+    privateKeyLabel.style.display = 'none';
+    keyLabel.style.display = 'none';
+    document.getElementById('generateKeyBtn').style.display = 'inline-block';
+    document.querySelector('.Xepngang button:last-child').style.display = 'inline-block';
 }
 
-// Function to generate user key
+// Tạo khóa người dùng
 window.generateUserKey = async function() {
-    const accountId = localStorage.getItem('accountId'); // Retrieve accountId from localStorage
+    const accountId = localStorage.getItem('accountId');
     if (!accountId) {
-        return alert('Account ID không tồn tại. Vui lòng đăng nhập lại.'); // Alert user if account ID is missing
+        return Swal.fire('Lỗi!', 'Account ID không tồn tại. Vui lòng đăng nhập lại.', 'error');
     }
 
     try {
         const userData = await fetchUserData(accountId);
         if (userData?.privateKey) {
-            displayExistingKey(userData.privateKey); // Display existing private key
+            Swal.fire('Thông báo', 'Bạn đã có khóa công khai.', 'info');
+            displayExistingKey(userData.privateKey);
         } else {
             const newKeyResult = await generateNewKey(accountId);
             if (newKeyResult) {
-                displayNewKey(newKeyResult.privateKey); // Display newly generated private key
+                displayNewKey(newKeyResult.privateKey);
             }
         }
     } catch (error) {
@@ -337,49 +370,58 @@ window.generateUserKey = async function() {
     }
 };
 
-// Function to fetch user data
+// Lấy dữ liệu người dùng
 async function fetchUserData(accountId) {
     const response = await fetch(`/api/account/${accountId}`);
-    if (!response.ok) throw new Error('Failed to fetch user data.'); // Throw error if response is not ok
+    if (!response.ok) throw new Error('Failed to fetch user data.');
     return response.json();
 }
 
-// Function to generate a new key
+// Gửi yêu cầu tạo khóa mới
 async function generateNewKey(accountId) {
     const response = await fetch(`/api/Taokhoanguoidung/${accountId}`, { method: 'POST' });
+    const result = await response.json();
+
     if (!response.ok) {
-        const result = await response.json();
-        alert(result.message || 'Có lỗi xảy ra khi cấp khóa.'); // Alert user with message or default error
-        throw new Error('Failed to generate new key.'); // Throw error if response is not ok
+        Swal.fire('Lỗi!', result.message || 'Không thể tạo khóa.', 'error');
+        throw new Error('Failed to generate new key.');
     }
-    return response.json(); // Return response JSON
+
+    return result;
 }
 
-// Function to display an existing key
+// Hiển thị khóa hiện có
 function displayExistingKey(privateKey) {
-    privateKeyField.value = privateKey; // Show the private key in the input field
-    privateKeyField.hidden = false; // Show the private key field
-    privateKeyLabel.style.display = 'block'; // Show the private key label
-    keyActions.style.display = 'flex'; // Show the actions for downloading and copying keys
-    toggleKeyModal('block'); // Show modal to display the private key
-    keyLabel.style.display = 'none'; // Hide the KeyLabel
+    privateKeyField.value = privateKey;
+    privateKeyField.hidden = false;
+    privateKeyLabel.style.display = 'block';
+    keyActions.style.display = 'flex';
+    toggleKeyModal('block');
+    keyLabel.style.display = 'none';
 }
 
-// Function to display a newly generated key
+// Hiển thị khóa mới tạo
 function displayNewKey(privateKey) {
-    alert('Khóa đã được cấp thành công!'); // Key generation success
-    displayExistingKey(privateKey); // Display the private key
-    // Hide buttons after successful key generation
-    document.getElementById('generateKeyBtn').style.display = 'none'; // Hide the generate button
-    document.querySelector('.Xepngang button:last-child').style.display = 'none'; // Hide the cancel button
-    
-    // Store key-related information in localStorage for use in other parts of the application
-    // Assuming the certificate, mspId, and type are fetched from the server response
-    const { certificate, mspId, type } = fetchCertificateAndType(); // Define a function that returns these values
-    localStorage.setItem('certificate', certificate);
-    localStorage.setItem('mspId', mspId);
-    localStorage.setItem('type', type);
+    Swal.fire({
+        title: 'Thành công!',
+        text: 'Khóa đã được cấp thành công!',
+        icon: 'success',
+        confirmButtonText: 'OK'
+    }).then(() => {
+        displayExistingKey(privateKey);
+        
+        // Ẩn các nút sau khi tạo khóa thành công
+        document.getElementById('generateKeyBtn').style.display = 'none';
+        document.querySelector('.Xepngang button:last-child').style.display = 'none';
+
+        // Giả định rằng server có trả về certificate, mspId, type
+        const certificateData = fetchCertificateAndType();
+        localStorage.setItem('certificate', certificateData.certificate);
+        localStorage.setItem('mspId', certificateData.mspId);
+        localStorage.setItem('type', certificateData.type);
+    });
 }
+
 
 // Function to download the key as a .txt file
 function downloadKey() {
@@ -399,90 +441,85 @@ function copyToClipboard() {
     document.execCommand('copy'); // Copy the text to the clipboard
     alert('Khóa đã được sao chép vào clipboard!'); // Alert the user
 }
-
 // Event listeners for opening and closing the modal
 openKeyModalButton.addEventListener('click', () => toggleKeyModal('block'));
 closeKeyModalButton.addEventListener('click', closeKeyModal);
+// 🌟 Lưu trữ các phần tử DOM một lần để tránh truy vấn nhiều lần
+const keyCAField = document.getElementById('KeyCA');
+const publicKeyStatus = document.getElementById('publicKeyStatus');
+const generateKeyBtn = document.getElementById('generateKeyBtn');
+const notificationBell = document.getElementById('notificationBell');
+const notificationContent = document.getElementById('notificationContent');
 
-// Close the modal when clicking outside of it
+// 🌟 Hàm đóng modal khi nhấn ra ngoài
 window.addEventListener('click', (event) => {
-    if (event.target === keyModal) {
-        closeKeyModal();
-    }
+    if (event.target === keyModal) closeKeyModal();
 });
 
-// Function to check public key and update UI accordingly
+// 🌟 Hàm hiển thị thông báo với SweetAlert2
+function showSwal(icon, title, text, timer = null) {
+    Swal.fire({
+        icon,
+        title,
+        text,
+        timer,
+        showConfirmButton: !timer,
+    });
+}
+
 async function checkPublicKey() {
-    const accountId = localStorage.getItem('accountId'); // Retrieve accountId from localStorage
+    const accountId = localStorage.getItem('accountId');
     if (!accountId) {
-        return alert('Account ID không tồn tại. Vui lòng đăng nhập lại.'); // Alert user if account ID is missing
+        return showSwal('warning', 'Lỗi', 'Vui lòng đăng nhập lại!');
     }
 
     try {
         const response = await fetch(`/api/LayCA/${accountId}`);
         const userData = await response.json();
 
-        if (response.ok) {
-            const keyCAField = document.getElementById('KeyCA');
-            if (userData?.publicKey) {
-                keyCAField.value = userData.publicKey; // Display the public key
-                keyCAField.hidden = false; // Show the public key field
-                document.getElementById('publicKeyStatus').style.display = 'none'; // Hide the no key message
-            } else {
-                keyCAField.hidden = true; // Hide the public key field
-                document.getElementById('publicKeyStatus').style.display = 'block'; // Show the no key message
+        if (!response.ok) {
+            throw new Error(userData?.message ?? 'Lỗi khi kiểm tra khóa công khai.');
+        }
+
+        if (userData?.publicKey) {
+            // ✅ Cập nhật trạng thái nếu có khóa công khai
+            KeyCA.value = userData.publicKey;
+            KeyCA.hidden = false;
+            KeyLabel.textContent = 'Khóa công khai đã được tạo!';
+            KeyLabel.style.color = 'green';
+            KeyLabel.style.display = 'block';
+            generateKeyBtn.style.display = 'none';
+
+            if (userData?.privateKey) {
+                privateKeyField.value = userData.privateKey;
+                privateKeyField.hidden = false;
+                privateKeyLabel.style.display = 'block';
+                keyActions.style.display = 'flex';
             }
         } else {
-            alert(userData.message || 'Có lỗi xảy ra khi kiểm tra khóa công khai.'); // Alert user with message or default error
+            KeyCA.hidden = true;
+            KeyLabel.textContent = 'Bạn muốn tạo chứng thực số?';
+            KeyLabel.style.color = 'black';
+            generateKeyBtn.style.display = 'inline-block';
+            privateKeyField.hidden = true;
+            privateKeyLabel.style.display = 'none';
+            keyActions.style.display = 'none';
         }
     } catch (error) {
-        console.error('Error checking public key:', error);
-        alert('Có lỗi xảy ra khi kiểm tra khóa công khai. Vui lòng thử lại.'); // Error handling
+        console.error('Lỗi:', error);
+        showSwal('error', 'Lỗi!', error.message || 'Vui lòng thử lại.');
     }
 }
 
-// Event listener for checking the public key when creating a key
-document.getElementById('generateKeyBtn').addEventListener('click', checkPublicKey);
+generateKeyBtn.addEventListener('click', checkPublicKey);
 
-// Hàm để hiển thị thông báo với nội dung động
 function showNotification(message) {
-    const notificationContent = document.getElementById('notificationContent');
-    const notificationText = document.getElementById('notificationText');
-    
-    // Thay đổi nội dung thông báo
-    notificationText.innerHTML = message;
-    
-    // Hiển thị thông báo
-    notificationContent.style.display = 'block';
-    
-    // Thêm class để hiển thị chấm thông báo
-    const notificationBell = document.getElementById('notificationBell');
+    showSwal('info', 'Thông báo', message, 3000);
     notificationBell.classList.add('new-notification');
 }
 
-// Khi người dùng nhấn vào chuông, ẩn hoặc hiện thông báo
-document.getElementById('notificationBell').addEventListener('click', () => {
-    const notificationContent = document.getElementById('notificationContent');
-    
-    // Kiểm tra trạng thái của thông báo
-    if (notificationContent.style.display === 'none' || notificationContent.style.display === '') {
-        notificationContent.style.display = 'block';
-    } else {
-        notificationContent.style.display = 'none';
-    }
-    
-    // Thêm hoặc loại bỏ chấm thông báo
-    const notificationBell = document.getElementById('notificationBell');
-    notificationBell.classList.toggle('new-notification');
+// 🌟 Toggle thông báo khi nhấn vào chuông
+notificationBell.addEventListener('click', () => {
+    notificationContent.style.display = notificationContent.style.display === 'block' ? 'none' : 'block';
+    notificationBell.classList.remove('new-notification'); // Ẩn chấm đỏ khi đã xem
 });
-
-// Ví dụ về việc gọi hàm showNotification khi có sự kiện
-setTimeout(() => {
-    showNotification('Thông báo mới từ hệ thống!');
-}, 3000); // Thông báo mới xuất hiện sau 3 giây
-
-// Giả sử khi người dùng làm một hành động nào đó, bạn có thể gọi:
-document.getElementById('someButton').addEventListener('click', () => {
-    showNotification('Bạn vừa nhấn nút!');
-});
-

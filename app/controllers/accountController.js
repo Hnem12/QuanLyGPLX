@@ -135,7 +135,7 @@ const createKeyForUser = async (req, res) => {
             // Check if the user already has a certificate
             const existingUser = await AccountModel.findById(accountId);
             if (existingUser && existingUser.certificate) {
-                return res.status(400).json({ message: 'Khóa đã tồn tại cho người dùng này.' });
+                return res.status(400).json({ message: 'Khóa đã được cấp' });
             }
 
             // Generate user key using DangKyNguoiDung and retrieve the certificate info

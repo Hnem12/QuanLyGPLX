@@ -9,25 +9,6 @@ body {
   font-family: 'Times New Roman', Times, serif, sans-serif;
   background: #fff;
 }
-.custom-alert {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 15px;
-  font-weight: 400;
-  text-align: center;
-}
-
-.custom-icon {
-  width: 20px;
-  height: 20px;
-}
-
-.custom-title {
-  margin-left: 5px;
-  font-size: 18px;
-  text-align: center !important;
-}
 
 
 /* CSS cho phần nội dung chính */
@@ -248,7 +229,7 @@ i {
   transform: scale(1.05); /* Phóng lớn hơn chút */
 }
 
-.column-width-tacvu { width: 100px; }
+.column-width-tacvu { width: 130px; }
 .column-width-anh { width: 160px; }
 .column-width-thongtin { width: 170px; }
 .column-width-status1 { width: 130px; }
@@ -593,4 +574,23 @@ select.form-control {
 .swal2-input {
   width: 450px !important; /* Giảm chiều rộng */
   
+}
+.custom-alert {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 15px;
+  font-weight: 400;
+  text-align: center;
+}
+
+.custom-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.custom-title {
+  margin-left: 5px;
+  font-size: 18px;
+  text-align: center !important;
 }

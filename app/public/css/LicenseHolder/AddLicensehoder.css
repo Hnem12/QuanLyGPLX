@@ -226,7 +226,7 @@ body {
     transform: scale(1.05); /* Phóng lớn hơn chút */
   }
   
-  .column-width-tacvu { width: 65px; }
+  .column-width-tacvu { width: 85px; }
   .column-width-anh { width: 140px; }
   .column-width-thongtin { width: 170px; }
   .column-width-status1 { width: 130px; }

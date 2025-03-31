@@ -39,7 +39,7 @@ body {
 }
 
 .sidebar .icon {
-  margin-right: 10px;
+  margin-right: 20px;
   font-size: 20px; /* Icon size */
   transition: font-size 0.3s ease; /* Smooth transition for icon size */
 }
@@ -114,7 +114,8 @@ span {
 
 
 i {
-  color: black;
+  color: #e2366f;
+  margin-right: 10px;
 }
 
 .email {
