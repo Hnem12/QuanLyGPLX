@@ -16,7 +16,6 @@ const imageRoutes = require('./app/routes/imageRoute');
 const { DangKyAdmin } = require('./app/blockchain/enrollAdmin'); // Điều chỉnh đường dẫn
 const { queryGPLXData } = require('./app/blockchain/Truyvandulieu');
 const KiemdinhGPLXRoute = require('./app/routes/KiemdinhGPLXRoute') 
-const verifyAndSign = require('./app/middleware/a')
 
 
 const app = express();
