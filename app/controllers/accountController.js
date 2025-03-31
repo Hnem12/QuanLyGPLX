@@ -184,7 +184,13 @@ const createKeyForUser = async (req, res) => {
     
             // Kiểm tra xem tài khoản có khóa công khai không
             if (!account.certificate) {
-                return res.status(404).json({ message: 'No public key found for this account.' });
+                return res.status(400).json({
+                    success: false,
+                    errorCode: "DUPLICATE_KEY",
+                    message: "❌ Khóa đã tồn tại cho người dùng này!",
+                    suggestion: "Vui lòng chọn một khóa khác.",
+                });
+                
             }
     
             // Gửi khóa công khai và thông tin bổ sung về cho người dùng, cùng với accountId

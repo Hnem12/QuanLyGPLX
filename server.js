@@ -1,12 +1,13 @@
-const express = require('express');
+const fs = require("fs");
+var cors = require("cors");
 const path = require('path');
+const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser'); // Import cookie-parser
 const { dbconnect } = require('./app/configs/dbConfig');
 const checkAuthentication = require('./app/middleware/checkAuthentication');
 const accountRouter = require('./app/routes/accountRoute');
 const licenseHolderRoutes = require('./app/routes/ChusohuuGPLXRoute');
-var cors = require("cors");
 // const AccountManagement = require('./license-management/src/components/AccountManagement');
 const LicenseHolder = require('./app/models/ChusohuuGPLXModel');
 const CaplaiGPLXRouter = require('./app/routes/caplaiGPLXRoute');
@@ -15,8 +16,8 @@ const imageRoutes = require('./app/routes/imageRoute');
 const { DangKyAdmin } = require('./app/blockchain/enrollAdmin'); // Điều chỉnh đường dẫn
 const { queryGPLXData } = require('./app/blockchain/Truyvandulieu');
 const KiemdinhGPLXRoute = require('./app/routes/KiemdinhGPLXRoute') 
-const apiRoutes = require('./app/routes/api') 
-const fs = require("fs");
+const verifyAndSign = require('./app/middleware/a')
+
 
 const app = express();
 dbconnect();

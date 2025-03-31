@@ -280,3 +280,24 @@ transition: margin-left 0.3s ease;
   margin: 0 5px; /* Khoảng cách giữa các dấu phân cách */
   color: #888; /* Màu sắc cho dấu phân cách */
 }
+
+/* Nút xác nhận màu hồng */
+.pink-confirm {
+  background: #e2366f !important;
+  color: white !important;
+  font-weight: bold !important;
+  border-radius: 10px !important;
+}
+
+/* Nút hủy màu xám */
+.pink-cancel {
+  background: #ccc !important;
+  color: black !important;
+  font-weight: bold !important;
+  border-radius: 10px !important;
+}
+
+.swal2-input {
+  width: 450px !important; /* Giảm chiều rộng */
+  
+}

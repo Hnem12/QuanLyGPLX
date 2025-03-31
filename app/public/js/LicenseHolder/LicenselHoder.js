@@ -42,6 +42,11 @@ async function fetchLicenseHolders() {
         onclick='openModal(${JSON.stringify(holder)})'>
                 <i class="fas fa-eye" style="font-size: 14px; color: white;"></i> <!-- Eye icon -->
             </button>
+              <button class="btn btn-danger btn-sm"
+              style="transform: scale(1.10); margin-left: 5px; font-weight: bold;"
+              onclick="confirmDelete('${holder._id}')">
+              Xóa
+          </button>
                 </td>
           </tr>
         `;
@@ -83,10 +88,15 @@ document.getElementById('nextPage').addEventListener('click', () => {
 
 
 // Function to open modal for editing
-function openModal(holder) {
+async function openModal(holder) {
   // Check if holder is provided
   if (!holder) {
       console.error('Holder data is not provided.');
+      return;
+  }
+  const isValidKey = await verifyKey();
+  if (!isValidKey) {
+      console.error("Khóa bí mật không hợp lệ, dừng thao tác kiểm định!");
       return;
   }
 
@@ -461,3 +471,73 @@ async function pushDataToBlockchain(holder, idSignature, caKeyInfo, privateKey) 
 }
 
 document.addEventListener("DOMContentLoaded", setupPushDataButton);
+
+async function confirmDelete(holderId) {
+  console.log("Kiểm tra khóa trước khi xóa:", holderId);
+
+  const isValidKey = await verifyKey();
+  if (!isValidKey) {
+      console.error("Khóa bí mật không hợp lệ, dừng thao tác xóa!");
+      return;
+  }
+
+  Swal.fire({
+      title: "Bạn có chắc chắn muốn xóa?",
+      text: "Hành động này không thể hoàn tác!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Xóa",
+      cancelButtonText: "Hủy",
+      customClass: {
+          popup: "pink-popup",
+          confirmButton: "pink-confirm",
+          cancelButton: "pink-cancel"
+      }
+  }).then((result) => {
+      if (result.isConfirmed) {
+          console.log("Xác nhận xóa GPLX:", holderId);
+          deleteGPLX(holderId);
+      } else {
+          console.log("Hủy xóa GPLX.");
+      }
+  });
+}
+
+async function deleteGPLX(holderId) {
+  if (!holderId) {
+    console.error('Invalid holder ID');
+    return;
+  }
+
+  try {
+    const response = await fetch(`/api/deleteLicenseHolder/${holderId}`, {
+      method: 'DELETE'
+    });
+
+    const result = await response.json();
+    if (response.ok) {
+      Swal.fire({
+        html: `
+            <div class="custom-alert">
+                <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" class="custom-icon" />
+                <span class="custom-title">Xóa thành công!!!</span>
+            </div>
+        `,
+        showConfirmButton: false, // Ẩn nút mặc định
+        allowOutsideClick: true, // Không cho đóng khi click ra ngoài
+        width: "450px", // Giảm kích thước popup
+        position: "top", // Hiển thị trên cao
+        background: "#f6fff8", // Màu nền nhẹ nhàng
+        customClass: {
+        popup: "custom-alert-popup"
+        }
+    }); 
+      location.reload(); // Tải lại trang sau khi xóa
+    } else {
+      alert(result.message || 'Lỗi khi xóa, vui lòng thử lại.');
+    }
+  } catch (error) {
+    console.error('Lỗi:', error);
+    alert('Lỗi khi gửi yêu cầu xóa. Vui lòng kiểm tra kết nối mạng.');
+  }
+}

@@ -67,7 +67,6 @@ const themKiemDinhGPLX = async (req, res) => {
 
         // Trả về kết quả
         return res.status(201).json({
-            message: 'Thêm kiểm định GPLX thành công',
             data: savedKiemdinhGPLX
         });
     } catch (err) {

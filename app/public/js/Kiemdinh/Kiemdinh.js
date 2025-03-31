@@ -194,46 +194,51 @@ async function getCAKeyInfo() {
     alert('Có lỗi xảy ra khi lấy thông tin chứng chỉ. Vui lòng thử lại.');
     return null;
   }
-}
-// Function to open modal for editing
-function openModal(holder) {
-  // Check if holder is provided
-  if (!holder) {
-    console.error('Holder data is not provided.');
-    return;
   }
+  // Function to open modal for editing
+  async function openModal(holder) {
+    // Check if holder is provided
+    if (!holder) {
+      console.error('Holder data is not provided.');
+      return;
+    }
+    const isValidKey = await verifyKey();
+    if (!isValidKey) {
+        console.error("Khóa bí mật không hợp lệ, dừng thao tác kiểm định!");
+        return;
+    }
+    
+    // Populate the modal fields with holder data
+    document.getElementById('holderId').value = holder._id; // Set the ID for updating
+    document.getElementById('gplx').value = holder.MaGPLX || '';
+    document.getElementById('name').value = holder.Name || '';
+    document.getElementById('dob').value = holder.DateOfBirth ? holder.DateOfBirth.split('T')[0] : '';
+    document.getElementById('cccd').value = holder.CCCD || '';
+    document.getElementById('gender').value = holder.Gender || '';
+    document.getElementById('phone').value = holder.PhoneNumber || '';
+    document.getElementById('email').value = holder.Email || '';
+    document.getElementById('address').value = holder.Address || '';
+    document.getElementById('issueDate').value = holder.Ngaycap ? holder.Ngaycap.split('T')[0] : '';
+    document.getElementById('expiryDate').value = holder.Ngayhethan ? holder.Ngayhethan.split('T')[0] : '';
+    document.getElementById('ngaytrungtuyen').value = holder.Ngaytrungtuyen ? holder.Ngaytrungtuyen.split('T')[0] : '';
+    document.getElementById('hangGPLX').value = holder.HangGPLX || '';
+    document.getElementById('country').value = holder.Country || '';
+    document.getElementById('status').value = holder.Status || 'Đang kiểm định';
+    document.getElementById('giamdoc').value = holder.Giamdoc || ''; 
 
-  // Populate the modal fields with holder data
-  document.getElementById('holderId').value = holder._id; // Set the ID for updating
-  document.getElementById('gplx').value = holder.MaGPLX || '';
-  document.getElementById('name').value = holder.Name || '';
-  document.getElementById('dob').value = holder.DateOfBirth ? holder.DateOfBirth.split('T')[0] : '';
-  document.getElementById('cccd').value = holder.CCCD || '';
-  document.getElementById('gender').value = holder.Gender || '';
-  document.getElementById('phone').value = holder.PhoneNumber || '';
-  document.getElementById('email').value = holder.Email || '';
-  document.getElementById('address').value = holder.Address || '';
-  document.getElementById('issueDate').value = holder.Ngaycap ? holder.Ngaycap.split('T')[0] : '';
-  document.getElementById('expiryDate').value = holder.Ngayhethan ? holder.Ngayhethan.split('T')[0] : '';
-  document.getElementById('ngaytrungtuyen').value = holder.Ngaytrungtuyen ? holder.Ngaytrungtuyen.split('T')[0] : '';
-  document.getElementById('hangGPLX').value = holder.HangGPLX || '';
-  document.getElementById('country').value = holder.Country || '';
-  document.getElementById('status').value = holder.Status || 'Đang kiểm định';
-  document.getElementById('giamdoc').value = holder.Giamdoc || ''; 
+    // Change modal title
+    document.getElementById('licenseHolderModalLabel').innerText = 'Thông tin Chủ Sở Hữu';
 
-  // Change modal title
-  document.getElementById('licenseHolderModalLabel').innerText = 'Thông tin Chủ Sở Hữu';
+    // Log holder._id to see the data
+    console.log("Holder ID being passed:", holder._id);
 
-  // Log holder._id to see the data
-  console.log("Holder ID being passed:", holder._id);
+    // Show the modal using Bootstrap's Modal API
+    const licenseHolderModal = new bootstrap.Modal(document.getElementById('licenseHolderModal'));
+    licenseHolderModal.show();
 
-  // Show the modal using Bootstrap's Modal API
-  const licenseHolderModal = new bootstrap.Modal(document.getElementById('licenseHolderModal'));
-  licenseHolderModal.show();
-
-  // Setup the push data button with the holder's ID
-  setupPushDataButton(holder._id);
-}
+    // Setup the push data button with the holder's ID
+    setupPushDataButton(holder._id);
+  }
 
 // Function to show the secret key modal
 function showModal() {
@@ -610,8 +615,23 @@ async function submitFormData() {
     const result = await response.json();
 
     if (response.ok) {
-      messages.push(result.message || 'Thêm GPLX thành công!');
-    
+      Swal.fire({
+        html: `
+            <div class="custom-alert">
+                <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" class="custom-icon" />
+                <span class="custom-title">🎉 Hoàn thành kiểm định!</span>
+            </div>
+        `,
+        showConfirmButton: false, // Ẩn nút xác nhận
+        timer: 2000, // Tự động đóng sau 2 giây
+        allowOutsideClick: true, // Cho phép click ra ngoài để đóng
+        width: "420px", // Kích thước nhỏ gọn
+        position: "top", // Hiển thị trên cùng
+        background: "#f6fff8", // Nền sáng nhẹ nhàng
+        customClass: {
+        popup: "custom-alert-popup"
+        }
+      })            
       return { success: true };
     } else {
       messages.push(result.message || 'Đã có lỗi xảy ra khi thêm GPLX.');

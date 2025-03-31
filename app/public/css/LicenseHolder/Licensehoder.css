@@ -248,14 +248,14 @@ i {
   transform: scale(1.05); /* Phóng lớn hơn chút */
 }
 
-.column-width-tacvu { width: 65px; }
-.column-width-anh { width: 140px; }
+.column-width-tacvu { width: 100px; }
+.column-width-anh { width: 160px; }
 .column-width-thongtin { width: 170px; }
 .column-width-status1 { width: 130px; }
-
 .column-width-status { width: 120px; }
 .column-width-select { width: 94px; }
 .column-width-ngaysinh { width: 112px; }
+.column-width-STT { width: 80px; }
 
 
 .hidden { display: none; }
@@ -571,4 +571,26 @@ select.form-control {
 /* Optional: Ensure spacing between form elements */
 .mb-3 {
   margin-bottom: 1.5rem;
+}
+
+
+/* Nút xác nhận màu hồng */
+.pink-confirm {
+  background: #e2366f !important;
+  color: white !important;
+  font-weight: bold !important;
+  border-radius: 10px !important;
+}
+
+/* Nút hủy màu xám */
+.pink-cancel {
+  background: #ccc !important;
+  color: black !important;
+  font-weight: bold !important;
+  border-radius: 10px !important;
+}
+
+.swal2-input {
+  width: 450px !important; /* Giảm chiều rộng */
+  
 }

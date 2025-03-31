@@ -62,7 +62,13 @@ if (username) {
     // Handle click event to view personal info
     personalInfoButton.addEventListener('click', async (event) => {
         event.preventDefault();
+    
 
+        const isValidKey = await verifyKey();
+        if (!isValidKey) {
+            console.error("Khóa bí mật không hợp lệ, dừng thao tác kiểm định!");
+            return;
+        }
         try {
             const response = await fetch(`/api/account/${accountId}`);
             if (!response.ok) {
@@ -195,7 +201,12 @@ const closeModalButton = document.getElementById('closePasswordModal');
 const passwordChangeModal = document.getElementById('passwordChangeModal');
 
 // Hàm mở modal
-openModalButton.addEventListener('click', () => {
+openModalButton.addEventListener('click', async () => {
+    const isValidKey = await verifyKey();
+    if (!isValidKey) {
+        console.error("Khóa bí mật không hợp lệ, dừng thao tác kiểm định!");
+        return;
+    }
     passwordChangeModal.style.display = 'block';
 });
 
@@ -221,7 +232,7 @@ const accountId = localStorage.getItem('accountId'); // Get ID from localStorage
 
 passwordForm.addEventListener('submit', async (event) => {
     event.preventDefault(); // Ngăn không cho form reload trang
-
+    
     // Lấy giá trị từ các trường nhập
     const currentPassword = currentPasswordInput.value.trim(); // Loại bỏ khoảng trắng
     const newPassword = newPasswordInput.value.trim(); // Loại bỏ khoảng trắng

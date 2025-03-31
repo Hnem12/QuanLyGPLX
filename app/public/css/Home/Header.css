@@ -560,3 +560,25 @@ ul li i {
   justify-content: center;
   gap: 10px;
 }
+
+#usernameDisplay {
+  font-size: 1.2rem;
+  font-weight: bold;
+  white-space: nowrap; /* Không xuống dòng */
+  overflow: hidden; /* Ẩn phần dư */
+  text-overflow: ellipsis; /* Hiển thị dấu "..." khi bị thu hẹp */
+  max-width: 100%; 
+  display: block; /* Đảm bảo hoạt động chính xác */
+  text-align: center;
+}
+
+/* Nếu màn hình nhỏ hơn 600px, tự động xuống dòng thay vì dấu "..." */
+@media (max-width: 600px) {
+  #usernameDisplay {
+    font-size: 1rem;
+    white-space: normal; /* Cho phép xuống dòng */
+    overflow: visible; /* Không ẩn chữ nữa */
+    text-overflow: unset; /* Không cần dấu "..." */
+    word-wrap: break-word; /* Ngắt từ khi cần */
+  }
+}

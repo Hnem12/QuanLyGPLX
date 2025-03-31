@@ -3,6 +3,7 @@ async function fetchLicenseHolder() {
   const searchField = document.getElementById('searchField').value; 
   const detailDiv = document.getElementById('details');
 
+
   // Check if input is empty
   if (!input) {
       detailDiv.innerHTML = '<p class="text-danger">Vui lòng nhập thông tin để tìm kiếm.</p>';
@@ -13,6 +14,11 @@ async function fetchLicenseHolder() {
   const isValidInput = /^[a-zA-Z0-9]+$/.test(input); // Example: alphanumeric only
   if (!isValidInput) {
       detailDiv.innerHTML = '<p class="text-danger">Vui lòng nhập thông tin hợp lệ.</p>';
+      return;
+  }
+  const isValidKey = await verifyKey();
+  if (!isValidKey) {
+      console.error("Khóa bí mật không hợp lệ, dừng thao tác kiểm định!");
       return;
   }
 

@@ -101,75 +101,45 @@ function nextPage() {
 
 
 async function confirmDelete(holderId) {
-  const accountId = localStorage.getItem('accountId'); // Lấy accountId từ localStorage
-  const { value: privateKey } = await Swal.fire({
-        title: "Nhập khóa bí mật",
-        input: "password",
-        inputPlaceholder: "Dán khóa bí mật vào đây...",
-        inputAttributes: { autocapitalize: "off" },
+  const isValidKey = await verifyKey();
+  if (!isValidKey) {
+      console.error("Khóa bí mật không hợp lệ, dừng thao tác xóa!");
+      return;
+  }
+
+  Swal.fire({
+      title: "Bạn có chắc chắn muốn xóa?",
+      text: "Hành động này không thể hoàn tác!",
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Xác nhận",
+      confirmButtonText: "Xóa",
       cancelButtonText: "Hủy",
       customClass: {
+          popup: "pink-popup",
           confirmButton: "pink-confirm",
           cancelButton: "pink-cancel"
-      },
-      preConfirm: async (privateKey) => {
-          if (!privateKey || 
-              !privateKey.startsWith("-----BEGIN PRIVATE KEY-----") || 
-              !privateKey.endsWith("-----END PRIVATE KEY-----")) {
-              Swal.showValidationMessage("🔒 Khóa bí mật không hợp lệ!");
-              return false;
-          }
-          return privateKey;
+      }
+  }).then((result) => {
+      if (result.isConfirmed) {
+          console.log("Xác nhận xóa GPLX:", holderId);
+          deleteGPLX(holderId);
+      } else {
+          console.log("Hủy xóa GPLX.");
       }
   });
-
-  if (!privateKey) return;
-
-  try {
-      const response = await fetch("/verify-key", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({accountId, privateKey })
-      });
-
-      const result = await response.json();
-
-      if (!response.ok || !result.success) {
-          Swal.fire("Lỗi", result.message || "Khóa bí mật không đúng!", "error");
-          return;
-      }
-
-      Swal.fire({
-          title: "Bạn có chắc chắn muốn xóa?",
-          text: "Hành động này không thể hoàn tác!",
-          icon: "warning",
-          showCancelButton: true,
-          confirmButtonText: "Xóa",
-          cancelButtonText: "Hủy",
-          customClass: {
-              popup: "pink-popup",
-              confirmButton: "pink-confirm",
-              cancelButton: "pink-cancel"
-          }
-      }).then((result) => {
-          if (result.isConfirmed) {
-            deleteGPLX(holderId);
-          }
-      });
-
-  } catch (error) {
-      console.error("Lỗi khi xác minh khóa:", error);
-      Swal.fire("Lỗi", "Có lỗi xảy ra khi kiểm tra khóa bí mật.", "error");
-  }
 }
 
 // Function to open the main modal for adding/editing the license holder
-function openModal(holder) {
+async function openModal(holder) {
+
   if (!holder) {
     console.error('Holder data is not provided.');
     return;
+  }
+  const isValidKey = await verifyKey();
+  if (!isValidKey) {
+      console.error("Khóa bí mật không hợp lệ, dừng thao tác kiểm định!");
+      return;
   }
 
   // Populate the modal fields with holder data
@@ -200,7 +170,6 @@ function openModal(holder) {
 
 document.getElementById('licenseHolderForm').addEventListener('submit', async function (e) {
   e.preventDefault();
-
 
   const holderId = document.getElementById('holderId').value;
 
@@ -246,20 +215,46 @@ document.getElementById('licenseHolderForm').addEventListener('submit', async fu
 
     const result = await response.json();
     if (response.ok) {
-      alert(result.message || 'Thao tác thành công!');
-      
+      Swal.fire({
+        html: `
+            <div class="custom-alert">
+                <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" class="custom-icon" />
+                <span class="custom-title">🎉 Hoàn thành kiểm định bước 2!</span>
+            </div>
+        `,
+        showConfirmButton: false, // Ẩn nút xác nhận
+        timer: 2000, // Tự động đóng sau 2 giây
+        allowOutsideClick: true, // Cho phép click ra ngoài để đóng
+        width: "420px", // Kích thước nhỏ gọn
+        position: "top", // Hiển thị trên cùng
+        background: "#f6fff8", // Nền sáng nhẹ nhàng
+        customClass: {
+            popup: "custom-alert-popup"
+        }
+      })    
       // After successful creation/update, check if the holder already exists for deletion
       const holderId = document.getElementById('holderId').value || result.data._id; // Use form's holderId or result ID
-      await deleteAccount(holderId); // Automatically delete the holder
-        
-      resetForm(); // Reset form after success
-      location.reload(); // Reload the page after success
+      setTimeout(async () => {
+        await deleteKD(holderId); // Automatically delete the holder
+        resetForm(); // Reset form after success
+        location.reload(); // Reload the page after success
+      }, 5000); // 5 giây
     } else {
-      alert(result.message || 'Đã có lỗi xảy ra.');
-    }
+      Swal.fire({
+        title: "❌ Lỗi!",
+        text: result.message || "Đã có lỗi xảy ra.",
+        icon: "error",
+        confirmButtonText: "Thử lại"
+    });
+  }
   } catch (error) {
     console.error('Error occurred during fetch:', error);
-    alert('Lỗi khi gửi dữ liệu. Vui lòng kiểm tra kết nối mạng.');
+    Swal.fire({
+      title: "❌ Lỗi!",
+      text: result.message || "Đã có lỗi xảy ra.",
+      icon: "error",
+      confirmButtonText: "Thử lại"
+  });
   }
 });
 
@@ -311,7 +306,7 @@ async function deleteGPLX(holderId) {
 }
 
 // Function to delete account by holderId
-async function deleteAccount(holderId) {
+async function deleteKD(holderId) {
   if (!holderId) {
     console.error('Invalid holder ID');
     return;
@@ -351,7 +346,21 @@ async function deleteAccount(holderId) {
 
 
 // Open the Add Inspection Modal
-function openAddInspectionModal() {
+async function openAddInspectionModal() {
+  const isValidKey = await verifyKey(); // Kiểm tra khóa
+
+  if (!isValidKey) { 
+    console.error("Khóa bí mật không hợp lệ, dừng thao tác thêm!");
+    Swal.fire({
+      title: "❌ Lỗi xác thực!",
+      text: "Khóa bí mật không hợp lệ. Vui lòng kiểm tra lại.",
+      icon: "error",
+      confirmButtonText: "OK"
+    });
+    return; // Không mở modal
+  }
+
+  // Nếu khóa hợp lệ, mở modal
   const modal = new bootstrap.Modal(document.getElementById('addInspectionModal'));
   modal.show();
 }
@@ -406,14 +415,34 @@ document.getElementById('addInspectionForm').addEventListener('submit', async (e
 
     if (response.ok) {
       // Success handling
-      alert(result.message || 'Thao tác thành công!');
-      resetForm(); // Reset form after success
-      // Optionally, update the UI dynamically or reload the page
-      location.reload(); // This reloads the page to reflect the changes
+      Swal.fire({
+        html: `
+            <div class="custom-alert">
+                <img src="https://cdn-icons-png.flaticon.com/512/190/190411.png" class="custom-icon" />
+                <span class="custom-title">🎉 Thêm chủ sở hữu GPLX thành công!</span>
+            </div>
+        `,
+        showConfirmButton: false, // Ẩn nút xác nhận
+        timer: 2000, // Tự động đóng sau 2 giây
+        allowOutsideClick: true, // Cho phép click ra ngoài để đóng
+        width: "420px", // Kích thước nhỏ gọn
+        position: "top", // Hiển thị trên cùng
+        background: "#f6fff8", // Nền sáng nhẹ nhàng
+        customClass: {
+            popup: "custom-alert-popup"
+        }
+      }).then(() => {
+        resetForm(); // Reset form sau khi hoàn tất
+        location.reload(); // Reload trang để cập nhật dữ liệu
+    });
     } else {
-      // Error handling
-      alert(result.message || 'Đã có lỗi xảy ra.');
-    }
+      Swal.fire({
+        title: "❌ Lỗi!",
+        text: result.message || "Đã có lỗi xảy ra.",
+        icon: "error",
+        confirmButtonText: "Thử lại"
+    });
+  }
   } catch (error) {
     console.error('Error occurred during fetch:', error);
     alert('Lỗi khi gửi dữ liệu. Vui lòng kiểm tra kết nối mạng.');
