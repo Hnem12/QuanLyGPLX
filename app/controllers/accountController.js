@@ -435,6 +435,7 @@ const resetPassword = async (req, res) => {
         res.status(500).json({ message: 'An error occurred while resetting the password.' });
     }
 };
+
 const changePassword = async (req, res) => {
     const { oldPassword, newPassword } = req.body;
     const { id } = req.params;

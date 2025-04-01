@@ -1,6 +1,7 @@
 const fs = require("fs");
 var cors = require("cors");
 const path = require('path');
+const bcrypt = require('bcrypt'); // Nếu dùng bcrypt
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser'); // Import cookie-parser
@@ -14,8 +15,8 @@ const CaplaiGPLXRouter = require('./app/routes/caplaiGPLXRoute');
 const GiahanGPLXRouter = require('./app/routes/GiahanGPLX');
 const imageRoutes = require('./app/routes/imageRoute');
 const { DangKyAdmin } = require('./app/blockchain/enrollAdmin'); // Điều chỉnh đường dẫn
-const { queryGPLXData } = require('./app/blockchain/Truyvandulieu');
 const KiemdinhGPLXRoute = require('./app/routes/KiemdinhGPLXRoute') 
+const AccountModel = require('./app/models/accountModel'); // Đảm bảo đường dẫn chính xác
 
 
 const app = express();
@@ -88,29 +89,27 @@ app.post("/verify-key", async (req, res) => {
     }
 });
 
-app.post('/api/account/login', (req, res) => {
-    const { username, password } = req.body;
 
-    // Kiểm tra username, password
-    const user = findUserInDatabase(username, password);
-    if (!user) {
-        return res.status(401).json({ message: "Sai thông tin đăng nhập" });
-    }
+app.post('/api/verifyPassword', async (req, res) => {
+    const { id, password } = req.body;
 
-    // Trả về dữ liệu user (bao gồm accountId)
-    res.json({
-        message: "Đăng nhập thành công",
-        userData: {
-            _id: user._id,
-            username: user.username,
-            image: user.image,
-            certificate: user.certificate,
-            mspId: user.mspId,
-            type: user.type
+    try {
+        const account = await AccountModel.findById(id);
+        if (!account) {
+            return res.status(404).json({ success: false, message: 'Tài khoản không tồn tại' });
         }
-    });
-});
 
+        const isMatch = await bcrypt.compare(password, account.password);
+        if (!isMatch) {
+            return res.status(400).json({ success: false, message: 'Mật khẩu không đúng' });
+        }
+
+        res.json({ success: true });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Lỗi server' });
+    }
+});
 
 
 DangKyAdmin();

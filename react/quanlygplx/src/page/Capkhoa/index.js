@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Button, message, Spin } from 'antd';
+import { Button, message, Spin, Input } from 'antd';
 import Swal from 'sweetalert2';
+import axios from 'axios';
 import API from '../../utils/request';
 import './createKey.scss';
 
@@ -9,26 +10,21 @@ const UserKeyForm = () => {
     const [loading, setLoading] = useState(false);
     const [privateKey, setPrivateKey] = useState(null);
     const [initializing, setInitializing] = useState(true);
-    
-    // Lấy accountId từ cookie khi component được mount
+    const [password, setPassword] = useState(''); // Thêm state để lưu mật khẩu
+
     useEffect(() => {
         const fetchAccountId = async () => {
             try {
                 setInitializing(true);
-                // Thử lấy accountId từ cookie trước
                 const accountIdFromCookie = getAccountIdFromCookie();
-                
                 if (accountIdFromCookie) {
-                    console.log("AccountId từ cookie:", accountIdFromCookie);
                     setAccountId(accountIdFromCookie);
                 } else {
-                    // Nếu không có cookie, thử lấy từ token như trước
                     const accountIdFromToken = getAccountIdFromToken();
                     if (accountIdFromToken) {
-                        console.log("AccountId từ token:", accountIdFromToken);
                         setAccountId(accountIdFromToken);
                     } else {
-                        Swal.fire('Lỗi!', 'Không thể lấy Account ID từ cookie hoặc token. Vui lòng đăng nhập lại.', 'error');
+                        Swal.fire('Lỗi!', 'Không thể lấy Account ID.', 'error');
                     }
                 }
             } catch (error) {
@@ -41,15 +37,14 @@ const UserKeyForm = () => {
         
         fetchAccountId();
     }, []);
-    
-    // Function để lấy accountId từ cookie
+
     const getAccountIdFromCookie = () => {
         try {
             const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
+            for (let cookie of cookies) {
+                cookie = cookie.trim();
                 if (cookie.startsWith('accountId=')) {
-                    return cookie.substring('accountId='.length, cookie.length);
+                    return cookie.substring('accountId='.length);
                 }
             }
             return null;
@@ -58,69 +53,62 @@ const UserKeyForm = () => {
             return null;
         }
     };
-    
-    // Function để lấy accountId từ JWT token (giữ lại như backup)
+
     const getAccountIdFromToken = () => {
         try {
             const token = localStorage.getItem('token');
             if (!token) return null;
-            
             const payload = token.split('.')[1];
             const decodedPayload = JSON.parse(atob(payload));
-            
             return decodedPayload.accountId || decodedPayload.sub;
         } catch (error) {
             console.error('Lỗi khi giải mã token:', error);
             return null;
         }
     };
-    
-    // Hàm tạo khóa sử dụng accountId
-    const handleGenerateKey = async (id = accountId) => {
-        if (!id) {
-            Swal.fire('Cảnh báo!', 'Không có Account ID để tạo khóa.', 'warning');
+
+    const handleGenerateKey = async () => {
+        if (!accountId || !password) {
+            Swal.fire('Cảnh báo!', 'Vui lòng nhập mật khẩu trước khi tạo khóa.', 'warning');
             return;
         }
     
         setLoading(true);
         try {
-            const result = await generateNewKey(id);
+            const verifyResponse = await axios.post('http://localhost:3000/api/verifyPassword', { id: accountId, password });
+
+            if (!verifyResponse.data.success) {
+                message.error('Mật khẩu không đúng.');
+                setLoading(false);
+                return;
+            }
+
+            const result = await generateNewKey(accountId);
             if (result.privateKey) {
-                // Giữ nguyên phần đầu và cuối, chỉ xóa xuống dòng trong phần nội dung
-                const formattedKey = result.privateKey.replace(/(\r\n|\n|\r)/g, ''); // Remove newlines
+                const formattedKey = result.privateKey.replace(/(\r\n|\n|\r)/g, '');
                 setPrivateKey(formattedKey);
                 message.success('Khóa đã được tạo thành công!');
             } else {
                 message.error('Tạo khóa không thành công.');
             }
         } catch (error) {
-            console.error(error);
+            console.error('Lỗi:', error);
+            message.error('Đã xảy ra lỗi.');
         } finally {
             setLoading(false);
         }
     };
-    
-    
+
     const handleCopyKey = () => {
-      if (privateKey) {
-        if (navigator.clipboard) {
-          // If the private key already exists, alert the user
-          navigator.clipboard.writeText(privateKey)
-            .then(() => {
-              message.success('Đã sao chép khóa bí mật!');
-            })
-            .catch((err) => {
-              console.error(err);
-              message.error('Không thể sao chép khóa bí mật.');
-            });
+        if (privateKey) {
+            navigator.clipboard.writeText(privateKey)
+                .then(() => message.success('Đã sao chép khóa bí mật!'))
+                .catch(() => message.error('Không thể sao chép khóa bí mật.'));
         } else {
-          message.error('Clipboard API không được hỗ trợ trên trình duyệt này.');
+            message.warning('Khóa bí mật chưa được tạo hoặc đã bị xóa.');
         }
-      } else {
-        message.warning('Khóa bí mật chưa được tạo hoặc đã bị xóa.');
-      }
     };
-      
+
     const handleDownloadKey = () => {
         if (privateKey) {
             const blob = new Blob([privateKey], { type: 'text/plain' });
@@ -134,8 +122,7 @@ const UserKeyForm = () => {
             URL.revokeObjectURL(url);
         }
     };
-    
-    // API call để tạo khóa mới
+
     const generateNewKey = async (id) => {        
         try {
             const response = await fetch(API.BASEURL + `/api/Taokhoanguoidung/${id}`, {
@@ -152,7 +139,6 @@ const UserKeyForm = () => {
             }
             
             const result = await response.json();
-            console.log("Kết quả từ API:", result);
             return result;
         } catch (error) {
             console.error('Lỗi khi tạo khóa:', error);
@@ -160,7 +146,7 @@ const UserKeyForm = () => {
             throw error;
         }
     };
-    
+
     if (initializing) {
         return (
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '200px' }}>
@@ -168,7 +154,7 @@ const UserKeyForm = () => {
             </div>
         );
     }
-    
+
     return (
         <div style={{ maxWidth: 500, margin: 'auto', padding: 20, textAlign: 'center' }}>
             <h2>Tạo Khóa Người Dùng</h2>
@@ -178,9 +164,18 @@ const UserKeyForm = () => {
                     <p style={{ fontSize: '16px' }}>
                         <strong>Account ID:</strong> {accountId}
                     </p>
+
+                    {/* Thêm input nhập mật khẩu */}
+                    <Input.Password 
+                        placeholder="Nhập mật khẩu để xác thực" 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        style={{ marginBottom: 10, width: '100%' }}
+                    />
+
                     <Button 
                         type="primary" 
-                        onClick={() => handleGenerateKey()} 
+                        onClick={handleGenerateKey} 
                         loading={loading}
                         style={{ width: '180px' }}
                     >

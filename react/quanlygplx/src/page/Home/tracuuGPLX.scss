@@ -1,61 +1,65 @@
-/* Form Container */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+/* Base font and general styling */
+body {
+  font-family: 'Poppins', sans-serif;
+}
 
-/* Apply the Poppins font to the entire application */
+/* CAPTCHA styling */
 .capcha {
-  font-family: 'Poppins', sans-serif; /* Use Poppins for a clean look */
-  font-size: 28px; /* Slightly larger font size for readability */
-  letter-spacing: 5px; /* Increased spacing to make it harder to read */
+  font-size: 28px;
+  letter-spacing: 5px;
   font-weight: bold;
-  text-transform: uppercase; /* Ensures consistency in characters */
-  transform: rotate(-5deg) skew(-5deg); /* Combined rotation and skew for distortion */
-  color: #ff5722; /* Use a strong color for contrast */
-  background: rgba(240, 240, 240, 0.8); /* Semi-transparent background */
+  text-transform: uppercase;
+  transform: rotate(-5deg) skew(-5deg);
+  color: #ff5722;
+  background: rgba(240, 240, 240, 0.8);
   padding: 10px;
   display: inline-block;
   border-radius: 5px;
-  border: 2px solid #b0bec5; /* Soft border color */
-  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2); /* Increased shadow for depth */
-  position: relative; /* Enables pseudo-element for additional decoration */
-}
-.mb-21{
-  font-weight: bold;
-  font-size: 16px;
+  border: 2px solid #b0bec5;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+  position: relative;
 }
 
-.Canle{
-  margin-left: 18px;
-  font-family: 'Times New Roman', Times, serif;
-  font-size: 17px;
-}
-.Font{
-  font-size: 18px;
-  font-family: 'Times New Roman', Times, serif;
-}
-input[type="date"] {
-  font-style: italic;  // Làm chữ nghiêng cho giá trị nhập vào
-}
-
-/* Optional: Add decorative lines to increase difficulty */
+/* CAPTCHA decorative lines */
 .capcha:before,
 .capcha:after {
   content: '';
   position: absolute;
   width: 100%;
-  height: 5px; /* Thickness of the line */
-  background: rgba(255, 255, 255, 0.5); /* Light color for lines */
-  top: 50%; /* Center the lines vertically */
+  height: 5px;
+  background: rgba(255, 255, 255, 0.5);
+  top: 50%;
   left: 0;
-  transform: rotate(15deg); /* Rotate the lines for a crossed effect */
+}
+
+.capcha:before {
+  transform: rotate(15deg);
 }
 
 .capcha:after {
-  transform: rotate(-15deg); /* Opposite rotation for cross effect */
+  transform: rotate(-15deg);
 }
 
+/* Typography classes */
+.mb-21 {
+  font-weight: bold;
+  font-size: 16px;
+}
 
+.Canle {
+  margin-left: 18px;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 17px;
+}
+
+.Font {
+  font-size: 18px;
+  font-family: 'Times New Roman', Times, serif;
+}
+
+/* Form container and elements */
 .form-container {
-  background: linear-gradient(to bottom, #e0f7fa, #ffffff); /* Nền chuyển màu */
+  background: linear-gradient(to bottom, #e0f7fa, #ffffff);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -68,24 +72,27 @@ input[type="date"] {
   margin: 10px 0;
   border: 1px solid #ccc;
   border-radius: 4px;
-  transition: border-color 0.3s ease; /* Thêm hiệu ứng chuyển đổi */
+  transition: border-color 0.3s ease, background-color 0.3s ease;
 }
 
+input[type="date"] {
+  font-style: italic;
+}
 
-/* Khi trường nhập liệu còn trống */
 .form-container input:placeholder-shown {
-  border-color: #ff9800; /* Đổi màu viền khi không có thông tin */
-  background-color: #fff8e1; /* Màu nền nhạt khi không có thông tin */
+  border-color: #ff9800;
+  background-color: #fff8e1;
 }
 
 .form-container input:focus,
 .form-container select:focus {
-  border-color: #1fcf45; /* Màu viền khi trường được chọn */
-  outline: none; /* Ẩn đường viền mặc định của trình duyệt */
+  border-color: #1fcf45;
+  outline: none;
+  box-shadow: 0 0 5px rgba(31, 207, 69, 0.3);
 }
 
 .form-container button {
-  background-color: #1fcf45; /* Màu cam cho nút */
+  background-color: #1fcf45;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -95,78 +102,121 @@ input[type="date"] {
 }
 
 .form-container button:hover {
-  background-color: #ff9800; /* Hiệu ứng hover: Màu xanh lá khi rê chuột vào nút */
+  background-color: #ff9800;
 }
 
+/* Layout utilities */
 .mt-custom {
-  margin-right: 100px; /* Thêm khoảng cách cho lớp này */
+  margin-right: 100px;
 }
 
-/* Status classes */
+/* Status indicators */
 .status.active {
-  color: green;
+  color: #52c41a;
+  background-color: rgba(82, 196, 26, 0.15);
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
 }
 
 .status.inactive {
-  color: red;
+  color: #ff4d4f;
+  background-color: rgba(255, 77, 79, 0.15);
+  padding: 0.15rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.875rem;
+}
+
+/* Variables */
+:root {
+  --primary-color: #1890ff;
+  --secondary-color: #f5f5f5;
+  --text-color: #333;
+  --error-color: #ff4d4f;
+  --success-color: #52c41a;
+  --border-color: #d9d9d9;
+  --hover-color: #40a9ff;
+  --focus-color: rgba(24, 144, 255, 0.2);
+  --header-bg: #1e3a8a;
+  --header-text: white;
 }
 
 /* Modal styling */
 .modal {
   position: fixed;
-  top: 50%; /* Modal ở giữa màn hình */
-  left: 50%;
-  transform: translate(-50%, -50%); /* Căn giữa modal */
-  background-color: white;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 1000; /* Đảm bảo modal nằm trên các thành phần khác */
-  transition: transform 0.3s ease-in-out;
-  max-width: 600px; /* Đặt độ rộng tối đa cho modal */
-  width: 100%; /* Đảm bảo modal không vượt quá màn hình */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s;
 }
 
 .modal.show {
-  transform: translate(-50%, -50%); /* Hiện modal ở giữa */
+  opacity: 1;
+  visibility: visible;
 }
 
 .modal-content {
-  margin: 0 auto;
+  background-color: white;
+  border-radius: 8px;
   width: 90%;
-  font-size: 20px;
+  max-width: 580px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
 }
 
 .modal-header {
-  font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 10px;
-  text-align: center; /* Canh giữa tiêu đề modal */
+  color: var(--header-bg);
+  font-size: 1.25rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border-color);
 }
 
-.modal-body {
-  font-size: 1rem;
+.modal-body p {
+  margin-bottom: 0.5rem;
+  line-height: 1.5;
+}
+
+.modal-body p strong {
+  font-weight: 600;
 }
 
 .modal-close {
-  cursor: pointer;
-  background-color: #007bff;
+  background-color: var(--primary-color);
   color: white;
-  padding: 10px 20px;
   border: none;
-  border-radius: 5px;
-  margin-top: 10px;
-  display: block;
-  margin-left: auto; /* Đặt nút đóng ở góc phải */
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  float: right;
+  margin-top: 1rem;
+  transition: background-color 0.3s;
 }
 
-/* Nền mờ phía sau modal */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5); /* Nền mờ đen */
-  z-index: 999; /* Đảm bảo nền mờ nằm dưới modal */
+.modal-close:hover {
+  background-color: var(--hover-color);
+}
+
+/* Responsive styling */
+@media (max-width: 640px) {
+  .modal .modal-content .modal-body {
+    flex-direction: column;
+  }
+
+  .modal-info-left,
+  .modal-info-right {
+    padding: 0 !important;
+    margin-bottom: 1rem;
+  }
 }
