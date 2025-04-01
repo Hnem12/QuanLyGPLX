@@ -130,6 +130,7 @@ function previousPage() {
 window.onload = fetchAccounts;
 
 document.addEventListener('DOMContentLoaded', function () {
+  
     const form = document.getElementById('accountForm');
     const accountModalElement = document.getElementById('accountModal');
     const passwordContainer = document.getElementById('passwordContainer');
@@ -252,7 +253,12 @@ function validateAccountForm(accountData) {
 }
 
 // Open modal for both adding and editing accounts
-function openModal(accountData) {
+async function openModal(accountData) {
+    const isValidKey = await verifyKey();
+    if (!isValidKey) {
+        console.error("Khóa bí mật không hợp lệ, dừng thao tác kiểm định!");
+        return;
+    }
     const modalTitle = document.getElementById('accountModalLabel');
     const submitBtn = document.getElementById('submitBtn');
     const accountIdField = document.getElementById('accountId');
