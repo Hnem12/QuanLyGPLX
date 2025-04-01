@@ -1,138 +1,271 @@
+// GplxReissueForm.scss
+
+// Color variables
+$primary-color: #1890ff;
+$secondary-color: #f5f5f5;
+$text-color: #333;
+$error-color: #ff4d4f;
+$success-color: #52c41a;
+$border-color: #d9d9d9;
+$hover-color: #40a9ff;
+$focus-color: rgba(24, 144, 255, 0.2);
+$header-bg: #1e3a8a;
+$header-text: white;
+
+// Fonts
+$font-family: "Times New Roman", serif;
+
+// Layout
 .form-container1 {
-  max-width: 1150px;
-  padding: 20px;
-  margin: 20px auto;
-  border-radius: 15px; /* Bo góc */
-  background: linear-gradient(135deg, #ffffff, #f9f9f9); /* Màu nền gradient nhẹ */
-  border: 1px solid #e0e0e0; /* Viền nhạt */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Bóng đổ mượt */
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Hiệu ứng chuyển đổi */
-
-  /* Hiệu ứng khi hover */
-  &:hover {
-    transform: translateY(-5px); /* Khung nổi lên khi hover */
-    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.15);
-  }
-}
-.form-title1 {
-  font-family: 'Times New Roman', serif;
-  font-size: 27px;
-  font-weight: bold;
-  text-align: center;
-  color: white;
-  background: black;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.4); /* Glowing effect */
-}
-
-.form-submit-button {
-  width: 100%;
-}
-
-.upload-button {
-  display: inline-flex;
-  align-items: center;
-}
-
-.form-item-input {
-  font-family: 'Times New Roman', serif;
-  font-size: 10px;
-  font-weight: inherit;
-  font-style: italic; /* Thêm chữ nghiêng */
-}
-
-.form-actions1 {
-  display: flex;
-  flex-direction: column; /* Sắp xếp các phần tử theo cột */
-  align-items: start; /* Căn trái nội dung */
-  gap: 10px; /* Khoảng cách giữa các phần tử */
-}
-
-.form-submit-button {
-  background-color: #1890ff;
-  color: white;
-  font-family: 'Times New Roman', serif;
-  font-size: 18px;
-  font-weight: bold;
-  border-radius: 5px;
-  padding: 8px 16px;
-  transition: all 0.3s ease;
-
-  &:hover {
-    background-color: #40a9ff;
-  }
-}
-.form-item-upload{
-  display: flex;
-}
-.form-container1 {
-  max-width: 1250px;
-  margin: 10px auto;
-  padding: 10px;
-  background: #ffffff;
-  box-shadow: 0 3px 5px rgba(0, 0, 0, 0.1);
+  max-width: 900px;
+  margin: 30px auto;
+  padding: 30px;
+  background-color: white;
   border-radius: 10px;
-  margin-top: -12px;
-}
-
-.form-item-input {
-  border-radius: 8px;
-  border: 1px solid #ced4da;
-  padding: 6px 10px;
-  font-size: 16px;
-  transition: all 0.3s ease-in-out;
-
-  &:focus, &:hover {
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  position: relative;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: linear-gradient(to right, #1e3a8a, #4f6bce);
+    border-radius: 10px 10px 0 0;
   }
 }
 
-.ant-select-selector {
-  border-radius: 8px !important;
+// Form title
+.form-title1 {
+  text-align: center;
+  color: $header-bg;
+  font-family: $font-family;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 30px;
+  padding-bottom: 15px;
+  border-bottom: 2px solid $header-bg;
+  position: relative;
+  
+  &::after {
+    content: "";
+    position: absolute;
+    width: 100px;
+    height: 4px;
+    background-color: $primary-color;
+    bottom: -3px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
 }
 
+// Override Ant Design form styles
+.ant-form-item-label > label {
+  font-family: $font-family;
+  color: $text-color;
+  font-weight: bold;
+}
+
+.ant-form-item {
+  margin-bottom: 20px;
+  
+  &:hover {
+    .ant-form-item-label > label {
+      color: $primary-color;
+    }
+  }
+}
+
+// Input fields
+.form-item-input, 
+.ant-input, 
+.ant-select-selector, 
 .ant-picker {
-  width: 100%;
-  border-radius: 8px;
-}
-
-.ant-btn-primary {
-  background: #007bff;
-  border-radius: 8px;
-  font-size: 16px;
-  padding: 8px 16px;
-  transition: all 0.3s;
-
+  border-radius: 6px !important;
+  border: 1px solid $border-color !important;
+  padding: 10px 12px !important;
+  font-family: $font-family !important;
+  transition: all 0.3s ease !important;
+  
   &:hover {
-    background: #0056b3;
+    border-color: $hover-color !important;
+  }
+  
+  &:focus, &.ant-input-focused, &.ant-select-focused, &.ant-picker-focused {
+    border-color: $primary-color !important;
+    box-shadow: 0 0 0 2px $focus-color !important;
+    outline: none !important;
   }
 }
 
-.upload-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  border: 2px dashed #007bff;
-  padding: 10px;
-  border-radius: 8px;
-  transition: all 0.3s;
+// Select dropdown
+.ant-select-selector {
+  height: 42px !important;
+  display: flex !important;
+  align-items: center !important;
+}
 
+.ant-select-selection-item {
+  font-family: $font-family !important;
+}
+
+// DatePicker
+.ant-picker {
+  width: 100% !important;
+  height: 42px !important;
+}
+
+// Upload button
+.ant-upload-list-item {
+  border-radius: 6px !important;
+  overflow: hidden !important;
+}
+
+.ant-upload.ant-upload-select {
+  .ant-btn {
+    display: flex !important;
+    align-items: center !important;
+    background-color: white !important;
+    border: 1px dashed $border-color !important;
+    border-radius: 6px !important;
+    padding: 12px 20px !important;
+    height: auto !important;
+    transition: all 0.3s ease !important;
+    
+    &:hover {
+      border-color: $primary-color !important;
+      color: $primary-color !important;
+    }
+    
+    .anticon {
+      margin-right: 8px !important;
+    }
+  }
+  
   &:hover {
-    background: rgba(0, 123, 255, 0.1);
+    .ant-btn {
+      color: $primary-color !important;
+    }
   }
 }
 
-/* Customize Ant Design notification globally */
-.ant-message-custom-content {
-  font-size: 18px; /* Increase the font size */
-  font-weight: bold; /* Make the text bold */
-  text-align: center; /* Center align the text */
+// Checkbox
+.ant-checkbox-wrapper {
+  margin: 15px 0 !important;
+  
+  span {
+    font-family: $font-family !important;
+  }
+  
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: $primary-color !important;
+    border-color: $primary-color !important;
+  }
 }
 
+// Submit button
+.form-actions1 {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  margin-top: 20px !important;
+}
+
+.form-submit-button {
+  background: linear-gradient(to right, $header-bg, #4f6bce) !important;
+  border: none !important;
+  border-radius: 6px !important;
+  height: 45px !important;
+  padding: 0 30px !important;
+  font-family: $font-family !important;
+  font-weight: bold !important;
+  letter-spacing: 1px !important;
+  box-shadow: 0 4px 10px rgba(24, 144, 255, 0.3) !important;
+  transition: all 0.3s ease !important;
+  
+  &:hover {
+    background: linear-gradient(to right, darken($header-bg, 5%), darken(#4f6bce, 5%)) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 12px rgba(24, 144, 255, 0.4) !important;
+  }
+  
+  &:active {
+    transform: translateY(0) !important;
+  }
+}
+
+// Error messages
+.ant-form-item-explain-error {
+  color: $error-color !important;
+  font-family: $font-family !important;
+  margin-top: 5px !important;
+  font-size: 133px !important;
+}
+
+// Success messages
 .ant-message-success {
-  color: black; /* Text color */
-  padding: 7px 15px; /* Add some padding */
+  .anticon {
+    color: $success-color !important;
+  }
+}
+
+// Responsive styles
+@media (max-width: 768px) {
+  .form-container1 {
+    padding: 20px 15px;
+    margin: 15px auto;
+  }
+  
+  .form-title1 {
+    font-size: 20px;
+  }
+  
+  .ant-row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  .ant-col {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+
+// Row and column styles for the date fields section
+.ant-row {
+  margin-bottom: 10px !important;
+}
+
+// Add some nice animation effects
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.form-container1 {
+  animation: fadeIn 0.5s ease-out;
+}
+
+// Form field groups - add visual separation
+.ant-form {
+  .ant-form-item:nth-child(7) {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px dashed lighten($border-color, 5%);
+  }
+}
+
+// Special styling for the confirmation checkbox
+.ant-checkbox-wrapper {
+  span {
+    &[style*="color: red"] {
+      transition: color 0.3s ease;
+      
+      &:hover {
+        color: darken($error-color, 10%) !important;
+      }
+    }
+  }
 }

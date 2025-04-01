@@ -3,56 +3,76 @@ import { Form, Input, Button, DatePicker, Select, Upload, Checkbox, message, Row
 import { UploadOutlined } from "@ant-design/icons";
 import axios from 'axios';  // Import axios to make the API call
 import './GplxReissueForm.scss'
-import api from '../../utils/request';
+import API from '../../utils/request';
+import useVerifyKey from "../Capkhoa/CheckKey";  // Import hook kiểm tra khóa
+
 
 const GplxReissueForm = () => {
   const [isChecked, setIsChecked] = useState(false);
   const { Option } = Select;
+  const { verifyKey, isVerifying } = useVerifyKey();
+
   const [form] = Form.useForm()
   const handleCheckboxChange = (e) => {
     setIsChecked(e.target.checked); // Update the state when checkbox is selected or deselected
   };
-  const onFinish = (values) => {
-    const fileList = values.image && values.image.fileList;  // Access fileList from the object
-    console.log("File List:", fileList);
-  
-    // Ensure fileList is an array and contains a file
-    if (Array.isArray(fileList) && fileList.length > 0) {
-      const imageFile = fileList[0].originFileObj;  // Get the file object from the first file
-      console.log("Uploaded Image:", imageFile);
-  
-      const formData = new FormData();
-      formData.append('image', imageFile);  // Append the image to the FormData
-  
-      // Append other form values (except image)
-      Object.keys(values).forEach((key) => {
-        if (key !== 'image' && values[key]) {
-          formData.append(key, values[key]);
-        }
-      });
-  
-      axios
-      .post(api.addRenew, formData)
-      .then((response) => {
-        console.log("Response from backend:", response.data);
-        message.success("Đơn yêu cầu cấp lại GPLX đã được gửi thành công!"); // Success notification
-        form.resetFields(); // Clear form fields
-      })
-      .catch((error) => {
-        if (error.response) {
-          console.error("Backend error:", error.response.data);
-          message.error(`Error: ${error.response.data.message || "Unknown error"}`); // Error message from backend
+
+ const onFinish = async (values) => {
+    try {
+        // Step 1: Verify the key first
+        const verificationResult = await verifyKey();
+
+        if (verificationResult?.success) {
+            console.log("Khóa hợp lệ! Gửi yêu cầu...");
+
+            // Step 2: Proceed with file handling only if verification is successful
+            const fileList = values.image && values.image.fileList;  // Access fileList from the object
+            console.log("File List:", fileList);
+
+            // Ensure fileList is an array and contains a file
+            if (Array.isArray(fileList) && fileList.length > 0) {
+                const imageFile = fileList[0].originFileObj;  // Get the file object from the first file
+                console.log("Uploaded Image:", imageFile);
+
+                const formData = new FormData();
+                formData.append('image', imageFile);  // Append the image to the FormData
+
+                // Append other form values (except image)
+                Object.keys(values).forEach((key) => {
+                    if (key !== 'image' && values[key]) {
+                        formData.append(key, values[key]);
+                    }
+                });
+
+                // Step 3: Send the request to the backend if the key is valid
+                try {
+                    const response = await axios.post(API.ADD_RENEW, formData);
+                    console.log("Response from backend:", response.data);
+                    message.success("Đơn yêu cầu cấp lại GPLX đã được gửi thành công!"); // Success notification
+                    form.resetFields(); // Clear form fields
+                } catch (error) {
+                    if (error.response) {
+                        console.error("Backend error:", error.response.data);
+                        message.error(`Error: ${error.response.data.message || "Unknown error"}`); // Error message from backend
+                    } else {
+                        console.error("Connection error:", error.message);
+                        message.error("Unable to connect to the server."); // Connection error
+                    }
+                }
+            } else {
+                console.error("No image file uploaded or invalid file list:", fileList);
+                message.error("Please upload an image."); // Notify user about missing file
+            }
         } else {
-          console.error("Connection error:", error.message);
-          message.error("Unable to connect to the server."); // Connection error
+            console.log("Khóa không hợp lệ! Không thể gửi yêu cầu.");
+            message.error("Khóa không hợp lệ! Không thể gửi yêu cầu.");
         }
-      });
-  } else {
-    console.error("No image file uploaded or invalid file list:", fileList);
-    message.error("Please upload an image."); // Notify user about missing file
-  }
+    } catch (error) {
+        console.error("Error during verification:", error);
+        message.error("Error during verification. Please try again later.");
+    }
 };
-  
+
   
   return (
     <div className="form-container1">
@@ -61,7 +81,7 @@ const GplxReissueForm = () => {
         {/* Mã GPLX */}
         <Form.Item
           name="MaGPLX"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Mã GPLX:</span>}        
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Mã GPLX:</span>}        
           rules={[{ required: true, message: "Vui lòng nhập Mã GPLX!" }]}>
           <Input className="form-item-input" placeholder="Nhập mã GPLX" />
         </Form.Item>
@@ -69,20 +89,20 @@ const GplxReissueForm = () => {
         {/* Tên */}
         <Form.Item
           name="Name"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Họ và tên:</span>}      
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Họ và tên:</span>}      
           rules={[{ required: true, message: "Vui lòng nhập tên!" }]}>
           <Input className="form-item-input" placeholder="Nhập họ và tên" />
         </Form.Item>
         <Form.Item
           name="Lidocaplai"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Lí do cấp lại:</span>}      
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Lí do cấp lại:</span>}      
            rules={[{ required: true, message: "Vui lòng nhập lí do cấp lại!" }]}>
           <Input className="form-item-input" placeholder="Nhập lí do cấp lại" />
         </Form.Item>
           {/* Ngày sinh */}
           <Form.Item
             name="DateOfBirth"
-            label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Ngày sinh:</span>}      
+            label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Ngày sinh:</span>}      
             rules={[{ required: true, message: "Vui lòng chọn ngày sinh!" }]}>
             <DatePicker style={{ width: "100%" }} />
           </Form.Item>
@@ -90,7 +110,7 @@ const GplxReissueForm = () => {
     {/* Giới tính */}
        <Form.Item
         name="Gender"
-        label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Giới tính</span>}
+        label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Giới tính</span>}
         rules={[{ required: true, message: "Vui lòng chọn giới tính!" }]}
       >
         <Select placeholder="Chọn giới tính">
@@ -102,7 +122,7 @@ const GplxReissueForm = () => {
         {/* CCCD */}
         <Form.Item
           name="CCCD"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>CCCD:</span>}   
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>CCCD:</span>}   
           rules={[{ required: true, message: "Vui lòng nhập CCCD!" }]}>
           <Input className="form-item-input" placeholder="Nhập CCCD" />
         </Form.Item>
@@ -111,7 +131,7 @@ const GplxReissueForm = () => {
         {/* Số điện thoại */}
         <Form.Item
           name="PhoneNumber"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Số điện thoại:</span>}   
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Số điện thoại:</span>}   
           rules={[
             { required: true, message: "Vui lòng nhập số điện thoại!" },
             { pattern: /^[0-9]{10}$/, message: "Số điện thoại không hợp lệ!" },
@@ -122,7 +142,7 @@ const GplxReissueForm = () => {
         {/* Email */}
         <Form.Item
           name="Email"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Email:</span>}   
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Email:</span>}   
           rules={[
             { required: true, message: "Vui lòng nhập email!" },
             { type: "email", message: "Email không hợp lệ!" },
@@ -134,7 +154,7 @@ const GplxReissueForm = () => {
         {/* Địa chỉ */}
         <Form.Item
           name="Address"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Địa chỉ:</span>}   
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Địa chỉ:</span>}   
           rules={[{ required: true, message: "Vui lòng nhập địa chỉ!" }]}>
           <Input className="form-item-input" placeholder="Nhập địa chỉ" />
         </Form.Item>
@@ -144,7 +164,7 @@ const GplxReissueForm = () => {
         <Col span={8}>
           <Form.Item
             name="Ngaytrungtuyen"
-            label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight: 'bold' }}>Ngày trúng tuyển:</span>}
+            label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight: 'bold' }}>Ngày trúng tuyển:</span>}
             rules={[{ required: true, message: "Vui lòng chọn ngày trúng tuyển!" }]}
           >
             <DatePicker style={{ width: "100%" }} />
@@ -153,7 +173,7 @@ const GplxReissueForm = () => {
         <Col span={8}>
           <Form.Item
             name="Ngaycap"
-            label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight: 'bold' }}>Ngày cấp:</span>}
+            label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight: 'bold' }}>Ngày cấp:</span>}
             rules={[{ required: true, message: "Vui lòng chọn ngày cấp!" }]}
           >
             <DatePicker style={{ width: "100%" }} />
@@ -163,7 +183,7 @@ const GplxReissueForm = () => {
         <Col span={8}>
           <Form.Item
             name="Ngayhethan"
-            label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight: 'bold' }}>Ngày hết hạn:</span>}
+            label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight: 'bold' }}>Ngày hết hạn:</span>}
             rules={[{ required: true, message: "Vui lòng chọn ngày hết hạn!" }]}
           >
             <DatePicker style={{ width: "100%" }} />
@@ -175,7 +195,7 @@ const GplxReissueForm = () => {
         {/* Hạng GPLX */}
         <Form.Item
           name="HangGPLX"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Hạng GPLX:</span>}   
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Hạng GPLX:</span>}   
           rules={[{ required: true, message: "Vui lòng chọn hạng GPLX!" }]}>
           <Select  placeholder="Chọn hạng GPLX">
             <Select.Option value="B1">B1</Select.Option>
@@ -183,13 +203,17 @@ const GplxReissueForm = () => {
             <Select.Option value="C">C</Select.Option>
             <Select.Option value="D">D</Select.Option>
             <Select.Option value="E">E</Select.Option>
+            <Select.Option value="A">A</Select.Option>
+            <Select.Option value="A1">A1</Select.Option>
+            <Select.Option value="A2">A2</Select.Option>
+
           </Select>
         </Form.Item>
                 
         {/* Quốc gia */}
         <Form.Item
                 name="Country"
-                label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Quốc gia</span>}
+                label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Quốc gia</span>}
                 rules={[{ required: true, message: 'Vui lòng chọn quốc gia!' }]}
               >
                 <Select placeholder="Chọn quốc gia">
@@ -204,7 +228,7 @@ const GplxReissueForm = () => {
 
         <Form.Item
           name="status"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Trạng thái:</span>}   
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Trạng thái:</span>}   
           rules={[{ required: true, message: "Vui lòng chọn trạng thái!" }]}>
           <Select placeholder="Chọn trạng thái">
             <Select.Option value="Chờ kiểm định">Chờ kiểm định</Select.Option>
@@ -214,7 +238,7 @@ const GplxReissueForm = () => {
         {/* Giám đốc */}
         <Form.Item
           name="Giamdoc"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Giám đốc:</span>}      
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Giám đốc:</span>}      
            rules={[{ required: true, message: "Vui lòng nhập giám đốc!" }]}>
           <Input className="form-item-input" placeholder="Nhập tên giám đốc" />
         </Form.Item>  
@@ -223,7 +247,7 @@ const GplxReissueForm = () => {
    {/* Image upload */}
    <Form.Item
         name="image"
-        label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Hình ảnh GPLX:</span>}
+        label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Hình ảnh GPLX:</span>}
                 rules={[{ required: true, message: "Vui lòng cung cấp hình ảnh!" }]}>
   
         <Upload
@@ -254,6 +278,7 @@ const GplxReissueForm = () => {
                 type="primary"
                 htmlType="submit"
                 className="form-submit-button"
+              loading={isVerifying}
                 style={{ marginTop: '10px', fontWeight: 'bold', fontSize: '18px' }}
               >
                 Gửi yêu cầu

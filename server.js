@@ -88,6 +88,29 @@ app.post("/verify-key", async (req, res) => {
     }
 });
 
+app.post('/api/account/login', (req, res) => {
+    const { username, password } = req.body;
+
+    // Kiểm tra username, password
+    const user = findUserInDatabase(username, password);
+    if (!user) {
+        return res.status(401).json({ message: "Sai thông tin đăng nhập" });
+    }
+
+    // Trả về dữ liệu user (bao gồm accountId)
+    res.json({
+        message: "Đăng nhập thành công",
+        userData: {
+            _id: user._id,
+            username: user.username,
+            image: user.image,
+            certificate: user.certificate,
+            mspId: user.mspId,
+            type: user.type
+        }
+    });
+});
+
 
 
 DangKyAdmin();

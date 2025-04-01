@@ -19,16 +19,19 @@ function getCookie(cname) {
     }
     return "";
 }
+
 // Hàm xử lý đăng nhập
 function login() {
     const username = $('#username').val();
     const password = $('#password').val();
-
+    
     if (!username || !password) {
         alert("Vui lòng nhập đầy đủ thông tin đăng nhập.");
         return;
     }
-
+    
+    console.log("Đang gửi request đăng nhập với username:", username);
+    
     $.ajax({
         url: '/api/account/login',
         type: 'POST',
@@ -38,23 +41,32 @@ function login() {
         }
     })
     .done(function(data) {
-        console.log('Login response:', data); // Debug log
-
+        console.log('Login response:', data); // Log toàn bộ response
+        
+        // Log cấu trúc chi tiết để kiểm tra
+        console.log('data.userData:', data.userData);
+        console.log('User ID:', data.userData ? data.userData._id : 'không có');
+        
         // Kiểm tra xem ID có tồn tại trong response hay không
         if (data.userData && data.userData._id) {
             // Lưu ID và các thông tin cần thiết vào localStorage
-            localStorage.setItem('accountId', data.userData._id); 
-            localStorage.setItem('username', username); 
+            localStorage.setItem('accountId', data.userData._id);
+            console.log('Đã lưu accountId vào localStorage:', data.userData._id);
+            
+            sessionStorage.setItem('accountId', data.userData._id);
+            localStorage.setItem('username', username);
             localStorage.setItem('image', data.userData.image);
             
             // Lưu chứng chỉ, mspId, và type
             localStorage.setItem('certificate', data.userData.certificate); // Lưu chứng chỉ
             localStorage.setItem('mspId', data.userData.mspId); // Lưu mspId
             localStorage.setItem('type', data.userData.type); // Lưu type
-
+            
             // Chuyển hướng sau khi đăng nhập thành công
+            console.log('Chuyển hướng đến /trangchu');
             window.location.href = "/trangchu";
         } else {
+            console.error("Không tìm thấy userData._id trong response");
             alert("Lỗi: Không nhận được ID người dùng từ server.");
         }
     })

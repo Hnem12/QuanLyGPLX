@@ -1,6 +1,8 @@
 import './tracuuGPLX.scss';
-import React, { useState, useEffect } from 'react';
-import api from '../../utils/request';
+import React, { useState, useEffect, message } from 'react';
+import API from '../../utils/request';
+import useVerifyKey from "../Capkhoa/CheckKey";  // Import hook kiểm tra khóa
+
 
 const LicenseSearch = () => {
     const [data, setData] = useState([]);
@@ -12,6 +14,8 @@ const LicenseSearch = () => {
     const [captcha, setCaptcha] = useState('');
     const [captchaInput, setCaptchaInput] = useState('');
     const [showModal, setShowModal] = useState(false);
+    const { verifyKey, isVerifying } = useVerifyKey();
+
 
     const generateCaptcha = () => {
         const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -26,7 +30,7 @@ const LicenseSearch = () => {
         const fetchDataAndGenerateCaptcha = async () => {
             setLoading(true);
             try {
-                const response = await fetch(api.findLicenseHolder);
+                const response = await fetch(API.Find_LICENSEHOLDER);
                 if (!response.ok) throw new Error("Network response was not ok");
 
                 const result = await response.json();
@@ -43,38 +47,51 @@ const LicenseSearch = () => {
         fetchDataAndGenerateCaptcha();
     }, []);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const licenseNumber = searchValue.trim();
-        const enteredBirthDate = new Date(birthDate).toLocaleDateString();
-
-        if (!licenseNumber || !birthDate || !captchaInput) {
-            setError('Vui lòng điền đầy đủ thông tin và CAPTCHA.');
-            return;
-        }
-
-        if (captchaInput.toUpperCase() !== captcha) {
-            setError('Mã CAPTCHA không chính xác.');
-            return;
-        }
-
-        const foundHolder = data.find(
-            item =>
-                item.MaGPLX === licenseNumber &&
-                new Date(item.DateOfBirth).toLocaleDateString() === enteredBirthDate
-        );
-
-        if (foundHolder) {
-            setHolder(foundHolder);
-            setError('');
-            setShowModal(true);
-        } else {
-            setError('Không tìm thấy thông tin giấy phép.');
-            setHolder(null);
+        setError(""); // Xóa lỗi trước khi kiểm tra
+    
+        try {
+            // ✅ Bước 1: Kiểm tra khóa trước khi tiếp tục
+            const verificationResult = await verifyKey();
+            if (!verificationResult?.success) {
+                message.error("Khóa không hợp lệ! Không thể gửi yêu cầu.");
+                return;
+            }
+            console.log("Khóa hợp lệ! Tiếp tục kiểm tra...");
+    
+            // ✅ Bước 2: Kiểm tra thông tin nhập vào
+            if (!searchValue.trim() || !birthDate || !captchaInput.trim()) {
+                setError("Vui lòng điền đầy đủ thông tin và CAPTCHA.");
+                return;
+            }
+    
+            if (captchaInput.toUpperCase() !== captcha) {
+                setError("Mã CAPTCHA không chính xác.");
+                return;
+            }
+    
+            // ✅ Bước 3: Tìm kiếm thông tin giấy phép lái xe
+            const enteredBirthDate = new Date(birthDate).toLocaleDateString();
+            const foundHolder = data.find(
+                item =>
+                    item.MaGPLX === searchValue.trim() &&
+                    new Date(item.DateOfBirth).toLocaleDateString() === enteredBirthDate
+            );
+    
+            if (foundHolder) {
+                setHolder(foundHolder);
+                setShowModal(true);
+            } else {
+                setError("Không tìm thấy thông tin giấy phép.");
+                setHolder(null);
+            }
+        } catch (error) {
+            console.error("Lỗi hệ thống:", error);
+            message.error("Có lỗi xảy ra, vui lòng thử lại!");
         }
     };
-
+    
     const closeModal = () => {
         setShowModal(false);
     };
@@ -130,7 +147,9 @@ const LicenseSearch = () => {
                             onChange={(e) => setCaptchaInput(e.target.value)}
                         />
                     </div>
-                    <button type="submit" className="bg-blue-500 text-white p-2 rounded canle">
+                    <button type="submit"
+                    loading={isVerifying}
+                    className="bg-blue-500 text-white p-2 rounded canle">
                         TRA CỨU GIẤY PHÉP LÁI XE
                     </button>
                 </form>

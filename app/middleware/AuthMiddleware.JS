@@ -1,37 +1,47 @@
 const jwt = require('jsonwebtoken');
-const AccountModel = require('../models/accountModel');
 
-// Middleware to check if user is logged in and extract role
-const authenticate = async (req, res, next) => {
-    try {
-        const token = req.cookies.token;
-        if (!token) {
-            return res.status(401).json({ message: 'Bạn chưa đăng nhập' });
-        }
-
-        const decoded = jwt.verify(token, 'Hnem');
-        const user = await AccountModel.findById(decoded._id);
-
-        if (!user) {
-            return res.status(403).json({ message: 'Người dùng không tồn tại' });
-        }
-
-        req.user = user; // Attach user to the request
-        next();
-    } catch (error) {
-        console.error('Authentication error:', error);
-        res.status(401).json({ message: 'Token không hợp lệ hoặc đã hết hạn' });
-    }
-};
-
-// Middleware to authorize based on roles
-const authorize = (roles) => {
-    return (req, res, next) => {
-        if (!roles.includes(req.user.role)) {
-            return res.status(403).json({ message: 'Bạn không đủ quyền để truy cập' });
-        }
-        next();
+// Khi đăng nhập thành công, tạo token với accountId
+const generateToken = (user) => {
+    const payload = {
+        accountId: user.accountId,
+        role: user.role
     };
+
+    // Tạo token với accountId
+    return jwt.sign(payload, 'Hnem', { expiresIn: '1h' });
 };
 
-module.exports = { authenticate, authorize };
+// Hàm xử lý đăng nhập người dùng
+const loginUser = (req, res) => {
+    const { accountId, role } = req.body;  // Lấy thông tin từ request body
+
+    // Kiểm tra thông tin đăng nhập (bạn có thể thay thế bằng mã kiểm tra thực tế)
+    if (!accountId || !role) {
+        return res.status(400).json({ message: 'Account ID và Role không được để trống' });
+    }
+
+    // Tạo token sau khi xác thực thông tin đăng nhập thành công
+    const token = generateToken({ accountId, role });
+
+    // Lưu token vào cookie (cookie chỉ có thể đọc bởi server)
+    res.cookie('token', token, {
+        httpOnly: true,  // Đảm bảo cookie không thể bị truy cập bởi JavaScript
+        secure: process.env.NODE_ENV === 'production', // Chỉ sử dụng HTTPS khi môi trường là production
+        maxAge: 3600000  // Đặt thời gian sống của cookie là 1 giờ (3600000ms)
+    });
+
+    // Lưu accountId vào cookie (nếu muốn truyền thông tin này qua cookies)
+    res.cookie('accountId', accountId, {
+        httpOnly: true, // Đảm bảo cookie không thể bị truy cập bởi JavaScript
+        secure: process.env.NODE_ENV === 'production',
+        maxAge: 3600000  // Đặt thời gian sống của cookie là 1 giờ (3600000ms)
+    });
+
+    // Trả về token cho client và thông báo đăng nhập thành công
+    res.json({
+        message: 'Login successful',
+        token: token // Trả về token cho client nếu cần
+    });
+};
+
+module.exports = { loginUser };

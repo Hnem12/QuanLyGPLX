@@ -2,7 +2,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import React from 'react';
 import { Layout, Menu } from 'antd';
 import './LayoutDefault.scss';
-import api from "../../utils/request";
+import API from "../../utils/request";
 
 const { Header, Footer, Content } = Layout;
 
@@ -25,22 +25,27 @@ function LayoutDefault() {
                         </NavLink>
                     </Menu.Item>
                     <Menu.Item key="about">
-                        <NavLink to="/Gioithieu" className={({ isActive }) => (isActive ? 'active' : '')}>
+                        <NavLink to="/gioithieu" className={({ isActive }) => (isActive ? 'active' : '')}>
                             Giới thiệu
                         </NavLink>
                     </Menu.Item>
                     <Menu.Item key="manage">
-                        <NavLink to="/GiahanGPLX" className={({ isActive }) => (isActive ? 'active' : '')}>
+                        <NavLink to="/giahanGPLX" className={({ isActive }) => (isActive ? 'active' : '')}>
                             Gia hạn GPLX
                         </NavLink>
                     </Menu.Item>
                     <Menu.Item key="exchange">
-                        <NavLink to="/CaplaiGPLX" className={({ isActive }) => (isActive ? 'active' : '')}>
-                            Cấp lại  GPLX
+                        <NavLink to="/caplaiGPLX" className={({ isActive }) => (isActive ? 'active' : '')}>
+                            Cấp lại GPLX
+                        </NavLink>
+                    </Menu.Item>
+                    <Menu.Item key="key">
+                        <NavLink to="/taokhoa" className={({ isActive }) => (isActive ? 'active' : '')}>
+                            Tạo Khóa
                         </NavLink>
                     </Menu.Item>
                     <Menu.Item key="login">
-                        <NavLink to={api.baseURL} className={({ isActive }) => (isActive ? 'active' : '')}>
+                        <NavLink to={API.BASEURL} className={({ isActive }) => (isActive ? 'active' : '')}>
                             Đăng Xuất
                         </NavLink>
                     </Menu.Item>
