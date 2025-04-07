@@ -172,6 +172,7 @@ th{
   text-align: center;
 
   }/* Styling for dropdown menu */
+  
 .dropdown-menu {
   min-width: 250px; /* Slightly wider menu for better readability */
   border-radius: 8px; /* Rounded corners for a smooth, clean look */

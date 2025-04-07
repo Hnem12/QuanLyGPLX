@@ -51,8 +51,6 @@ async function verifyKey() {
             Swal.fire("Lỗi", result.message || "Khóa bí mật không đúng!", "error");
             return null;
         }
-
-        console.log("✅ Khóa bí mật hợp lệ!");
         return true; // Trả về true nếu khóa hợp lệ
     } catch (error) {
         console.error("Lỗi khi gọi API verify-key:", error);

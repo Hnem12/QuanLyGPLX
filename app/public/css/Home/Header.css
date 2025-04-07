@@ -55,7 +55,6 @@ body {
   }
 }
 
-/* Header Styles */
 .header {
   background-color: var(--primary-color);
   color: var(--text-light);
@@ -67,7 +66,12 @@ body {
   top: 0;
   z-index: 1000;
   box-shadow: var(--shadow-light);
+  flex-shrink: 0;
+  width: 100vw; /* Chiều rộng cố định bằng chiều rộng màn hình */
+  min-height: 60px; /* Đảm bảo chiều cao tối thiểu */
 }
+
+
 
 .logo {
   display: flex;

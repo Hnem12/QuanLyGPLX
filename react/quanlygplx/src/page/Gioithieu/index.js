@@ -30,15 +30,15 @@ const Gioithieu = () => {
         {/* Icon Section */}
         <section className="info-section">
           <div className="info-item">
-            <img src="https://dvc4.gplx.gov.vn/p/home/theme/uploads/icon-htlt.svg" alt="icon" />
+            <img src="https://dvc-gplx.csgt.bocongan.gov.vn/p/home/theme/uploads/icon-htlt.svg" alt="icon" />
             <p>Hệ thống liên thông điện tử với các cơ quan ngành Y tế, ngành Công an trong xác nhận thông tin giúp người dân có thể thực hiện dịch vụ đơn giản, nhanh chóng tại nhà.</p>
           </div>
           <div className="info-item">
-            <img src="https://dvc4.gplx.gov.vn/p/home/theme/uploads/icon-cc.svg" alt="icon" />
+            <img src="https://dvc-gplx.csgt.bocongan.gov.vn/p/home/theme/uploads/icon-cc.svg" alt="icon" />
             <p>Cung cấp tính năng giúp người dân có thể thực hiện nộp hồ sơ trực tuyến, theo dõi việc xử lý hồ sơ, trả kết quả tại nhà</p>
           </div>
           <div className="info-item">
-            <img src="https://dvc4.gplx.gov.vn/p/home/theme/uploads/icon-tttt.svg" alt="icon" />
+            <img src="https://dvc-gplx.csgt.bocongan.gov.vn/p/home/theme/uploads/icon-tttt.svg" alt="icon" />
             <p>Cung cấp nền tảng thanh toán trực tuyến qua nhiều ngân hàng, trung gian thanh toán để người dân dễ dàng thanh toán trực tuyến phí, lệ phí thực hiện dịch vụ công</p>
           </div>
         </section>

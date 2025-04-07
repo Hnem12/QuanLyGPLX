@@ -1,33 +1,31 @@
 .image-container1 {
-  height: 100vh; /* Let the container adjust its height based on the content */
+  height: 100vh;
   display: flex;
-  justify-content: center; /* Center the image horizontally */
-  align-items: center; /* Center the image vertically */
-  margin-left: auto; /* Ensure the container is centered */
-  margin-right: auto;
-  overflow: hidden; /* Prevent image from overflowing */
-  margin-left: 250px; /* Add margin on the left if you need to offset the container */
-  margin-top: -80px;
+  justify-content: center;
+  align-items: center;
+  margin: -80px auto 0 250px;
+  overflow: hidden;
 }
 
 .image-container1 img {
-  max-width: 90%; /* Limit the image's width */
-  max-height: 100vh; /* Limit the image height to avoid exceeding the viewport */
-  width: auto; /* Maintain the aspect ratio */
-  height: auto; /* Ensure aspect ratio is preserved */
-  border: 2px solid #e2366f; /* Add a standout border */
-  border-radius: 12px; /* Rounded corners for the image */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow for the image */
-  padding: 20px; /* Padding between the image and border */
-  background-color: #fff; /* White background for the container */
-  object-fit: contain; /* Ensure the image is fully contained within the bounds */
-  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition for hover effects */
+  max-width: 90%;
+  max-height: 100vh;
+  width: auto;
+  height: auto;
+  border: 2px solid #e2366f;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  background-color: #fff;
+  object-fit: contain;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .image-container1 img:hover {
-  transform: scale(1.05); /* Slightly zoom the image on hover */
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover */
+  transform: scale(1.05);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
 }
+
 
 .main-content1 {
   margin-top: 50px; /* Space between the header and content */

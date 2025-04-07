@@ -1,6 +1,4 @@
-// createKey.scss
-
-// Color Variables
+// Variables
 $primary-color: #1890ff;
 $secondary-color: #f5f5f5;
 $success-color: #52c41a;
@@ -11,8 +9,8 @@ $border-color: #d9d9d9;
 $box-shadow: 0 2px 8px rgba(0, 0, 0, 0.09);
 $heading-color: #1e3a8a;
 
-// Key form container
-.user-key-container {
+// Container
+.user-key-form {
   max-width: 700px;
   margin: 40px auto;
   padding: 30px;
@@ -20,220 +18,213 @@ $heading-color: #1e3a8a;
   border-radius: 8px;
   box-shadow: $box-shadow;
   transition: all 0.3s ease;
-  
+
   &:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
   }
-}
 
-// Heading styles
-.key-title {
-  color: $heading-color;
-  font-size: 28px;
-  font-weight: 600;
-  margin-bottom: 30px;
-  text-align: center;
-  position: relative;
-  padding-bottom: 15px;
-  
-  &:after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(to right, $primary-color, lighten($primary-color, 20%));
-  }
-}
-
-// Account ID display
-.account-id-section {
-  margin-bottom: 30px;
-  padding: 15px;
-  background-color: rgba($primary-color, 0.05);
-  border-radius: 6px;
-  border-left: 4px solid $primary-color;
-  
-  .account-id-label {
-    font-size: 16px;
-    margin-bottom: 5px;
-    color: $text-color;
-    
-    strong {
-      font-weight: 600;
-    }
-  }
-}
-
-// Generate button container
-.action-button-container {
-  display: flex;
-  justify-content: center;
-  margin: 25px 0;
-  
-  .ant-btn {
-    height: 45px;
-    font-size: 16px;
-    font-weight: 500;
-    padding: 0 25px;
-    border-radius: 6px;
-    
-    &.ant-btn-primary {
-      background: linear-gradient(to right, $primary-color, lighten($primary-color, 10%));
-      border: none;
-      box-shadow: 0 2px 6px rgba($primary-color, 0.4);
-      transition: all 0.3s ease;
-      
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 10px rgba($primary-color, 0.5);
-        background: linear-gradient(to right, darken($primary-color, 5%), $primary-color);
-      }
-      
-      &:active {
-        transform: translateY(0);
-      }
-    }
-  }
-}
-
-// Private key display section
-.private-key-section {
-  margin-top: 40px;
-  opacity: 0;
-  animation: fadeIn 0.5s ease forwards;
-  
-  .private-key-title {
-    font-size: 20px;
-    font-weight: 600;
+  h2 {
     color: $heading-color;
-    margin-bottom: 15px;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 30px;
+    text-align: center;
     position: relative;
-    padding-left: 15px;
-    
-    &:before {
+    padding-bottom: 15px;
+
+    &:after {
       content: '';
       position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 5px;
-      height: 20px;
-      background-color: $primary-color;
-      border-radius: 3px;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(to right, $primary-color, lighten($primary-color, 20%));
     }
   }
-  
-  .private-key-display {
-    font-family: 'Consolas', 'Monaco', monospace;
-    background-color: $secondary-color;
-    padding: 20px;
-    border-radius: 6px;
-    border: 1px solid $border-color;
-    word-wrap: break-word;
-    white-space: pre-wrap;
-    max-height: 250px;
-    overflow: auto;
-    font-size: 14px;
-    line-height: 1.6;
-    color: #545454;
-    position: relative;
-    
-    &::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    
-    &::-webkit-scrollbar-thumb {
-      background: #c1c1c1;
-      border-radius: 4px;
-      
-      &:hover {
-        background: #a8a8a8;
-      }
-    }
-    
-    &::-webkit-scrollbar-track {
-      background: #f0f0f0;
-      border-radius: 4px;
-    }
-  }
-}
 
-// Key action buttons
-.key-actions {
-  display: flex;
-  gap: 12px;
-  margin-top: 20px;
-  
-  .ant-btn {
+  .account-id-box {
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: rgba($primary-color, 0.05);
     border-radius: 6px;
-    height: 40px;
-    padding: 0 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 500;
-    
-    &.ant-btn-primary {
-      background-color: $primary-color;
-      border-color: $primary-color;
-      
-      &:hover {
-        background-color: darken($primary-color, 5%);
-        border-color: darken($primary-color, 5%);
-      }
-    }
-    
-    &:not(.ant-btn-primary) {
-      border-color: $border-color;
+    border-left: 4px solid $primary-color;
+
+    .account-id-label {
+      font-size: 16px;
+      margin-bottom: 5px;
       color: $text-color;
-      
-      &:hover {
-        color: $primary-color;
-        border-color: $primary-color;
+
+      strong {
+        font-weight: 600;
       }
     }
   }
-}
 
-// Loading state
-.loading-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 300px;
-  flex-direction: column;
-  
-  .ant-spin {
-    margin-bottom: 15px;
-    
-    .ant-spin-dot-item {
-      background-color: $primary-color;
+  .action-button-container {
+    display: flex;
+    justify-content: center;
+    margin: 25px 0;
+
+    .ant-btn {
+      height: 45px;
+      font-size: 16px;
+      font-weight: 500;
+      padding: 0 25px;
+      border-radius: 6px;
+
+      &.ant-btn-primary {
+        background: linear-gradient(to right, $primary-color, lighten($primary-color, 10%));
+        border: none;
+        box-shadow: 0 2px 6px rgba($primary-color, 0.4);
+        transition: all 0.3s ease;
+
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 4px 10px rgba($primary-color, 0.5);
+          background: linear-gradient(to right, darken($primary-color, 5%), $primary-color);
+        }
+
+        &:active {
+          transform: translateY(0);
+        }
+      }
     }
   }
-  
-  .loading-text {
-    color: $text-color;
-    font-size: 16px;
-    margin-top: 10px;
+
+  .private-key-section {
+    margin-top: 40px;
+    opacity: 0;
+    animation: fadeIn 0.5s ease forwards;
+
+    .private-key-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: $heading-color;
+      margin-bottom: 15px;
+      position: relative;
+      padding-left: 15px;
+
+      &:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 5px;
+        height: 20px;
+        background-color: $primary-color;
+        border-radius: 3px;
+      }
+    }
+
+    .private-key-display {
+      font-family: 'Consolas', 'Monaco', monospace;
+      background-color: $secondary-color;
+      padding: 20px;
+      border-radius: 6px;
+      border: 1px solid $border-color;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+      max-height: 250px;
+      overflow: auto;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #545454;
+      position: relative;
+
+      &::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 4px;
+
+        &:hover {
+          background: #a8a8a8;
+        }
+      }
+
+      &::-webkit-scrollbar-track {
+        background: #f0f0f0;
+        border-radius: 4px;
+      }
+    }
+
+    .key-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+
+      .ant-btn {
+        border-radius: 6px;
+        height: 40px;
+        padding: 0 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+
+        &.ant-btn-primary {
+          background-color: $primary-color;
+          border-color: $primary-color;
+
+          &:hover {
+            background-color: darken($primary-color, 5%);
+            border-color: darken($primary-color, 5%);
+          }
+        }
+
+        &:not(.ant-btn-primary) {
+          border-color: $border-color;
+          color: $text-color;
+
+          &:hover {
+            color: $primary-color;
+            border-color: $primary-color;
+          }
+        }
+      }
+    }
+  }
+
+  .loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    flex-direction: column;
+
+    .ant-spin {
+      margin-bottom: 15px;
+
+      .ant-spin-dot-item {
+        background-color: $primary-color;
+      }
+    }
+
+    .loading-text {
+      color: $text-color;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+  }
+
+  .error-message {
+    color: $error-color;
+    padding: 12px;
+    background-color: rgba($error-color, 0.05);
+    border-radius: 6px;
+    border-left: 4px solid $error-color;
+    margin: 20px 0;
+    font-size: 15px;
   }
 }
 
-// Error message
-.error-message {
-  color: $error-color;
-  padding: 12px;
-  background-color: rgba($error-color, 0.05);
-  border-radius: 6px;
-  border-left: 4px solid $error-color;
-  margin: 20px 0;
-  font-size: 15px;
-}
-
-// Animations
+// Animation
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -245,109 +236,60 @@ $heading-color: #1e3a8a;
   }
 }
 
-// Sweet Alert overrides
+// SweetAlert2 Custom Styles
 .swal2-popup {
   border-radius: 8px !important;
   padding: 25px !important;
-  
+
   .swal2-title {
     font-size: 24px !important;
     margin-bottom: 15px !important;
   }
-  
+
   .swal2-content {
     font-size: 16px !important;
   }
-  
+
   .swal2-actions {
     margin-top: 25px !important;
-    
-    .swal2-confirm {
-      background-color: $primary-color !important;
-      border-radius: 6px !important;
-      padding: 10px 25px !important;
-      font-size: 16px !important;
-    }
-    
+
+    .swal2-confirm,
     .swal2-cancel {
       border-radius: 6px !important;
       padding: 10px 25px !important;
       font-size: 16px !important;
     }
+
+    .swal2-confirm {
+      background-color: $primary-color !important;
+    }
   }
 }
 
-// Media queries for responsiveness
+// Responsive
 @media screen and (max-width: 768px) {
-  .user-key-container {
+  .user-key-form {
     margin: 20px;
     padding: 20px;
-  }
-  
-  .key-title {
-    font-size: 24px;
-  }
-  
-  .private-key-section {
-    .private-key-display {
-      max-height: 200px;
-      font-size: 13px;
-    }
-  }
-  
-  .key-actions {
-    flex-direction: column;
-    
-    .ant-btn {
-      width: 100%;
-      margin-bottom: 10px;
-    }
-  }
-}
 
-// Apply updated component class names
-#root {
-  .user-key-form {
-    @extend .user-key-container;
-    
     h2 {
-      @extend .key-title;
+      font-size: 24px;
     }
-    
-    > div:first-of-type:not(.loading-container) {
-      @extend .account-id-section;
-      
-      p {
-        @extend .account-id-label;
+
+    .private-key-section {
+      .private-key-display {
+        max-height: 200px;
+        font-size: 13px;
       }
-      
+    }
+
+    .key-actions {
+      flex-direction: column;
+
       .ant-btn {
-        @extend .action-button-container;
+        width: 100%;
+        margin-bottom: 10px;
       }
-    }
-    
-    > div:last-of-type {
-      @extend .private-key-section;
-      
-      h3 {
-        @extend .private-key-title;
-      }
-      
-      pre {
-        @extend .private-key-display;
-      }
-      
-      > div:last-of-type {
-        @extend .key-actions;
-      }
-    }
-    
-    > div[style*="display: flex; justify-content: center"] {
-      @extend .loading-container;
-    }
-    
-    p[style*="color: red"] {
-      @extend .error-message;
     }
   }
 }

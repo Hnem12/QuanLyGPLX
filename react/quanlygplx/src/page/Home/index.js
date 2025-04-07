@@ -1,5 +1,6 @@
 import './tracuuGPLX.scss';
-import React, { useState, useEffect, message } from 'react';
+import React, { useState, useEffect } from 'react';
+import { message } from 'antd';
 import API from '../../utils/request';
 import useVerifyKey from "../Capkhoa/CheckKey";  // Import hook kiểm tra khóa
 

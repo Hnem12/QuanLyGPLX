@@ -75,7 +75,7 @@ const UserKeyForm = () => {
     
         setLoading(true);
         try {
-            const verifyResponse = await axios.post('http://localhost:3000/api/verifyPassword', { id: accountId, password });
+            const verifyResponse = await axios.post(`${API.BASEURL}/api/verifyPassword`, { id: accountId, password });
 
             if (!verifyResponse.data.success) {
                 message.error('Mật khẩu không đúng.');
