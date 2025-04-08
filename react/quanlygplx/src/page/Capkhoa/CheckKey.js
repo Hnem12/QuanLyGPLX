@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import API from '../../utils/request';
-import './CheckKey.scss';
+import './createKey.scss'
 
 const useVerifyKey = () => {
     const [isVerifying, setIsVerifying] = useState(false);
@@ -64,6 +64,10 @@ const useVerifyKey = () => {
             showCancelButton: true,
             confirmButtonText: "Xác nhận",
             cancelButtonText: "Hủy",
+            customClass: {
+                confirmButton: "pink-confirm",
+                cancelButton: "pink-cancel"
+              },
             preConfirm: (privateKey) => {
                 if (!privateKey ||
                     !privateKey.startsWith("-----BEGIN PRIVATE KEY-----") ||

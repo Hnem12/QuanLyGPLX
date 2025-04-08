@@ -100,7 +100,7 @@ body {
   .status {
     background-color: #d0f0d4; /* Lighter green background */
     color: #2a7f3f; /* Darker green text color */
-    padding: 10px; /* Padding inside */
+    padding: 5px; /* Padding inside */
     border-radius: 5px; /* Rounded corners */
     text-align: center; /* Center text */
     display: inline-block; /* Inline block display to wrap around text */
@@ -112,7 +112,7 @@ body {
   .status1 {
     background-color: #f8cdcd; /* Lighter green background */
     color: #e60000;
-    padding: 10px; /* Padding inside */
+    padding: 8px; /* Padding inside */
     border-radius: 5px; /* Rounded corners */
     text-align: center; /* Center text */
     display: inline-block; /* Inline block display to wrap around text */

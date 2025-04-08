@@ -186,7 +186,7 @@ th{
   display: flex;
   align-items: center; /* Vertically center icon and text */
   padding: 0.75rem 1.25rem; /* Slightly more padding for improved spacing */
-  font-size: 16px; /* Slightly smaller text for a refined appearance */
+  font-size: 19px !important; /* Slightly smaller text for a refined appearance */
   color: #333; /* Dark text for better readability */
   text-align: left; /* Align text to the left */
   transition: background-color 0.3s ease, color 0.3s ease, padding 0.2s ease; /* Smooth transition on hover */
@@ -219,11 +219,11 @@ th{
 /* Responsive adjustments for mobile */
 @media (max-width: 768px) {
   .dropdown-item {
-    font-size: 14px; /* Slightly smaller text on mobile */
+    font-size: 14px !important; /* Slightly smaller text on mobile */
     padding: 0.5rem 1rem; /* Adjust padding for better fit on smaller screens */
   }
 
   .dropdown-item i {
-    font-size: 16px; /* Slightly smaller icons on mobile */
+    font-size: 16px !important; /* Slightly smaller icons on mobile */
   }
 }

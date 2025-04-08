@@ -60,7 +60,7 @@ function LayoutDefault() {
                 <div className="footer-content">
                     <ul className="footer-menu">
                         <li><a href="/">Trang chủ</a></li>
-                        <li><a href="/">Giới thiệu</a></li>
+                        <li><a href="/gioithieu">Giới thiệu</a></li>
                         <li><a href="/">Quản lý vi phạm</a></li>
                         <li><a href="/">Đổi GPLX trực tuyến</a></li>
                     </ul>

@@ -3,7 +3,8 @@ import { Button, message, Spin, Input } from 'antd';
 import Swal from 'sweetalert2';
 import axios from 'axios';
 import API from '../../utils/request';
-import './createKey.scss';
+import './createKey.scss'
+
 
 const UserKeyForm = () => {
     const [accountId, setAccountId] = useState('');
@@ -100,14 +101,26 @@ const UserKeyForm = () => {
     };
 
     const handleCopyKey = () => {
-        if (privateKey) {
-            navigator.clipboard.writeText(privateKey)
-                .then(() => message.success('Đã sao chép khóa bí mật!'))
-                .catch(() => message.error('Không thể sao chép khóa bí mật.'));
-        } else {
-            message.warning('Khóa bí mật chưa được tạo hoặc đã bị xóa.');
+        if (!privateKey) {
+          message.warning("Khóa bí mật chưa được tạo hoặc đã bị xóa.");
+          return;
         }
-    };
+      
+        try {
+          const textarea = document.createElement("textarea");
+          textarea.value = privateKey;
+          document.body.appendChild(textarea);
+          textarea.select();
+          document.execCommand("copy");
+          document.body.removeChild(textarea);
+      
+          message.success("Khóa bí mật đã được sao chép vào clipboard");
+        } catch (error) {
+          console.error(error);
+          message.error("Không thể sao chép khóa bí mật");
+        }
+      };
+      
 
     const handleDownloadKey = () => {
         if (privateKey) {
@@ -177,10 +190,11 @@ const UserKeyForm = () => {
                         type="primary" 
                         onClick={handleGenerateKey} 
                         loading={loading}
-                        style={{ width: '180px' }}
+                            style={{ width: '180px', height:'35px', fontWeight:'bold', padding:'10px', fontSize:'15px'}}
                     >
-                        Tạo Khóa
+                        Tạo khóa
                     </Button>
+                    
                 </div>
             ) : (
                 <div style={{ marginBottom: 20 }}>

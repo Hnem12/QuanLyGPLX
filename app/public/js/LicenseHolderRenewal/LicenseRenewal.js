@@ -38,12 +38,12 @@ async function fetchKiemDinhGPLX() {
             <td><span class="status1">${holder.Status}</span></td>
             <td>
              <button class="btn btn-sm" 
-        style="background-color: #168e60; color: white; padding: 8px; border-radius: 5px;  border: none;" 
+        style="background-color: #168e60; color: white; padding: 6px; border-radius: 5px;  border: none;" 
         onclick='openModal(${JSON.stringify(holder)})'>
-                <i class="fas fa-eye" style="font-size: 14px; color: white; margin-left:10px"></i> <!-- Eye icon -->
+                <i class="fas fa-eye" style="font-size: 11px; color: white; margin-left:10px"></i> <!-- Eye icon -->
             </button>
           <button class="btn btn-danger btn-sm"
-              style="transform: scale(1.10); margin-left: 5px; font-weight: bold;"
+              style="transform: scale(1.05); margin-left: 5px; font-weight: bold;"
               onclick="confirmDelete('${holder._id}')">
               Xóa
           </button>
@@ -248,7 +248,7 @@ document.getElementById('licenseHolderForm').addEventListener('submit', async fu
         await deleteKD(holderId); // Automatically delete the holder
         resetForm(); // Reset form after success
         location.reload(); // Reload the page after success
-      }, 5000); // 5 giây
+      }, 4000); // 5 giây
     } else {
       Swal.fire({
         title: "❌ Lỗi!",

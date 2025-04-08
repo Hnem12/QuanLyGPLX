@@ -78,7 +78,7 @@ const GplxRenewForm = () => {
         {/* Mã GPLX */}
         <Form.Item
           name="MaGPLX"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Mã GPLX:</span>}        
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Mã GPLX:</span>}        
           rules={[{ required: true, message: "Vui lòng nhập Mã GPLX!" }]}>
           <Input className="form-item-input" placeholder="Nhập mã GPLX" />
         </Form.Item>
@@ -86,7 +86,7 @@ const GplxRenewForm = () => {
         {/* Tên */}
         <Form.Item
           name="Name"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Họ và tên:</span>}      
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Họ và tên:</span>}      
           rules={[{ required: true, message: "Vui lòng nhập tên!" }]}>
           <Input className="form-item-input" placeholder="Nhập họ và tên" />
         </Form.Item>
@@ -94,7 +94,7 @@ const GplxRenewForm = () => {
           {/* Ngày sinh */}
           <Form.Item
             name="DateOfBirth"
-            label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Ngày sinh:</span>}      
+            label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Ngày sinh:</span>}      
             rules={[{ required: true, message: "Vui lòng chọn ngày sinh!" }]}>
             <DatePicker style={{ width: "100%" }} />
           </Form.Item>
@@ -102,7 +102,7 @@ const GplxRenewForm = () => {
     {/* Giới tính */}
        <Form.Item
         name="Gender"
-        label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Giới tính</span>}
+        label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Giới tính</span>}
         rules={[{ required: true, message: "Vui lòng chọn giới tính!" }]}
       >
         <Select placeholder="Chọn giới tính">
@@ -114,7 +114,7 @@ const GplxRenewForm = () => {
         {/* CCCD */}
         <Form.Item
           name="CCCD"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>CCCD:</span>}   
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>CCCD:</span>}   
           rules={[{ required: true, message: "Vui lòng nhập CCCD!" }]}>
           <Input className="form-item-input" placeholder="Nhập CCCD" />
         </Form.Item>
@@ -123,7 +123,7 @@ const GplxRenewForm = () => {
         {/* Số điện thoại */}
         <Form.Item
           name="PhoneNumber"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Số điện thoại:</span>}   
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Số điện thoại:</span>}   
           rules={[
             { required: true, message: "Vui lòng nhập số điện thoại!" },
             { pattern: /^[0-9]{10}$/, message: "Số điện thoại không hợp lệ!" },
@@ -134,7 +134,7 @@ const GplxRenewForm = () => {
         {/* Email */}
         <Form.Item
           name="Email"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Email:</span>}   
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Email:</span>}   
           rules={[
             { required: true, message: "Vui lòng nhập email!" },
             { type: "email", message: "Email không hợp lệ!" },
@@ -146,7 +146,7 @@ const GplxRenewForm = () => {
         {/* Địa chỉ */}
         <Form.Item
           name="Address"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Địa chỉ:</span>}   
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Địa chỉ:</span>}   
           rules={[{ required: true, message: "Vui lòng nhập địa chỉ!" }]}>
           <Input className="form-item-input" placeholder="Nhập địa chỉ" />
         </Form.Item>
@@ -156,7 +156,7 @@ const GplxRenewForm = () => {
         <Col span={8}>
           <Form.Item
             name="Ngaytrungtuyen"
-            label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight: 'bold' }}>Ngày trúng tuyển:</span>}
+            label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight: 'bold' }}>Ngày trúng tuyển:</span>}
             rules={[{ required: true, message: "Vui lòng chọn ngày trúng tuyển!" }]}
           >
             <DatePicker style={{ width: "100%" }} />
@@ -165,7 +165,7 @@ const GplxRenewForm = () => {
         <Col span={8}>
           <Form.Item
             name="Ngaycap"
-            label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight: 'bold' }}>Ngày cấp:</span>}
+            label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight: 'bold' }}>Ngày cấp:</span>}
             rules={[{ required: true, message: "Vui lòng chọn ngày cấp!" }]}
           >
             <DatePicker style={{ width: "100%" }} />
@@ -175,7 +175,7 @@ const GplxRenewForm = () => {
         <Col span={8}>
           <Form.Item
             name="Ngayhethan"
-            label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight: 'bold' }}>Ngày hết hạn:</span>}
+            label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight: 'bold' }}>Ngày hết hạn:</span>}
             rules={[{ required: true, message: "Vui lòng chọn ngày hết hạn!" }]}
           >
             <DatePicker style={{ width: "100%" }} />
@@ -187,7 +187,7 @@ const GplxRenewForm = () => {
         {/* Hạng GPLX */}
         <Form.Item
           name="HangGPLX"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Hạng GPLX:</span>}   
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Hạng GPLX:</span>}   
           rules={[{ required: true, message: "Vui lòng chọn hạng GPLX!" }]}>
           <Select  placeholder="Chọn hạng GPLX">
             <Select.Option value="B1">B1</Select.Option>
@@ -204,22 +204,18 @@ const GplxRenewForm = () => {
         {/* Quốc gia */}
         <Form.Item
                 name="Country"
-                label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Quốc gia</span>}
+                label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Quốc gia</span>}
                 rules={[{ required: true, message: 'Vui lòng chọn quốc gia!' }]}
               >
                 <Select  placeholder="Chọn quốc gia">
                   <Option value="Vietnam">Việt Nam</Option>
-                  <Option value="USA">Mỹ</Option>
-                  <Option value="UK">Anh</Option>
-                  <Option value="France">Pháp</Option>
-                  <Option value="Germany">Đức</Option>
                   <Option value="Other">Khác</Option>
                 </Select>
               </Form.Item>
 
         <Form.Item
           name="status"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Trạng thái:</span>}   
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Trạng thái:</span>}   
           rules={[{ required: true, message: "Vui lòng chọn trạng thái!" }]}>
           <Select placeholder="Chọn trạng thái">
             <Select.Option value="Chờ kiểm định">Chờ kiểm định</Select.Option>
@@ -229,7 +225,7 @@ const GplxRenewForm = () => {
         {/* Giám đốc */}
         <Form.Item
           name="Giamdoc"
-          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Giám đốc:</span>}      
+          label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Giám đốc:</span>}      
            rules={[{ required: true, message: "Vui lòng nhập giám đốc!" }]}>
           <Input className="form-item-input" placeholder="Nhập tên giám đốc" />
         </Form.Item>  
@@ -238,7 +234,7 @@ const GplxRenewForm = () => {
    {/* Image upload */}
    <Form.Item
         name="image"
-        label={<span style={{ fontFamily: 'Times New Roman', fontSize: '15px', fontWeight:'bold'}}>Hình ảnh GPLX:</span>}
+        label={<span style={{ fontFamily: 'Times New Roman', fontSize: '17px', fontWeight:'bold'}}>Hình ảnh GPLX:</span>}
         rules={[{ required: true, message: "Vui lòng cung cấp hình ảnh!" }]}>
       
         <Upload

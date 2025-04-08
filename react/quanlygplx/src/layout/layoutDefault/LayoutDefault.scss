@@ -11,14 +11,58 @@
     background-color: #fff;
 }
 
+/* Footer improvements */
 .footer {
+    font-size: 16px;
+    font-family: 'Times New Roman', Times, serif;
+    background-color: #001d58; /* Giữ màu xanh đậm nhất quán */
+    color: white;
     text-align: center;
-    background-color: #001d58;
-    color: #fff;
-    padding: 16px;
-
+    padding: 16px 0;
+    width: 100%;
+    margin-top: auto; /* Đẩy footer xuống dưới cùng khi có không gian */
 }
 
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#root, .ant-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Chiều cao tối thiểu là toàn bộ viewport */
+}
+
+.content {
+    flex: 1; /* Cho phép content mở rộng để đẩy footer xuống dưới */
+    padding: 24px;
+    min-height: 280px;
+    background-color: #fff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .footer {
+        font-size: 14px;
+        padding: 12px 0;
+    }
+}
+
+/* Menu footer alignment */
+.footer-menu {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+    padding: 0;
+    list-style-type: none;
+}
+
+.footer-menu li {
+    margin: 0 10px;
+}
 
 .custom-header {
 background-color: #003366 ; // Deep blue background

@@ -41,7 +41,7 @@ function displayAccounts(page) {
                 <td>${account.Gender}</td>
                 <td>${account.role}</td>
                 <td>
-                    <img src="${account.image}" alt="Account Image" style="width: 145px; height: 110px;" />
+                    <img src="${account.image}" alt="Account Image" style="width: 135px; height: 110px;" />
                 </td>
                 <td>
                     <span class="status">${account.status}</span>

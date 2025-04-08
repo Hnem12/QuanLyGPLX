@@ -17,8 +17,9 @@ $font-family: "Times New Roman", serif;
 // Layout
 .form-container1 {
   max-width: 900px;
-  margin: 30px auto;
-  padding: 30px;
+  margin: 20px auto;
+  padding: 20px;
+  margin-top: -5px !important;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -78,7 +79,24 @@ $font-family: "Times New Roman", serif;
 }
 
 // Input fields
-.form-item-input, 
+.form-item-input {
+  border-radius: 6px !important;
+  border: 1px solid $border-color !important;
+  padding: 10px 12px !important;
+  font-size: 15px !important  ; 
+  font-family: $font-family !important;
+  transition: all 0.3s ease !important;
+  
+  &:hover {
+    border-color: $hover-color !important;
+  }
+  
+  &:focus, &.ant-input-focused, &.ant-select-focused, &.ant-picker-focused {
+    border-color: $primary-color !important;
+    box-shadow: 0 0 0 2px $focus-color !important;
+    outline: none !important;
+  }
+} 
 .ant-input, 
 .ant-select-selector, 
 .ant-picker {
@@ -169,7 +187,7 @@ $font-family: "Times New Roman", serif;
   display: flex !important;
   flex-direction: column !important;
   align-items: center !important;
-  margin-top: 20px !important;
+  margin-top: -10px !important;
 }
 
 .form-submit-button {

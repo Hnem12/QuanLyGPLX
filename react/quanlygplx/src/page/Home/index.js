@@ -148,11 +148,13 @@ const LicenseSearch = () => {
                             onChange={(e) => setCaptchaInput(e.target.value)}
                         />
                     </div>
-                    <button type="submit"
-                    loading={isVerifying}
-                    className="bg-blue-500 text-white p-2 rounded canle">
-                        TRA CỨU GIẤY PHÉP LÁI XE
-                    </button>
+                    <button
+                        type="submit"
+                        className={`tra-cuu-button ${isVerifying ? "loading" : ""} `}
+                        >
+                        {isVerifying ? "ĐANG TRA CỨU..." : "TRA CỨU GIẤY PHÉP LÁI XE"}
+                        </button>
+
                 </form>
 
                 {loading && <p>Loading...</p>}

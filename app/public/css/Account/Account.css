@@ -73,7 +73,7 @@ table.table tbody tr:hover {
 .status {
   background-color: #d0f0d4;
   color: #2a7f3f;
-  padding: 10px;
+  padding: 8px;
   border-radius: 5px;
   text-align: center;
   display: inline-block;

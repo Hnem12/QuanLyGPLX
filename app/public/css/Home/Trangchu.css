@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   margin: -80px auto 0 250px;
-  overflow: hidden;
+
 }
 
 .image-container1 img {
@@ -18,6 +18,7 @@
   padding: 20px;
   background-color: #fff;
   object-fit: contain;
+  display: block;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -28,7 +29,6 @@
 
 
 .main-content1 {
-  margin-top: 50px; /* Space between the header and content */
   padding: 20px; /* Inner padding for content */
   overflow-y: auto; /* Enable vertical scrolling if content exceeds container height */
   height: auto; /* Allow content to grow */
@@ -37,6 +37,9 @@
   background-color: #f8f8f8; /* Light background to differentiate from image */
   border-radius: 10px; /* Slight rounded corners for the content area */
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Light shadow around the content area */
+  overflow-x: hidden;
+  overflow-y: hidden;
+  margin-top: 10px;
 }
 
 
@@ -52,4 +55,9 @@
 
 .main-content1::-webkit-scrollbar-thumb:hover {
   background-color: #555; /* Darker color when hovering over the scrollbar thumb */
+}
+.layout {
+  display: flex;
+  min-height: 50vh;
+  
 }

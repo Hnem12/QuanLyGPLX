@@ -1,5 +1,6 @@
+@use "sass:color";
 // Variables
-$primary-color: #1890ff;
+$primary-color: #e2366f;
 $secondary-color: #f5f5f5;
 $success-color: #52c41a;
 $warning-color: #faad14;
@@ -293,3 +294,123 @@ $heading-color: #1e3a8a;
     }
   }
 }
+// CheckKey.scss
+.pink-confirm {
+  background-color: #ff69b4 !important;
+  color: white;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-weight: bold;
+  transition: background 0.3s;
+  
+  &:hover {
+      background-color: #ff1493;
+  }
+}
+
+.pink-cancel {
+  background-color: #ccc;
+  color: black;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-weight: bold;
+  transition: background 0.3s;
+  
+  &:hover {
+      background-color: #bbb;
+  }
+}
+
+button:disabled {
+  background-color: #ddd;
+  cursor: not-allowed;
+}
+
+
+.tao-khoa {
+  background-color: #2563eb; /* blue-600, màu xanh đẹp hơn */
+  color: #ffffff;
+  padding: 12px 28px;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(37, 99, 235, 0.25);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  justify-content: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  
+  /* Hiệu ứng gradient nhẹ */
+  background-image: linear-gradient(135deg, #2563eb, #3b82f6);
+  
+  &:hover {
+    background-image: linear-gradient(135deg, #1d4ed8, #2563eb);
+    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+    transform: translateY(-2px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 10px rgba(37, 99, 235, 0.2);
+  }
+  
+  &.loading {
+    background-image: linear-gradient(135deg, #60a5fa, #93c5fd);
+    cursor: not-allowed;
+    pointer-events: none;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      right: 16px;
+      width: 18px;
+      height: 18px;
+      border: 2.5px solid rgba(255, 255, 255, 0.8);
+      border-top: 2.5px solid transparent;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Thêm hiệu ứng ripple khi click */
+.tao-khoa::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.5s, height 0.5s;
+  z-index: 0;
+}
+
+.tao-khoa:active::before {
+  width: 200px;
+  height: 200px;
+}
+
+/* Đảm bảo text luôn ở phía trên hiệu ứng */
+.tao-khoa span {
+  position: relative;
+  z-index: 1;
+}
+
