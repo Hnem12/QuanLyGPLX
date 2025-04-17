@@ -327,11 +327,29 @@ function resetForm() {
     // Add more fields here if needed
   }
 
+  async function openAddInspectionModal() {
+    const isValidKey = await verifyKey(); // Kiểm tra khóa
+  
+    if (!isValidKey) { 
+      console.error("Khóa bí mật không hợp lệ, dừng thao tác thêm!");
+      Swal.fire({
+        title: "❌ Lỗi xác thực!",
+        text: "Khóa bí mật không hợp lệ. Vui lòng kiểm tra lại.",
+        icon: "error",
+        confirmButtonText: "OK"
+      });
+      return; // Không mở modal
+    }
+  
+    // Nếu khóa hợp lệ, mở modal
+    const modal = new bootstrap.Modal(document.getElementById('accountModal'));
+    modal.show();
+  }
+
 
 // Delete account function
 async function deleteAccount(id) {
-    const confirmation = confirm('Bạn có chắc chắn muốn xóa tài khoản này?');
-    if (!confirmation) return;
+   
 
     try {
         const response = await fetch(`/api/account/${id}`, {

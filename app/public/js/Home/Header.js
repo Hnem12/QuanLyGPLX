@@ -16,13 +16,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
    const storedImage = localStorage.getItem('image'); // Retrieve the new avatar if available
 
-if (username) {
-    usernameDisplay.textContent = `Chào mừng ${username} đến với hệ thống quản lý GPLX`;
-    avatarImage.src = storedImage || userImage || './uploads/h6.jpg'; // Use stored, user, or default image
-} else {
-    usernameDisplay.textContent = 'Khách';
-    avatarImage.src = storedImage || './uploads/h6.jpg'; // Fallback to stored or default image
-}
+    if (username) {
+        usernameDisplay.textContent = `Chào mừng ${username} đến với hệ thống quản lý GPLX`;
+        avatarImage.src = storedImage || userImage || './uploads/h6.jpg'; // Use stored, user, or default image
+    } else {
+        usernameDisplay.textContent = 'Khách';
+        avatarImage.src = storedImage || './uploads/h6.jpg'; // Fallback to stored or default image
+    }
 
     // Toggle dropdown on avatar click
     avatarContainer.addEventListener('click', function(event) {
@@ -439,7 +439,12 @@ function downloadKey() {
 function copyToClipboard() {
     privateKeyField.select(); // Select the text in the input field
     document.execCommand('copy'); // Copy the text to the clipboard
-    alert('Khóa đã được sao chép vào clipboard!'); // Alert the user
+    Swal.fire({
+        icon: 'success',
+        title: 'Thành công!',
+        text: 'Khóa đã được sao chép vào clipboard!',
+        confirmButtonText: 'OK'
+      });
 }
 // Event listeners for opening and closing the modal
 openKeyModalButton.addEventListener('click', () => toggleKeyModal('block'));
