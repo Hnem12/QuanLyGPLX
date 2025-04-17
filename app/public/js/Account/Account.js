@@ -223,7 +223,25 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
                 // If successful, notify the user and reload the page
-                alert(accountId ? 'Cập nhật tài khoản thành công!' : 'Thêm tài khoản thành công!');
+                Swal.fire({
+                    html: `
+                        <div class="custom-alert">
+                            <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" class="custom-icon" />
+                            <span class="custom-title">
+                                ${accountId ? 'Cập nhật tài khoản thành công!' : 'Thêm tài khoản thành công!'}
+                            </span>
+                        </div>
+                    `,
+                    showConfirmButton: false,
+                    allowOutsideClick: true,
+                    width: "450px",
+                    position: "top",
+                    background: "#f6fff8",
+                    customClass: {
+                        popup: "custom-alert-popup"
+                    },
+                    timer: 5000 // Tự động đóng sau 2 giây
+                });
                 resetForm();
                 location.reload();
             } catch (error) {
